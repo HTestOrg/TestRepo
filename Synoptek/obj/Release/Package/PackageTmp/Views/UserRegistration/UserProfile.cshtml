@@ -1,0 +1,387 @@
+﻿@model BusinessObjects.UserProfileEditModel
+
+@{
+    ViewBag.Title = "Edit User Profile";
+}
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">Preferences/Settings</h2>
+    </div>
+</div>
+@if (TempData["UserSuccess"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["UserSuccess"]</p>
+}
+<div class="container mt-5 mb-5">
+    @if (Synoptek.SessionController.UserSession.UserId != null)
+    {
+        using (Html.BeginForm("UpdateUserDetails", "UserRegistration", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Account Holder Info</h6>
+                    <div class="form-group mt-4">
+                        @Html.HiddenFor(model => model.ID)
+                        @Html.LabelFor(model => model.Name)
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email)
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.HiddenFor(model => model.Email)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PhoneNumber)
+                        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompanyName)
+                        @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CompanyName)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Address)
+                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", id = "txtAddress" })
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.City)
+                        @Html.TextBoxFor(model => model.City, new { @class = "form-control", id = "txtCity" })
+                        @Html.ValidationMessageFor(model => model.City)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StateName)
+                        @Html.TextBoxFor(model => model.StateName, new { @class = "form-control", id = "txtStateName" })
+                        @Html.ValidationMessageFor(model => model.StateName)
+                    </div> 
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ZipCode)
+                        @Html.TextBoxFor(model => model.ZipCode, new { @class = "form-control", id = "txtZipCode" })
+                        @Html.ValidationMessageFor(model => model.ZipCode)
+                    </div>   
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RoleId, "Role")
+                        @if (Model.RoleId == 2)
+                        {
+                            @Html.LabelFor(model => model.RoleId, "Investor")
+                        }
+                        else if (Model.RoleId == 3)
+                        {
+                            @Html.LabelFor(model => model.RoleId, "Broker")
+                        }
+                        else if (Model.RoleId == 4)
+                        {
+                            @Html.LabelFor(model => model.RoleId, "Registered User")
+                        }
+                        else
+                        {
+                            @Html.LabelFor(model => model.RoleId, "Admin")
+                        }
+                        @Html.HiddenFor(model => model.RoleId)
+                    </div>
+
+                    @if (Synoptek.SessionController.UserSession.RoleType != "Admin")
+                    {
+                        <h6 class="mt-5 mb-4">Change Password</h6>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CurrentPassword)
+                            @Html.PasswordFor(model => model.CurrentPassword, new { @maxlength = "20", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CurrentPassword)
+                            <div style="color:red; margin-left:365px;">@ViewBag.Error</div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Password)
+                            @Html.PasswordFor(model => model.Password, new { @maxlength = "20", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ConfirmPassword)
+                            @Html.PasswordFor(model => model.ConfirmPassword, new { @maxlength = "20", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                        </div>
+
+
+                        if (Synoptek.SessionController.UserSession.IsPaid)
+                        {
+                            <h6 class="mt-5 mb-4">Billing Information</h6>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubscriptionModel.CardType)
+                                @Html.DropDownListFor(model => model.SubscriptionModel.CardTypeID, new SelectList(Model.SubscriptionModel.CardType, "ID", "Name"), "Card Type", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                                @Html.ValidationMessageFor(model => model.SubscriptionModel.CardType)
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubscriptionModel.CardNumber)
+                                @Html.TextBoxFor(model => model.SubscriptionModel.CardNumber, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.SubscriptionModel.CardNumber)
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.SubscriptionModel.ExpirationMonth)
+                                        @Html.DropDownListFor(model => model.SubscriptionModel.ExpirationMonth, new SelectList(Model.SubscriptionModel.ExpirationMonthList, "ID", "Month"), "Select Month", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                                        @Html.ValidationMessageFor(model => model.SubscriptionModel.ExpirationMonth)
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(model => model.SubscriptionModel.ExpirationYear)
+                                        @Html.DropDownListFor(model => model.SubscriptionModel.ExpirationYear, new SelectList(Model.SubscriptionModel.ExpirationYearList, "ID", "Year"), "Select Year", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                                        @Html.ValidationMessageFor(model => model.SubscriptionModel.ExpirationYear)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubscriptionModel.NameOnCard)
+                                @Html.TextBoxFor(model => model.SubscriptionModel.NameOnCard, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.SubscriptionModel.NameOnCard)
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubscriptionModel.BillingAddress)
+                                <label class="custom-checkbox pull-right">
+                                    <span class="customlabel">Save as above</span>
+                                    @Html.CheckBox("IsSameAddress", false)
+                                    <span class="checkmark"></span>
+                                </label>
+                                @Html.TextBoxFor(model => model.SubscriptionModel.BillingAddress, new { @class = "form-control", id = "txtBillingAddress" })
+                                @Html.ValidationMessageFor(model => model.SubscriptionModel.BillingAddress)
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubscriptionModel.City)
+                                @Html.TextBoxFor(model => model.SubscriptionModel.City, new { @class = "form-control", id = "txtBillingCity" })
+                                @Html.ValidationMessageFor(model => model.SubscriptionModel.City)
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubscriptionModel.State)
+                                @Html.TextBoxFor(model => model.SubscriptionModel.State, new { @class = "form-control", id = "txtBillingState" })
+                                @Html.ValidationMessageFor(model => model.SubscriptionModel.State)
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubscriptionModel.Zip)
+                                @Html.TextBoxFor(model => model.SubscriptionModel.Zip, new { @class = "form-control w-250px", id = "txtBillingZipCode" })
+                                @Html.ValidationMessageFor(model => model.SubscriptionModel.Zip)
+                            </div>
+
+                        } 
+                    } 
+                    <div class="text-center mt-4 mb-5">
+                        <input type="submit" value="Save preferences" id="btnSavePreferences" class="btn btn-primary font14 mr-1" />
+                        @if (Synoptek.SessionController.UserSession.RoleType != "Admin")
+                        {
+                            if (Model.SubscriptionModel.CardNumber != null)
+                            {
+                                if (Synoptek.SessionController.UserSession.IsPaid)
+                                {
+                                    <input type="button" value="Cancel Subscription" class="btn btn-primary font14 mr-1" onclick="CancelSubscription(@Model.ID)" />
+                                }
+                            }
+                        }
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 offset-md-2">
+                    <div class="CreateResource">
+                        <div class="position-relative">
+                            <div id="image-holder" class="position-relative">
+                                <img id='img-upload' src="@Model.ProfileImage" width="350" height="250" class="w-100 mb-3" />
+                            </div>
+                            @Html.HiddenFor(model => model.ProfileImage)
+                            <br/>
+                            <label class="btn-bs-file btn btn-primary" >
+                                Edit Profile Picture
+                                <input type="file" name="image_Uploader" id="image_Uploader" onchange="ValidateProfileImage(this);"  style="display:none;" />
+                            </label>
+                        </div>
+                        <h2>@Model.CompanyName</h2>
+                        <div class="DividerBot mb-3 mt-3"></div>
+
+                        <div>
+                            <div>@Model.Email</div>
+                            <div class="mt-2">@Model.PhoneNumber</div>
+                        </div>
+                        <div class="DividerBot mb-3 mt-3"></div>
+
+                        <input type="button" value="Upgrade Account" class="btn GhostButton w-45per Respon-left" />
+                        <input type="button" value="Logout" class="btn GhostButton w-50 Respon-right" onclick="location.href='@Url.Action("LogOff", "Login")'" />
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        }
+    }
+</div>
+
+<script>
+
+    $('#image_Uploader').on('change', function (e) {
+        if (typeof (FileReader) != "undefined") {
+            if ($(this)[0].files.length > 0) {
+                var image_holder = $("#image-holder");
+                image_holder.empty();
+            }
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image",
+                    "height": "250",
+                    "width": "350",
+                }).appendTo(image_holder);
+            }
+            image_holder.show();
+            if ($(this)[0].files.length > 0) {
+                reader.readAsDataURL($(this)[0].files[0]);
+            }
+        } else {
+            alert("This browser does not support FileReader.");
+        }
+        var files = e.target.files;
+        if (files.length > 0) {
+            try {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: '/UserRegistration/UploadProfileImage',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function (xhr, status, p3, p4) {
+                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                err = JSON.parse(xhr.responseText).Message;
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("This browser doesn't support HTML5 file uploads!");
+                }
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        }
+    });
+
+    var _validImageFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+    function ValidateProfileImage(oInput) {
+        if (oInput.type == "file") {
+            var sFileName = oInput.value;
+            if (sFileName.length > 0) {
+                var blnValid = false;
+                for (var j = 0; j < _validImageFileExtensions.length; j++) {
+                    var sCurExtension = _validImageFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        blnValid = true;
+                        break;
+                    }
+                }
+                if (!blnValid) {
+                    alert("Sorry, these extensions are not valid");
+                    oInput.value = "";
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    function CancelSubscription(userID) {
+        bootbox.confirm({
+            message: "Are you sure you want to cancel the subscription?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: "CancelSubscription",
+                        data: { userID: userID },
+                        success: function (result) {
+                            bootbox.alert("Subscription has been cancelled. Please relogin to continue..",
+                                function () { location.href = '@Url.Action("LogOff", "Login")' });
+                        },
+                        error: function (result) {
+                            bootbox.alert("Error has been occurred..");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function removeDisabled() {
+        $("#txtBillingAddress").removeAttr("disabled");
+        $("#txtBillingCity").removeAttr("disabled");
+        $("#txtBillingState").removeAttr("disabled");
+        $("#txtBillingZipCode").removeAttr("disabled");
+    }
+
+    $("#btnSavePreferences").click(function () {
+        removeDisabled();
+    });
+
+    //Use Save address as above functionality
+    $("#IsSameAddress").change(function () {
+        if (this.checked) {
+            if ($("#txtAddress").val() != "") {
+                var address = $("#txtAddress").val();
+                var City = $("#txtCity").val();
+                var StateName = $("#txtStateName").val();
+                var ZipCode = $("#txtZipCode").val();
+                $("#txtBillingAddress").val(address);
+                $("#txtBillingCity").val(City);
+                $("#txtBillingState").val(StateName);
+                $("#txtBillingZipCode").val(ZipCode);
+                $("#txtBillingAddress").attr("disabled", "disabled");
+                $("#txtBillingCity").attr("disabled", "disabled");
+                $("#txtBillingState").attr("disabled", "disabled");
+                $("#txtBillingZipCode").attr("disabled", "disabled");
+            }
+        } else {
+            $("#txtBillingAddress").val("");
+            $("#txtBillingCity").val("");
+            $("#txtBillingState").val("");
+            $("#txtBillingZipCode").val("");
+            removeDisabled();
+        } 
+    });
+
+</script>

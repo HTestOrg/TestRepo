@@ -1,0 +1,225 @@
+﻿@model BusinessObjects.ListingModel
+@using System.Security.Claims;
+
+@{
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.Role);
+}
+
+@{
+    ViewBag.Title = "Add Listing";
+}
+@Styles.Render("~/bundles/dropzoneCss", "~/bundles/steps")
+@Scripts.Render("~/bundles/dropzone")
+@Scripts.Render("~/bundles/backstretch")
+
+<style>
+    /* Always set the map height explicitly to define the size of the div element that contains the map. */
+    #map {
+        height: 100%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+
+    #infowindow-content .title {
+        font-weight: bold;
+    }
+
+    #infowindow-content {
+        display: none;
+    }
+
+    #map #infowindow-content {
+        display: inline;
+    }
+
+    .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+    }
+
+    #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+    }
+
+    .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+    }
+
+        .pac-controls label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+    #target {
+        width: 345px;
+    }
+</style>
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">Create Loan</h2>
+    </div>
+</div>
+@{
+    string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(Model.ID), true);
+    string userType = Convert.ToString(Synoptek.SessionController.UserSession.RoleType);
+}
+@Html.Hidden("hdn_userrole",userType);
+
+<div class="educationPage">
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-12 f1">
+                @if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Broker || claim.Value == Synoptek.Helpers.Constants.UserRoles.Admin)
+                {
+
+                    @*@Html.HiddenFor(m => m.ID, new { @id = "hdn_Listings_ID" })*@
+                    <input id="hdn_Listings_ID" name="ID" type="hidden" value="@ListingID">
+                    <div class="f1-steps">
+                        <div class="f1-progress">
+                            <div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="3" style="width: 16.66%;"></div>
+                        </div>
+                        <div class="f1-step active">
+                            <div class="f1-step-icon"><!-- <i class="fa fa-user"></i> --> 1</div>
+                            <p>Loan Listing</p>
+                        </div>
+                        <div class="f1-step">
+                            <div class="f1-step-icon">2</div>
+                            <p>Property Information</p>
+                        </div>
+                        <div class="f1-step">
+                            <div class="f1-step-icon">3</div>
+                            <p>Comments</p>
+                        </div>
+                        <div class="f1-step">
+                            <div class="f1-step-icon">4</div>
+                            <p>Documents</p>
+                        </div>
+                    </div>
+
+                    <fieldset>
+                        <div id="ActiveStep">
+                            @Html.Partial("_LoanInformation", Model.loanInformation)
+                        </div>
+                    </fieldset>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Help Popup-->
+<div class="modal fade" id="HelpPopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <h3>Help - Item</h3>
+                <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Nullam id dolor id nibh ultricies vehicula ut id elit. Aenean lacinia bibendum nulla sed consectetur. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Help Popup-->
+<!--Success Popup-->
+<script>
+    function PreviousJS() {
+        var current_active_step = $('.f1').find('.f1-step.active');
+        var progress_line = $('.f1').find('.f1-progress-line');
+        current_active_step.removeClass('active').prev().removeClass('activated').addClass('active');
+        bar_progress(progress_line, 'left');
+        scroll_to_class($('.f1'), 20);
+        $('fieldset').show();
+    }
+    function NextJS() {
+        var current_active_step = $('.f1').find('.f1-step.active');
+        var progress_line = $('.f1').find('.f1-progress-line');
+        current_active_step.removeClass('active').addClass('activated').next().addClass('active');
+        bar_progress(progress_line, 'right');
+        scroll_to_class($('.f1'), 20);
+        $('fieldset').show();
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfUtwHjVoCA1gmp3xlT_fAWITPjeW6SMA&libraries=places&callback=initAutocomplete" async defer></script>
+@*Google Location autocomplete js*@
+<script>
+    function initAutocomplete() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: -33.8688, lng: 151.2195 },
+            zoom: 13,
+            mapTypeId: 'roadmap'
+        });
+
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function () {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+                return;
+            }
+
+            // Clear out the old markers.
+            markers.forEach(function (marker) {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            // For each place, get the icon, name and location.
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function (place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+                var icon = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+
+                // Create a marker for each place.
+                markers.push(new google.maps.Marker({
+                    map: map,
+                    icon: icon,
+                    title: place.name,
+                    position: place.geometry.location
+                }));
+
+                if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+        });
+    }
+</script>

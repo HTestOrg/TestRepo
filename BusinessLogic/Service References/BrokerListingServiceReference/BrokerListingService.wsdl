@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="BrokerListingService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://10.0.0.145:8000/BrokerListingService/BrokerListingService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://10.0.0.145:8000/BrokerListingService/BrokerListingService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IBrokerListingService_DeleteCurrentListing_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrentListing" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_DeleteCurrentListing_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrentListingResponse" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_GetBrokerListingDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBrokerListingDetails" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_GetBrokerListingDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBrokerListingDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_GetCurrentListingMessages_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrentListingMessages" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_GetCurrentListingMessages_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrentListingMessagesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_ReplyToMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyToMessage" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_ReplyToMessage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyToMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_DeleteCurrentMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrentMessage" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_DeleteCurrentMessage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrentMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_MarkAsReadMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarkAsReadMessage" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_MarkAsReadMessage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarkAsReadMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_GetMessageListDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMessageListDetails" />
+  </wsdl:message>
+  <wsdl:message name="IBrokerListingService_GetMessageListDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMessageListDetailsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IBrokerListingService">
+    <wsdl:operation name="DeleteCurrentListing">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBrokerListingService/DeleteCurrentListing" message="tns:IBrokerListingService_DeleteCurrentListing_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBrokerListingService/DeleteCurrentListingResponse" message="tns:IBrokerListingService_DeleteCurrentListing_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBrokerListingDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBrokerListingService/GetBrokerListingDetails" message="tns:IBrokerListingService_GetBrokerListingDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBrokerListingService/GetBrokerListingDetailsResponse" message="tns:IBrokerListingService_GetBrokerListingDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentListingMessages">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBrokerListingService/GetCurrentListingMessages" message="tns:IBrokerListingService_GetCurrentListingMessages_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBrokerListingService/GetCurrentListingMessagesResponse" message="tns:IBrokerListingService_GetCurrentListingMessages_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplyToMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBrokerListingService/ReplyToMessage" message="tns:IBrokerListingService_ReplyToMessage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBrokerListingService/ReplyToMessageResponse" message="tns:IBrokerListingService_ReplyToMessage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCurrentMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBrokerListingService/DeleteCurrentMessage" message="tns:IBrokerListingService_DeleteCurrentMessage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBrokerListingService/DeleteCurrentMessageResponse" message="tns:IBrokerListingService_DeleteCurrentMessage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MarkAsReadMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBrokerListingService/MarkAsReadMessage" message="tns:IBrokerListingService_MarkAsReadMessage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBrokerListingService/MarkAsReadMessageResponse" message="tns:IBrokerListingService_MarkAsReadMessage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMessageListDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IBrokerListingService/GetMessageListDetails" message="tns:IBrokerListingService_GetMessageListDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IBrokerListingService/GetMessageListDetailsResponse" message="tns:IBrokerListingService_GetMessageListDetails_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IBrokerListingService" type="tns:IBrokerListingService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DeleteCurrentListing">
+      <soap:operation soapAction="http://tempuri.org/IBrokerListingService/DeleteCurrentListing" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBrokerListingDetails">
+      <soap:operation soapAction="http://tempuri.org/IBrokerListingService/GetBrokerListingDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentListingMessages">
+      <soap:operation soapAction="http://tempuri.org/IBrokerListingService/GetCurrentListingMessages" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplyToMessage">
+      <soap:operation soapAction="http://tempuri.org/IBrokerListingService/ReplyToMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCurrentMessage">
+      <soap:operation soapAction="http://tempuri.org/IBrokerListingService/DeleteCurrentMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MarkAsReadMessage">
+      <soap:operation soapAction="http://tempuri.org/IBrokerListingService/MarkAsReadMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMessageListDetails">
+      <soap:operation soapAction="http://tempuri.org/IBrokerListingService/GetMessageListDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BrokerListingService">
+    <wsdl:port name="BasicHttpBinding_IBrokerListingService" binding="tns:BasicHttpBinding_IBrokerListingService">
+      <soap:address location="http://10.0.0.145:8000/BrokerListingService/BrokerListingService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

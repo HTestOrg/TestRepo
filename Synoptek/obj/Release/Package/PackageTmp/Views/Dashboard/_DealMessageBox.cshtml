@@ -1,0 +1,72 @@
+﻿@model List<BusinessObjects.ListingComments>
+
+<h3 class="text-center">Deal Messages for : @Model[0].ListingName</h3>
+
+<style>
+    .wordwrap {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+</style>
+<div class="UserCommentsBox">
+    @{
+        var i = 0;
+    }
+    @foreach (var item in Model)
+    {
+        <div class="media">
+            <img class="mr-3 rounded-circle" src="@item.ImagePath" width="60" height="60">
+            <div class="media-body col-md-12">
+                <h6 class="mt-0 bSYellow">
+                    @item.MessageFrom
+                    <span class="coolGrey">@item.Duration</span>
+                </h6>
+                <p class="wordwrap">@item.MessageText</p>
+                <a href="#" class="float-right MsgBox">Reply</a>
+                <a href="#" class="float-right ReplyBox mr-3">@item.MessageCount Comments</a>
+                <div class="clearfix"></div>
+                <div class="MsgBox-Form" style="display: none;">
+                    <textarea class="w-100 mt-4 rounded"></textarea>
+                    <span class="redcolor"></span>
+                    <button type="button" class="btn btn-primary float-right mt-3 mb-2 w-125px" onclick="ReplyMessage('@item.CommentID','@item.FromID','@item.ListingId',this)">Send</button>
+                </div>
+                <div class="clearfix"></div>
+                <div class="replyComments" style="display: none;">
+                    @{
+                        if (Model[i].RepliedComments != null)
+                        {
+                            foreach (var repliedItem in Model[i].RepliedComments)
+                            {
+                                <div class="media mt-4">
+                                    <img class="mr-3 rounded-circle" src="@repliedItem.ImagePath" width="60" height="60">
+                                    <div class="media-body">
+                                        <h6 class="mt-0 bSYellow">@repliedItem.MessageFrom
+                                        <span class="coolGrey">@repliedItem.Duration</span>
+                                        </h6>
+                                        <p>@repliedItem.MessageText</p>
+                                    </div>
+                                </div> 
+                            }
+                        }
+                        i++;
+                    }
+                </div>
+            </div>
+        </div>
+                        }
+</div>
+<script>
+    $("document").ready(function () {
+        $(".MsgBox").click(function () {
+            event.stopPropagation();
+            $(this).parent().find(".MsgBox-Form").slideToggle("fast");
+            $(this).parent().find(".replyComments").slideUp("fast");
+        });
+
+        $(".ReplyBox").click(function () {
+            event.stopPropagation();
+            $(this).parent().find(".replyComments").slideToggle("fast");
+            $(this).parent().find(".MsgBox-Form").slideUp("fast");
+        });
+    }); 
+</script>

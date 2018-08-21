@@ -1,0 +1,808 @@
+﻿@model BusinessObjects.DocumentsInformation
+@using System.Security.Claims;
+
+@{
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.Role);
+}
+
+<h4>Documents Needed</h4>
+@{ string ListingID = ""; }
+@using (Html.BeginForm("SaveDocumentsInformation", "ListingDetails", FormMethod.Post, new { @id = "frmAddListings" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.ID, new { @id = "hdn_Current_ID" })
+
+
+     ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(Model.ID), true);
+
+    <div class="white-two p-4 mb-4 documentSection">
+        <div>
+            This section only allows word, excel and pdf file formates, also images(png, jpg, jpeg, gif, tiff), otherwise documents wont' be uploaded. 50 MB of documents is the maximum attachments allowed per note. All documents that are available will be forwarded to Buyer when an Indicative Offer is accepted.
+        </div>
+
+        <div class="row mt-4 mb-3">
+            <div class="col-md-6 mt-4">@Html.LabelFor(m => m.CopyOfNoteAndRider, new { @class = "font13 mt-3" })</div>
+            <div class="col-md-6">
+                <div class="mt-4 mb-4 dropzone fileuploadborder dropzonediv dropzoneminheight" id="DocumentUploadDropzone">
+                    <div class="fallback">
+                        <input name="file" type="file" />
+                    </div>
+                </div>
+                <div id="Attachment_DocumentUpload">
+                    @if (Model.ListingLoanDocuments != null)
+                    {
+                        foreach (var item in Model.ListingLoanDocuments)
+                        {
+                            if (item.DocumentType == "CopyOfNoteAndRider")
+                            {
+                                <div class="js_DocumentUpload border p-2 white-two rounded font-italic mb-3">
+                                    <i class="fa fa-paperclip font25 mr-3 ml-2 align-middle"></i>
+                                    @item.FileName
+                                    <div class="deletefile float-right border-left border-dark pl-3 pr-3 cursorPointer"><i class="fa fa-trash font21" onclick="RemoveUploadFile('@item.FileName','1','CopyOfNoteAndRider')"></i></div>
+                                </div>
+                                @Html.Hidden("hdnCopyOfNoteAndRider", item.DocumentTypeID)
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-3">
+            <div class="col-md-6 mt-4">@Html.LabelFor(m => m.CopyOfRecordedDeedTrust, new { @class = "font13 mt-3" })</div>
+            <div class="col-md-6">
+                <div class="mt-4 mb-4 dropzone fileuploadborder dropzonediv dropzoneminheight" id="CopyOfRecordedDeedTrustDropzone">
+                    <div class="fallback">
+                        <input name="file" type="file" />
+                    </div>
+                </div>
+                <div id="Attachment_CopyOfRecordedDeedTrust">
+                    @if (Model.ListingLoanDocuments != null)
+                    {
+                        foreach (var item in Model.ListingLoanDocuments)
+                        {
+                            if (item.DocumentType == "CopyOfRecordedDeedTrust")
+                            {
+                                <div class="js_CopyOfRecordedDeedTrust border p-2 white-two rounded font-italic mb-3">
+                                    <i class="fa fa-paperclip font25 mr-3 ml-2 align-middle"></i>
+                                    @item.FileName
+                                    <div class="deletefile float-right border-left border-dark pl-3 pr-3 cursorPointer"><i class="fa fa-trash font21" onclick="RemoveUploadFile('@item.FileName','2','CopyOfRecordedDeedTrust')"></i></div>
+                                </div>
+                                @Html.Hidden("hdnCopyOfRecordedDeedTrust", item.DocumentTypeID)
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-3">
+            <div class="col-md-6 mt-4">@Html.LabelFor(m => m.CopyLoanModification, new { @class = "font13 mt-3" })</div>
+            <div class="col-md-6">
+                <div class="mt-4 mb-4 dropzone fileuploadborder dropzonediv dropzoneminheight" id="CopyLoanModificationDropzone">
+                    <div class="fallback">
+                        <input name="file" type="file" />
+                    </div>
+                </div>
+                <div id="Attachment_CopyLoanModification">
+                    @if (Model.ListingLoanDocuments != null)
+                    {
+                        foreach (var item in Model.ListingLoanDocuments)
+                        {
+                            if (item.DocumentType == "CopyLoanModification")
+                            {
+                                <div class="js_CopyLoanModification border p-2 white-two rounded font-italic mb-3">
+                                    <i class="fa fa-paperclip font25 mr-3 ml-2 align-middle"></i>
+                                    @item.FileName
+                                    <div class="deletefile float-right border-left border-dark pl-3 pr-3 cursorPointer"><i class="fa fa-trash font21" onclick="RemoveUploadFile('@item.FileName','3','CopyLoanModification')"></i></div>
+                                </div>
+                                @Html.Hidden("hdnCopyLoanModification", item.DocumentTypeID)
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-3">
+            <div class="col-md-6 mt-4">@Html.LabelFor(m => m.CopyAppraisalBPO, new { @class = "font13 mt-3" })</div>
+            <div class="col-md-6">
+                <div class="mt-4 mb-4 dropzone fileuploadborder dropzonediv dropzoneminheight" id="CopyAppraisalBPODropzone">
+                    <div class="fallback">
+                        <input name="file" type="file" />
+                    </div>
+                </div>
+                <div id="Attachment_CopyAppraisalBPO">
+                    @if (Model.ListingLoanDocuments != null)
+                    {
+                        foreach (var item in Model.ListingLoanDocuments)
+                        {
+                            if (item.DocumentType == "CopyAppraisalBPO")
+                            {
+                                <div class="js_CopyAppraisalBPO border p-2 white-two rounded font-italic mb-3">
+                                    <i class="fa fa-paperclip font25 mr-3 ml-2 align-middle"></i>
+                                    @item.FileName
+                                    <div class="deletefile float-right border-left border-dark pl-3 pr-3 cursorPointer"><i class="fa fa-trash font21" onclick="RemoveUploadFile('@item.FileName','4','CopyAppraisalBPO')"></i></div>
+                                </div>
+                                @Html.Hidden("hdnCopyAppraisalBPO", item.DocumentTypeID)
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div>Other</div>
+        <div class="row mt-4 mb-3">
+            <label class="font-weight-bold">Payment History</label>
+            <p>Note: If the notes are in FCI loan servicing then the payment history will automatically update. If notes are not serviced by FCI then monthly updates of payment history need to be submitted.</p>
+
+            @*<div class="col-md-6 mt-4">@Html.LabelFor(m => m.PaymentHistory, new { @class = "font13 mt-3" })</div>*@
+            <div class="col-md-6">
+                <div class="mt-4 mb-4 dropzone fileuploadborder dropzonediv dropzoneminheight" id="PaymentHistoryDropzone">
+                    <div class="fallback">
+                        <input name="file" type="file" />
+                    </div>
+                </div>
+                <div id="Attachment_PaymentHistory">
+                    @if (Model.ListingLoanDocuments != null)
+                    {
+                        foreach (var item in Model.ListingLoanDocuments)
+                        {
+                            if (item.DocumentType == "PaymentHistory")
+                            {
+                                <div class="js_CopyAppraisalBPO border p-2 white-two rounded font-italic mb-3">
+                                    <i class="fa fa-paperclip font25 mr-3 ml-2 align-middle"></i>
+                                    @item.FileName
+                                    <div class="deletefile float-right border-left border-dark pl-3 pr-3 cursorPointer"><i class="fa fa-trash font21" onclick="RemoveUploadFile('@item.FileName','5','PaymentHistory')"></i></div>
+                                </div>
+                                @Html.Hidden("hdnPaymentHistory", item.DocumentTypeID)
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <label class="font-weight-bold">Chain of Assignments</label>
+        <p>Note: For all new clients listing notes chain of assignments will be requested to prove ownership, please provide them at this time.</p>
+
+        <div class="mt-1">
+            <label class="font13 mr-2">Do you have the complete chain of assignments and allonges?</label>
+            @foreach (var value in @EnumHelper<BusinessObjects.ChainOfAssignmentGroup>.GetValues(BusinessObjects.ChainOfAssignmentGroup.Yes))
+            {
+                var description = EnumHelper<BusinessObjects.ChainOfAssignmentGroup>.GetDisplayValue(value);
+                <div class="form-check form-check-inline">
+                    <label class="customForm">
+                        <span class="customlabel">@description.ToString()</span>
+                        @Html.RadioButtonFor(m => m.ChainAssignments, Convert.ToInt32(value), new { @class = "js_ChainAssignments" })
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            }
+            @Html.ValidationMessageFor(model => model.ChainAssignments)
+        </div>
+
+        <div class="row mt-4 mb-3">
+            @*<div class="col-md-6 mt-4">@Html.LabelFor(m => m.ChainAssignmentsDoc, new { @class = "font13 mt-3" })</div>*@
+            <div class="col-md-6">
+                <div class="mt-4 mb-4 dropzone fileuploadborder dropzonediv dropzoneminheight" id="ChainAssignmentsDropzone">
+                    <div class="fallback">
+                        <input name="file" type="file" />
+                    </div>
+                </div>
+                <div id="Attachment_ChainAssignments">
+                    @if (Model.ListingLoanDocuments != null)
+                    {
+                        foreach (var item in Model.ListingLoanDocuments)
+                        {
+                            if (item.DocumentType == "ChainAssignments")
+                            {
+                                <div class="js_ChainAssignments border p-2 white-two rounded font-italic mb-3">
+                                    <i class="fa fa-paperclip font25 mr-3 ml-2 align-middle"></i>
+                                    @item.FileName
+                                    <div class="deletefile float-right border-left border-dark pl-3 pr-3 cursorPointer"><i class="fa fa-trash font21" onclick="RemoveUploadFile('@item.FileName','6','ChainAssignments')"></i></div>
+                                </div>
+                                @Html.Hidden("hdnChainAssignments", item.DocumentTypeID)
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Photos</h4>
+    <div class="white-two p-4 mb-4">
+        <p class="font-weight-bold"> Please add photo to increase buyer interest</p>
+        @Html.HiddenFor(m => m.ListingStatusID, new { @id = "ListingStatusID" })  @*Hidden control To save publish and draft status*@
+
+        <div class="form-group mt-4 border p-3 white-two">
+            <label class="custom-checkbox mb-0">
+                <span class="customlabel">Feature this listing (costs will apply)*</span>
+                @Html.CheckBoxFor(model => model.IsSponsored)
+                <span class="checkmark"></span>
+            </label>
+            @Html.ValidationMessageFor(model => model.IsSponsored)
+        </div>
+
+        <div class="mt-4 row" id="ImageContainer">
+            @if (Model.ListingImages != null)
+            {
+                foreach (var item in Model.ListingImages)
+                {
+                    <div class="col-md-3 col-lg-3">
+                        <div>
+                            <img width=100 height=100 src="@item.ImagePath" id="img_@(item.id)" alt="@item.FileName" />
+                        </div>
+                        <div class="form-group mt-1">
+                            <label for="chk_@(item.id)" class="custom-checkbox">
+                                @*onclick="MakeFeaturedImage('@item.FileName','chk_@(item.id)')"*@
+                                <span class="customlabel">Make Featured Image</span>
+                                @if (item.IsFeatured)
+                                {
+                                    <input type="checkbox" class='JSFeaturedImage' data-filename="@item.FileName" id="chk_@(item.id)" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class='JSFeaturedImage' data-filename="@item.FileName" id="chk_@(item.id)">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="form-group">
+            <div class="dropzone fileuploadborder dropzonediv" id="ImageUploadDropzone">
+                <div class="dz-message" data-dz-message><span>Browse for Image</span></div>
+                <div class="fallback">
+                    <input name="file" type="file" multiple />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+}
+<div class="f1-buttons">
+    <button type="button" id="btn_Previous_UploadInformation" class="btn btn-previous">Previous</button>
+    <button type="button" id="btn_SaveAndQuit" class="btn btn-primary font14">Deactivate Post</button>
+    <button type="button" id="btn_SaveAsDraft" class="btn btn-primary font14">Save as Draft</button>
+    <button type="button" id="btn_Publish" class="btn btn-primary font14">Save & Publish Changes</button>
+</div>
+
+<!--Success popup-->
+<div class="modal fade" id="SuccessPopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <h3 class="mb-2 mt-5">Success</h3>
+                <p>Your loan has been posted</p>
+                <div class="text-center mt-4 mb-5 pt-2">
+                    <a href='@Url.Action("GetSingleListingDetails", "InvestorListings", new { ListingId = ListingID})'>
+                        <button type="button" id="btn_ViewPost" class="btn btn-primary font14 mr-2">VIEW POST</button>
+                    </a>
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Admin)
+                    {
+                        <button type="button" id="btn_GoToAdminDashboard" class="btn btn-primary font14">Go To Dashboard</button>
+                    }
+                    else
+                    {
+                        <button type="button" id="btn_GoToMyPosts" class="btn btn-primary font14">GO TO MY POSTS</button>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+    function PublishMyListing() {
+        //$("#hdn_Current_ID").val($("#hdn_Listings_ID").val());
+        $.ajax({
+            url: '@Url.Action("SaveDocumentsInformation", "ListingDetails")',
+            type: "POST",
+            data: $("#frmAddListings").serialize(),
+            success: function (jsonResult) {
+                if (jsonResult[0].ID > 0) {
+                    var listingID = jsonResult[0].ListingID;
+                    if ($("#ListingStatusID").val() == "1") {
+                        //$("#btn_ViewPost").attr("data-listingID", listingID);
+                        $('#SuccessPopup').modal('show');
+                    }
+                    else if ($("#ListingStatusID").val() == "2") {
+                        //$("#btn_ViewPost").attr("data-listingID", listingID);
+                        $('#SuccessPopup').modal('show');
+                    }
+                    else if ($("#ListingStatusID").val() == "0") {
+                        bootbox.alert("This deal is deactivated. <br>You will find this deal in Archieved/Closed section on dashboard.", function () {
+                            var userRole = $('#hdn_userrole').val();
+                            if(userRole == "Broker")
+                                window.location.href = "/Dashboard/Broker";
+                            else
+                                window.location.href = "/Dashboard/Admin";
+                        });
+                    }
+                }
+            },
+            error: function (jsonResult) {
+                bootbox.alert(jsonResult.toString());
+            }
+        });
+    }
+
+    function RemoveUploadFile(fileName, DocTypeId, DocType) {
+        var ListingId = $("#hdn_Listings_ID").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RemoveUploadFile", "ListingDetails")?FileName=' + fileName + '&DocTypeId=' + DocTypeId + '&ListingId=' + ListingId + '&DocType=' + DocType,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                if (xhr.responseText && xhr.responseText[0] == "{")
+                    err = JSON.parse(xhr.responseText).Message;
+                console.log(err);
+            }
+        });
+    }
+
+    var _validImageFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+    function ValidateListingImage(oInput) {
+        if (oInput.type == "file") {
+            var sFileName = oInput.value;
+            if (sFileName.length > 0) {
+                var blnValid = false;
+                for (var j = 0; j < _validImageFileExtensions.length; j++) {
+                    var sCurExtension = _validImageFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        blnValid = true;
+                        break;
+                    }
+                }
+                if (!blnValid) {
+                    alert("Sorry, these extensions are not valid");
+                    oInput.value = "";
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    $(document).ready(function () {
+        for (i = 0; i < $(".js_ChainAssignments").length; i++) {
+            if ($(".js_ChainAssignments")[i].checked && $(".js_ChainAssignments")[i].value == "1") {
+                $('#ChainAssignmentsDropzone').removeClass("disableEvent");
+                $('#ChainAssignmentsDropzone').removeClass("backgroundgray");
+                break;
+            }
+            else {
+                $('#ChainAssignmentsDropzone').addClass("disableEvent");
+                $('#ChainAssignmentsDropzone').addClass("backgroundgray");
+            }
+        }
+    });
+
+    $(".js_ChainAssignments").on("click", function () {
+        if ($(this).val() == "1") {
+            $('#ChainAssignmentsDropzone').removeClass("disableEvent");
+            $('#ChainAssignmentsDropzone').removeClass("backgroundgray");
+        }
+        else {
+            $('#ChainAssignmentsDropzone').addClass("disableEvent");
+            $('#ChainAssignmentsDropzone').addClass("backgroundgray");
+        }
+        if ($("#Attachment_ChainAssignments").html().trim() != "") {
+            var DocTypeId = "6";
+            var FileName = $("#Attachment_ChainAssignments .deletefile").parent().text().trim();
+            var DocType = "ChainAssignments";
+            RemoveUploadFile(FileName, DocTypeId, DocType);
+            $("#Attachment_ChainAssignments").html("");
+        }
+    });
+
+    $(document).on('click', ".JSFeaturedImage", function () {
+        for (i = 0; i < $(".JSFeaturedImage").length; i++) {
+            if ($(this)[0].id != $(".JSFeaturedImage")[i].id)
+                $(".JSFeaturedImage")[i].checked = false;
+        }
+        var isFeatured = $(this)[0].checked;
+        var isExceuted = false;
+        if (!isExceuted) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("MakeFeaturedImage", "ListingDetails")?fileName=' + $(this).attr("data-filename") + '&isFeatured=' + isFeatured,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    console.log(result);
+                    isExecuted = true;
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    if (xhr.responseText && xhr.responseText[0] == "{")
+                        err = JSON.parse(xhr.responseText).Message;
+                    console.log(err);
+                }
+            });
+            isExecuted = true;
+        }
+    });
+
+    $("#btn_Publish").on("click", function () {
+        if ($(".JSFeaturedImage").length > 0) {
+            var isselected = false;
+            for (i = 0; i < $(".JSFeaturedImage").length; i++) {
+                if ($(".JSFeaturedImage")[i].checked) {
+                    isselected = true
+                }
+            }
+            if (!isselected) {
+                bootbox.alert('please select featured image');
+                return false;
+            }
+        }
+        $("#ListingStatusID").val("1");
+        PublishMyListing();
+    });
+
+    $("#btn_SaveAsDraft").on("click", function () {
+        $("#ListingStatusID").val("2");
+        PublishMyListing();
+    });
+
+    $("#btn_SaveAndQuit").on("click", function () {
+        bootbox.confirm("Do you really want to deactive this deal?", function (result) {
+            if (result) {
+                $("#ListingStatusID").val("0");
+                PublishMyListing();
+            }
+        });
+    });
+
+    //$("#btn_ViewPost").on("click", function () {
+    //    window.location.href = "/InvestorListings/GetSingleListingDetails?listingId=" + this.getAttribute("data-listingID");
+    //});
+
+    $("#btn_GoToMyPosts").on("click", function () {
+        window.location.href = "/Dashboard/Broker";
+    });
+
+    $("#btn_GoToAdminDashboard").on("click", function () {
+        window.location.href = "@Url.Action("Admin", "Dashboard")";
+    });
+
+    $(document).on('click', "#btn_Previous_UploadInformation", function () {
+        $.ajax({
+            url: '@Url.Action("EditCommentsInformation", "ListingDetails")',
+            type: "GET",
+            data: { listingID: $("#hdn_Listings_ID").val() },
+            success: function (result) {
+                $("#ActiveStep").show();
+                $("#ActiveStep").html(result);
+                PreviousJS();
+            },
+            error: function (result) {
+                bootbox.alert(result.toString());
+            }
+        });
+    });
+
+    $(".documentSection").on('click', '.deletefile', function () {
+        $(this).parent().remove();
+    });
+
+    //image upload control
+    Dropzone.autoDiscover = false;
+    Dropzone.options.ImageUploadDropzone = {
+        addRemoveLinks: true,
+        url: "/ListingDetails/UploadListingImage",
+        acceptedFiles: 'image/*',
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".png, .jpg, .jpeg, .bmp, .gif, .jfif",
+        //  previewTemplate: document.getElementById('template').innerHTML,
+        init: function () {
+            this.on("complete", function (file) {
+                if (!file.type.match('image.*')) {
+                    bootbox.alert("Upload Image Only!");
+                    return false;
+                }
+            }),
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var result = "<div class='col-md-3 col-lg-3'><div><img width=100 height=100 src=" + response + " id='img_'" + file.name + "  alt='" + file.name + "' /></div> <div class='form-group mt-1'><label for='chk_" + file.lastModified + "' class='custom-checkbox' >"; // onclick='MakeFeaturedImage('" + file.name + "','" + file.id + "')'
+                result += "<span class='customlabel'>Make Featured Image</span><input type='checkbox' class='JSFeaturedImage' data-filename=" + file.name + "   id='chk_" + file.lastModified + "'><span class='checkmark'></span></label></div></div>";
+                $("#ImageContainer").append(result);
+            });
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveTempFile',
+                data: "filename=" + name,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#ImageUploadDropzone').dropzone();
+    // end of image upload method
+
+    // upload document method
+
+    Dropzone.autoDiscover = false;
+    Dropzone.options.DocumentUploadDropzone = {
+        addRemoveLinks: true,
+        url: '@Html.Raw(@Url.Action("UploadloanDocuments", "ListingDetails", new { FileType = "CopyOfNoteAndRider", DocID = "1" }))',
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".jpg, .jpeg, .bmp, .gif, .png, .DOC, .DOCX, .ODT, .PDF, .XLS, .XLSX, .ODS, .PPT, .PPTX, .TXT",
+        init: function () {
+            this.on("addedfile", function (file) {
+                //if (this.files[1] != null) {
+                //    this.removeFile(this.files[0]);
+                //}
+            }),
+            this.on("success", function (file, response) {
+                var DocTypeId = "1";
+                var DocType = "CopyOfNoteAndRider";
+                if ($("#Attachment_DocumentUpload").find('.js_DocumentUpload').length > 0) {
+                    $("#Attachment_DocumentUpload").html("");
+                }
+                $("#Attachment_DocumentUpload").append("<div class='js_DocumentUpload border p-2 white-two rounded font-italic mb-3'><i class='fa fa-paperclip font25 mr-3 ml-2 align-middle'></i> " + file.name + " <div class='cursorPointer deletefile float-right border-left border-dark pl-3 pr-3'><i class='fa fa-trash font21' onclick='RemoveUploadFile(" + file.name + "," + DocTypeId + "," + DocType + ")'></i></div></div>");
+            });
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveUploadFile',
+                data: "filename=" + name + '&id=' + id,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#DocumentUploadDropzone').dropzone();
+
+    Dropzone.autoDiscover = false;
+    Dropzone.options.CopyOfRecordedDeedTrustDropzone = {
+        addRemoveLinks: true,
+        url: '@Html.Raw(@Url.Action("UploadloanDocuments", "ListingDetails", new{ FileType= "CopyOfRecordedDeedTrust", DocID= "2" }))',
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".jpg, .jpeg, .bmp, .gif, .png, .DOC, .DOCX, .ODT, .PDF, .XLS, .XLSX, .ODS, .PPT, .PPTX, .TXT",
+        init: function () {
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var DocTypeId = "2";
+                var DocType = "CopyOfRecordedDeedTrust";
+                if ($("#Attachment_CopyOfRecordedDeedTrust").find('.js_CopyOfRecordedDeedTrust').length > 0) {
+                    $("#Attachment_CopyOfRecordedDeedTrust").html("");
+                }
+                $("#Attachment_CopyOfRecordedDeedTrust").append("<div class='js_CopyOfRecordedDeedTrust border p-2 white-two rounded font-italic mb-3'><i class='fa fa-paperclip font25 mr-3 ml-2 align-middle'></i> " + file.name + " <div class='cursorPointer deletefile float-right border-left border-dark pl-3 pr-3'><i class='fa fa-trash font21' onclick='RemoveUploadFile(" + file.name + "," + DocTypeId + "," + DocType + ")'></i></div></div>");
+            })
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveUploadFile',
+                data: "filename=" + name + '&id=' + id,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#CopyOfRecordedDeedTrustDropzone').dropzone();
+
+    Dropzone.autoDiscover = false;
+    Dropzone.options.CopyLoanModificationDropzone = {
+        addRemoveLinks: true,
+        url: '@Html.Raw(@Url.Action("UploadloanDocuments", "ListingDetails", new{ FileType= "CopyLoanModification", DocID= "3" }))',
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".jpg, .jpeg, .bmp, .gif, .png, .DOC, .DOCX, .ODT, .PDF, .XLS, .XLSX, .ODS, .PPT, .PPTX, .TXT",
+        init: function () {
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var DocTypeId = "3";
+                var DocType = "CopyLoanModification";
+                if ($("#Attachment_CopyLoanModification").find('.js_CopyLoanModification').length > 0) {
+                    $("#Attachment_CopyLoanModification").html("");
+                }
+                $("#Attachment_CopyLoanModification").append("<div class='js_CopyLoanModification border p-2 white-two rounded font-italic mb-3'><i class='fa fa-paperclip font25 mr-3 ml-2 align-middle'></i> " + file.name + " <div class='cursorPointer deletefile float-right border-left border-dark pl-3 pr-3'><i class='fa fa-trash font21' onclick='RemoveUploadFile(" + file.name + "," + DocTypeId + "," + DocType + ")'></i></div></div>");
+            })
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveUploadFile',
+                data: "filename=" + name + '&id=' + id,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#CopyLoanModificationDropzone').dropzone();
+
+    Dropzone.autoDiscover = false;
+    Dropzone.options.CopyAppraisalBPODropzone = {
+        addRemoveLinks: true,
+        url: '@Html.Raw(@Url.Action("UploadloanDocuments", "ListingDetails", new{ FileType= "CopyAppraisalBPO", DocID= "4" }))',
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".jpg, .jpeg, .bmp, .gif, .png, .DOC, .DOCX, .ODT, .PDF, .XLS, .XLSX, .ODS, .PPT, .PPTX, .TXT",
+        init: function () {
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var DocTypeId = "4";
+                var DocType = "CopyAppraisalBPO";
+                if ($("#Attachment_CopyAppraisalBPO").find('.js_CopyAppraisalBPO').length > 0) {
+                    $("#Attachment_CopyAppraisalBPO").html("");
+                }
+                $("#Attachment_CopyAppraisalBPO").append("<div class='js_CopyAppraisalBPO border p-2 white-two rounded font-italic mb-3'><i class='fa fa-paperclip font25 mr-3 ml-2 align-middle'></i> " + file.name + " <div class='cursorPointer deletefile float-right border-left border-dark pl-3 pr-3'><i class='fa fa-trash font21' onclick='RemoveUploadFile(" + file.name + "," + DocTypeId + "," + DocType + ")'></i></div></div>");
+            })
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveUploadFile',
+                data: "filename=" + name + '&id=' + id,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#CopyAppraisalBPODropzone').dropzone();
+
+    Dropzone.autoDiscover = false;
+    Dropzone.options.PaymentHistoryDropzone = {
+        addRemoveLinks: true,
+        url: '@Html.Raw(@Url.Action("UploadloanDocuments", "ListingDetails", new{ FileType= "PaymentHistory", DocID= "5" }))',
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".jpg, .jpeg, .bmp, .gif, .png, .DOC, .DOCX, .ODT, .PDF, .XLS, .XLSX, .ODS, .PPT, .PPTX, .TXT",
+        init: function () {
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var DocTypeId = "5";
+                var DocType = "PaymentHistory";
+                if ($("#Attachment_PaymentHistory").find('.js_PaymentHistory').length > 0) {
+                    $("#Attachment_PaymentHistory").html("");
+                }
+                $("#Attachment_PaymentHistory").append("<div class='js_PaymentHistory border p-2 white-two rounded font-italic mb-3'><i class='fa fa-paperclip font25 mr-3 ml-2 align-middle'></i> " + file.name + " <div class='cursorPointer deletefile float-right border-left border-dark pl-3 pr-3'><i class='fa fa-trash font21' onclick='RemoveUploadFile(" + file.name + "," + DocTypeId + "," + DocType + ")'></i></div></div>");
+            })
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveUploadFile',
+                data: "filename=" + name + '&id=' + id,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#PaymentHistoryDropzone').dropzone();
+
+    Dropzone.autoDiscover = false;
+    Dropzone.options.ChainAssignmentsDropzone = {
+        addRemoveLinks: true,
+        url: '@Html.Raw(@Url.Action("UploadloanDocuments", "ListingDetails", new{ FileType= "ChainAssignments", DocID= "6" }))',
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".jpg, .jpeg, .bmp, .gif, .png, .DOC, .DOCX, .ODT, .PDF, .XLS, .XLSX, .ODS, .PPT, .PPTX, .TXT",
+        init: function () {
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var DocTypeId = "6";
+                var DocType = "ChainAssignments";
+                if ($("#Attachment_ChainAssignments").find('.js_ChainAssignments').length > 0) {
+                    $("#Attachment_ChainAssignments").html("");
+                }
+                $("#Attachment_ChainAssignments").append("<div class='js_ChainAssignments border p-2 white-two rounded font-italic mb-3'><i class='fa fa-paperclip font25 mr-3 ml-2 align-middle'></i> " + file.name + " <div class='cursorPointer deletefile float-right border-left border-dark pl-3 pr-3'><i class='fa fa-trash font21' onclick='RemoveUploadFile(" + file.name + "," + DocTypeId + "," + DocType + ")'></i></div></div>");
+            })
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveUploadFile',
+                data: "filename=" + name + '&id=' + id,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#ChainAssignmentsDropzone').dropzone();
+    // end upload document method
+
+    //Listing Image uplaod
+    $('#image_Uploader').on('change', function (e) {
+        if (typeof (FileReader) != "undefined") {
+            var image_holder = $("#image-holder");
+            image_holder.empty();
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image",
+                    "height": "250",
+                    "width": "250",
+                }).appendTo(image_holder);
+            }
+            image_holder.show();
+            reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+            alert("This browser does not support FileReader.");
+        }
+        var files = e.target.files;
+        if (files.length > 0) {
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/ListingDetails/UploadListingImage',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] == "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+</script>

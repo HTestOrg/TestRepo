@@ -1,0 +1,131 @@
+﻿@model  PagedList.IPagedList<BusinessObjects.InvestorListingsModel>
+@using PagedList.Mvc;
+
+
+@if (Synoptek.SessionController.UserSession.UserId != null)
+{
+    foreach (var item in Model)
+    {
+        string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+        //string ListingID = item.ID.ToString();
+
+        <div class="row pt-2 BrokerList" id="RowID_@(item.ID)">
+            <div class="col-md-4">
+                <div class="item mb-2 js_image" data-id="@(item.ID)">
+                    <img src="@(item.ImagePath)" class="img-fluid height200" alt="@(item.Name)">
+                    @if (item.IsSponsored)
+                    {
+                        <div class='item-star'><i class='fa fa-star'></i></div>
+                    }
+                    <div class="item-text">$ @item.AmountRequired <br> @item.Location</div>
+                </div>
+                @Html.ActionLink("View Details", "GetSingleListingDetails", new { ListingId = ListingID }, new { @class = "btn btn-primary w-100 mb-2 font14" })
+                @*<button type="button" class="btn btn-primary w-100 font14" id="btnContactBroker" data-broker-id="@(item.BrokerId)" title="@(item.BrokerName)" onclick="ContactBroker('@ListingID','@item.BrokerName')">Message Broker</button>*@
+                @if (Synoptek.SessionController.UserSession.RoleType == "Investor")
+                {
+                    <button type="button" class="btn GhostButton mt-4" id="js_favorite@(item.ID)" data-val="@(item.IsFavorite)">
+                        @if (item.IsFavorite)
+                        {
+                            <i class="fa fa-heart float-left font-weight-bold"></i> <span>Favorited</span>
+                        }
+                        else
+                        {
+                            <i class="fa fa-heart-o float-left font-weight-bold"></i> <span>Favorite</span>
+                        }
+                    </button>}
+                @*<button type="button" class="btn GhostButton mt-4"><i class="fa fa-close float-left font-weight-bold"></i> Forget</button>*@
+            </div>
+            <div class="col-md-8">
+                <div class="font12"><a href="#" class="mr-2">@item.ListingType.ToUpper()</a> <strong>ID #@item.ID</strong></div>
+                <h4>@item.Name</h4>
+                <p>@item.Description</p>
+            </div>
+            <div class="col-md-12">
+                <div class="DividerBot"></div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <script>
+            $(document).ready(function () {
+                $("#js_favorite@(item.ID)").on("click", function () {
+                    try {
+                        var IsFavorite = $("#js_favorite@(item.ID)").attr("data-val");
+                        var id = '@ListingID'
+                        $.ajax({
+                            url: "Favorite",
+                            data: { listingID: id, IsFavorite: IsFavorite },
+                            success: function (result) {
+                                if (result == 1) {
+                                    $("#js_favorite@(item.ID) i").removeClass("fa fa-heart-o").addClass("fa fa-heart");
+                                    $("#js_favorite@(item.ID) span").html("Favorited");
+                                    $("#js_favorite@(item.ID)").attr("data-val", "True");
+                                }
+                                else {
+                                    $("#js_favorite@(item.ID) i").removeClass("fa fa-heart").addClass("fa fa-heart-o");
+                                    $("#js_favorite@(item.ID) span").html("Favorite");
+                                    $("#js_favorite@(item.ID)").attr("data-val", "False");
+                                }
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    }
+                    catch (ex) {
+                        ShowErrorMessage(ex.message);
+                    }
+                });
+            });
+        </script>
+    }
+}
+
+<nav aria-label="Page navigation pagination">
+    <ul class="pagination justify-content-center" id='Paging'>
+        @Html.PagedListPager(Model, page => Url.Action("BrokerDetails", new { Page = page }))
+    </ul>
+</nav>
+
+<script>
+    function ContactBroker(listingID, brokerName) {
+        $('#InvestorModal').modal({ backdrop: 'static', keyboard: false })
+        $("#deal_title").html("Contact Broker : " + brokerName);
+        $("#hdn_ListingId").val(listingID);
+    }
+</script>
+@if (Model.Count <= 0)
+{
+    <div>
+        <h4 class="text-center">No deals found</h4>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+        //Pagination event handling ----------------------------
+        $('.pagination a').click(function () {
+            try {
+                var BrokerName = $("#BrokerName").val();
+                var BrokerId = $("#BrokerId").val();
+                if (this.href != "" && this.href != undefined) {
+                    $.ajax({
+                        url: this.href,
+                        data: { Featured: "0", BrokerId: BrokerId, BrokerName: BrokerName },
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#brokerListingDiv').html(result);
+                        }
+                    });
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        //Pagination event handling ----------------------------
+    });
+</script>

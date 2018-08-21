@@ -1,0 +1,194 @@
+﻿@model  PagedList.IPagedList<BusinessObjects.BrokerListingsModel>
+@using PagedList.Mvc;
+
+@{
+    var IsPagerAdded = false;
+}
+<style>
+    .fa-eye, .fa-pencil, .fa-eye:hover, .fa-pencil:hover {
+        color: white;
+        text-decoration: none;
+    } 
+</style>
+<div class="container">
+    @if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Broker")
+    {
+        int counter = 0; int iii = 1; int modelcounter = Model.Count;
+        foreach (var item in Model)
+        {
+            string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+            if (counter % 4 == 0)
+            {
+                @Html.Raw("<div class='row'>")
+            }
+            <div class="col-md-3 mb-4">
+                <div class="item mb-2">
+                    <img src="@(item.ImagePath)" class="img-fluid cursorPointer" alt="@(item.Name)">
+                    <div class="itemAction">
+                        <a title="View Details" class="fa fa-eye" href="@Url.Action("GetSingleListingDetails", "InvestorListings",new {ListingId = ListingID })"></a>
+                        <a title="Edit" class="fa fa-pencil" href="@Url.Action("Edit", "ListingDetails",new {ListingID = ListingID })"></a>
+                        <i title="Delete" class="fa fa-trash" id="btnDelete" onclick="DeleteDeal('@ListingID', '@item.ListingStatus')"></i>
+                    </div>
+                    <div class="item-star"><i class="fa fa-star"></i></div>
+                    <div class="item-text">$ @item.AmountRequired <br> @item.Location</div>
+                </div>
+
+                <div class="font12 mb-1"><a href="#" class="mr-2">@item.ListingType.ToUpper()</a> <strong>ID #@item.ID</strong></div>
+                <h4 class="mb-1">@item.Name</h4>
+                @if (item.MessageCount <= 0)
+                    {
+                    <span class="coolGrey" ><i class="fa fa-envelope"></i> @item.MessageCount New Message</span>
+                }
+                else
+                {
+                    <span class="coolBlue cursorPointer" data-toggle="modal" data-target="#brokerMessageModel" onclick="ViewMessages('@ListingID','@item.Name');"><i class="fa fa-envelope"></i> @item.MessageCount New Messages</span>
+                }
+            </div>
+            if (iii % 4 == 0 || iii == modelcounter)
+            {
+                @Html.Raw("</div>");
+            }
+            iii++;
+            counter++;
+        }
+        if (Model.Count <= 0)
+        {
+            <div>
+                <h4 class="text-center">No deals found</h4>
+            </div>
+        }
+    }
+</div>
+@foreach (var item in Model)
+{
+    if (!IsPagerAdded)
+    {
+        IsPagerAdded = true;
+
+        <nav aria-label="Page navigation pagination" id='Paging_@item.ListingStatus'>
+            <ul class="pagination justify-content-center">
+                @Html.PagedListPager(Model, page => Url.Action("Broker", new { Page = page, Status = item.ListingStatus }))
+            </ul>
+        </nav>
+    }
+}
+<!--User Comments Popup-->
+<div class="modal fade" id="brokerMessageModel" tabindex="-1" role="dialog" aria-labelledby="brokerMessageModelCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body" id="messageBody">
+            </div>
+        </div>
+    </div>
+</div>
+<!--User Comments Popup-->
+
+<script>
+    $(document).ready(function () {
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+        $('.pagination a').click(function () {
+            try {
+                if (this.href != "" && this.href != undefined) {
+                    $.ajax({
+                        url: this.href,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#DivActiveContent').html(result);
+                        }
+                    });
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+    });
+
+
+
+    function DeleteDeal(listingID, listingStatus) {
+        var Id = listingID
+        bootbox.confirm({
+            message: "Do you want to delete this Deal?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Dashboard")',
+                        data: { listingID: Id },
+                        success: function (result) {
+                            var status = listingStatus;
+                            if (status == "Active") {
+                                $("#li_Active").trigger('click');
+                            }
+                            if (status == "Draft") {
+                                $("#li_Draft").trigger('click');
+                            }
+                            if (status == "Inactive") {
+                                $("#li_Inactive").trigger('click');
+                            }
+                        },
+                        error: function (result) {
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function ViewMessages(listingID, ListingName) {
+        try {
+            var Id = listingID;
+            $.ajax({
+                url: '@Url.Action("GetDealMessages", "Dashboard")',
+                data: { listingID: Id },
+                success: function (result) {
+                    $("#messageBody").html(result); 
+                },
+                error: function (result) {
+                }
+            });
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    }
+
+    function ReplyMessage(CommentID, toUserId, listingDetailsID, obj) {
+        message = $(obj).siblings('textarea').val().trim();
+        if (message != "") {
+            $.ajax({
+                url: '@Url.Action("ReplyToMessage","MessageCenter")',
+                data: { listingDetailsID: listingDetailsID, toUserId: toUserId, message: message, CommentID: CommentID },
+                success: function (result) {
+                    if (result) {
+                        bootbox.alert("Your message has been sent successfully!!!", function () {
+                            $("#brokerMessageModel .close").trigger('click');
+                        });
+                    }
+                },
+                error: function (result) {
+                }
+            });
+        }
+        else {
+            $(obj).siblings('span') = 'Message is required.';
+            return false;
+        }
+    }
+</script> 

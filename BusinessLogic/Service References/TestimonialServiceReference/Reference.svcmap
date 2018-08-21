@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="93e1f383-930d-412b-913c-bb59d11fd5b4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://geraciwcfservices.azurewebsites.net/TestimonialService/TestimonialService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TestimonialService3.xsd" MetadataType="Schema" ID="557c4bc0-8eec-4b60-a86e-a84c00d58eca" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/TestimonialService/TestimonialService.svc?xsd=xsd1" />
+    <MetadataFile FileName="TestimonialService4.xsd" MetadataType="Schema" ID="37d12a7a-489d-4fb4-b83d-9c9bdaa55ab2" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/TestimonialService/TestimonialService.svc?xsd=xsd0" />
+    <MetadataFile FileName="TestimonialService5.xsd" MetadataType="Schema" ID="a59f5d7b-e120-4caa-a8a4-b049863b9dcc" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/TestimonialService/TestimonialService.svc?xsd=xsd2" />
+    <MetadataFile FileName="TestimonialService1.wsdl" MetadataType="Wsdl" ID="36c923fc-4bcd-4116-aef7-0440cb5b5108" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/TestimonialService/TestimonialService.svc?wsdl" />
+    <MetadataFile FileName="TestimonialService1.disco" MetadataType="Disco" ID="681af6f5-a936-47a7-85ce-11c26634d92a" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/TestimonialService/TestimonialService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

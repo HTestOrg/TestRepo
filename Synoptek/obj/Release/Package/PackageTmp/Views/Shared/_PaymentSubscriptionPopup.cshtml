@@ -1,0 +1,82 @@
+﻿@model BusinessObjects.SubscriptionModel
+
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+
+<div class="modal-body text-center">
+    @using (Ajax.BeginForm("ChargeSaveCustomer", "Subscription",
+                                                                        new AjaxOptions
+                                                                        {
+                                                                            OnSuccess = "handleSuccess",
+                                                                            HttpMethod = "POST",
+                                                                            OnFailure = "showError"
+                                                                        },
+                                                                        new { id = "frmSubscription" }
+                                                                        ))
+    {
+
+
+        <form>
+            <h3 class="mb-2 mt-5">@ViewBag.SubscriptionTitle </h3>
+            <div class="text-center mt-4 pt-2 modalData">
+                <p class="font-weight-bold">Provide your payment details below.</p>
+
+
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.RoleID, new { @id = "hdn_userrole_ID" })
+                @Html.HiddenFor(m => m.Token, new { @id = "hdnToken" })
+
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    <div class="position-relative">
+                        @Html.DropDownListFor(model => model.CardTypeID, new SelectList(Model.CardType, "ID", "Name"), "Card Type", new { @class = "custom-select form-control-lg skill-icon pl-2 empty" })
+                        @Html.ValidationMessageFor(model => model.CardType)
+
+                        <div style="color:red" id="div_cardTypeError"></div>
+                    </div>
+                </div>
+
+                @Html.TextBoxFor(model => model.NameOnCard, new { @class = "form-control", placeholder = "Name On Card" })
+                @Html.ValidationMessageFor(model => model.NameOnCard)
+
+                @if (Synoptek.SessionController.UserSession.CustomerID != null)
+                {
+                    @Html.TextBoxFor(model => model.CardNumber, new { @class = "form-control", placeholder = "Card Number", id = "txtCardNumber", @readonly = "readonly" })}
+                else
+                {
+                    @Html.TextBoxFor(model => model.CardNumber, new { @class = "form-control", placeholder = "Card Number", id = "txtCardNumber" })
+                }
+
+                @Html.ValidationMessageFor(model => model.CardNumber)
+
+                <div style="color:red" id="div_cardnumberError"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.ExpirationMonth, new SelectList(Model.ExpirationMonthList, "ID", "Month"), "Select Month", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.ExpirationMonth)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.ExpirationYear, new SelectList(Model.ExpirationYearList, "ID", "Year"), "Select Year", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.ExpirationYear)
+
+                        <div style="color:red" id="div_yearError"></div>
+                    </div>
+                </div>
+                <br />
+                @Html.TextBoxFor(model => model.SecurityCode, new { @class = "form-control", placeholder = "Security Code" })
+                @Html.ValidationMessageFor(model => model.SecurityCode)
+
+                <div style="color:red" id="div_cvcError"></div>
+                @if (Synoptek.SessionController.UserSession.CustomerID == null)
+                {
+                    <input type="submit" value="Subscription" class="btn btn-primary mt-4 mb-5" id="btnSubscribe" onclick="MakeSubscription()" />}
+                else
+                {
+                    <input type="submit" value="Subscription" class="btn btn-primary mt-4 mb-5" id="btnSubscribe" />
+                }@*onclick="MakeSubscriptionForSaveCard()"*@
+                <p class="font-weight-bold">By subscribing you agree to our <a href="#" id="TermsConditions" data-toggle="modal" data-dismiss="modal" data-target="#TermsAndConditions" class="font14">Terms and Conditions</a> and understand that you will be charged $199 each month on the billing date. You may update your billing preferences in your accounts settings.</p>
+            </div>
+        </form>
+    }
+</div>

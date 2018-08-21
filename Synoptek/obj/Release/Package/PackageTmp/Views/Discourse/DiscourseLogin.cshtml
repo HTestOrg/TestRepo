@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "DiscourseLoginView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Login/Login",
+            success: function (result) {
+                $("#LoginModal").modal();
+                $("#loginContent").html(result);
+            }
+        });
+    });
+
+</script>

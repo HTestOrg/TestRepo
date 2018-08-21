@@ -1,0 +1,82 @@
+﻿@model BusinessObjects.UserProfileModel
+
+@{
+    ViewBag.Title = "Register";
+}
+<style>
+    input.input-validation-error {
+        border: 2px solid #e80c4d;
+    }
+</style>
+
+@using (Ajax.BeginForm("RegisterUser", "UserRegistration",
+                                    new AjaxOptions
+                                    {
+                                        OnSuccess = "handleSuccess",
+                                        HttpMethod = "POST",
+                                        OnFailure = "showError"
+                                    }, new { id = "_SignUpForm" }))
+{
+    @Html.HiddenFor(model => model.ID)
+
+    @Html.AntiForgeryToken()
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="modal-body text-center">
+        <form>
+            <h3 class="mb-5 mt-5">Sign up for a free account <br /> to access our platform content</h3>
+            <div class="text-center mt-4 pt-2 modalData">
+                @Html.ValidationSummary(true)
+                <div class="form-group has-warning text-left">
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control marginbottom0", placeholder = "Email Address" })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group has-warning text-left">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control marginbottom0", placeholder = "Name" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+                <div class="form-group has-warning text-left">
+                    @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control marginbottom0", placeholder = "Company" })
+                    @Html.ValidationMessageFor(model => model.CompanyName)
+                </div>
+                <div class="form-group has-warning text-left">
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control marginbottom0", placeholder = "Password" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+                <div class="form-group has-warning text-left">
+                    @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control marginbottom0", placeholder = "Confirm Password" })
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                </div>
+                <input type="submit" value="SIGN UP" class="btn btn-primary mt-4 mb-5" id="btn_signup" />
+            </div>
+
+        </form>
+    </div>
+
+}
+
+<script>
+    var handleSuccess = function (result) {
+        if (result.type == "Url") {
+            var model = result.Url;
+            var token = $('input[name=__RequestVerificationToken]').val();
+            $.ajax({
+                type: "POST",
+                data: { loginModel: model, __RequestVerificationToken: token },
+                url: '/Login/Login',
+            }).done(function (res) {
+                window.location.reload();
+            });
+        }
+        else {
+            $("#Signupcontent").html(result);
+        }
+    };
+
+    function showError(error) {
+        bootbox.alert(error.responseText);
+    };
+</script>

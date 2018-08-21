@@ -1,0 +1,65 @@
+﻿@model BusinessObjects.SingleListingWrapper
+
+@{
+    ViewBag.Title = "Investor Listing - Single";
+}
+
+<div id="singleInvestorListingDiv">
+    @Html.Partial("_SingleListingDetails", Model.SingleInvestorListings)
+</div>
+ 
+@*this part is not implemented yet. only Static html is display. will get cover in backlog*@
+<div class="white-two educationPage">
+    <div class="container pb-5">
+        <h2 class="pt-5">Featured Listing</h2>
+        <div class="BottonLine mt-3 mb-4"></div>
+        <div class="clearfix"></div>
+        <div class="row pt-2">
+            @foreach (var item in Model.FeaturedOpportunityList)
+            {
+                string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+                <div class="col-md-3">
+
+                    <div class="item mb-2 FeaturedList cursorPointer" data-id="@(ListingID)">
+                        <img src="@item.ImagePath" class="img-fluid cursorPointer" alt="@item.Name">
+
+                        <div class="item-star"><i class="fa fa-star"></i></div>
+                        <div class="item-text">
+                            $@item.AmountRequired <br> @item.Location
+                        </div>
+                    </div>
+                    <h4 class="mb-1">@item.Name</h4>
+                    <div class="font12 mb-1"><span class="category mr-2">@item.ListingType</span></div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        try {
+            $(".FeaturedList").on('click', function () {
+                var Id = $(this).attr("data-id");
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetSingleListingDetailsPartial", "InvestorListings")',
+                    data: { listingId : Id},
+                    success: function (result) {
+                        $("#singleInvestorListingDiv").html("");
+                        $("#singleInvestorListingDiv").html(result);
+                        $('html, body').animate({ scrollTop: 0 }, 'slow');
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                });
+            });
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    });
+</script>
+
+

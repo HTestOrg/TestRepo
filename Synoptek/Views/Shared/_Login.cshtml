@@ -1,0 +1,141 @@
+﻿@model BusinessObjects.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<button type="button" class="close" id="btn_closeLogin" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+
+<div class="modal-body text-center">
+    @using (Ajax.BeginForm("Login", "Login",
+                                                                                                                                                                                new AjaxOptions
+                                                                                                                                                                                {
+                                                                                                                                                                                    OnSuccess = "handleSuccess",
+                                                                                                                                                                                    HttpMethod = "POST",
+                                                                                                                                                                                    OnFailure = "showError"
+                                                                                                                                                                                }))
+    {
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="ForgotFlow">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="login-tab" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <h3 class="mb-5 mt-5">Login</h3>
+                    <div class="text-center mt-4 pt-2 modalData">
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", placeholder = "User Name" })
+                        @Html.ValidationMessageFor(model => model.UserName)
+
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Password" })
+                        @Html.ValidationMessageFor(model => model.Password)
+
+                        <button type="submit" id="btn_login" class="btn btn-primary mt-4 mb-4">Login</button>
+                    </div>
+                    <ul class="nav nav-pills mb-3 text-center row" id="pills-tab" role="tablist">
+                        <li class="nav-item w-100">
+                            <a class="nav-link font14" id="forgot-password-tab" data-toggle="pill" href="#forget-tab" role="tab" aria-controls="forget-tab" aria-selected="false">Forgot Password?</a>
+                            <span style="color:white">Not having account with us?</span>&nbsp;&nbsp; <a class="font14" href="#" onclick="GetSignUpPopup()">Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="forget-tab" role="tabpanel" aria-labelledby="forgot-password-tab">
+                    <h3 class="mb-5 mt-5">Forgot Password</h3>
+                    <div class="text-center mt-4 pt-2 modalData">
+                        <input type="text" class="form-control" id="Email" placeholder="Please Enter Email...">
+                        <div class="field-validation-error"><span></span></div>
+                        <button type="button" id="btn_forgotPassword" class="btn btn-primary mt-4 mb-4">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    var handleSuccess = function (result) {
+        if (result.type == "Url") {
+            var redirectURl = $('#hdnRedirectURL').val();
+            window.location.href = result.Url;
+            window.location.reload();
+        }
+        else {
+            $("#loginContent").html(result);
+        }
+    };
+
+    function showError(error) {
+        bootbox.alert(error.responseText);
+    };
+
+    function isEmailExists(Email) {
+        var isValidEmail = ValidateEmail(Email);
+        var isExists = false;
+        if (Email.trim() != "" && isValidEmail) {
+            $.ajax({
+                url: '@Url.Action("IfUserExists","ForgotPassword")',
+                async: false,
+                data: { Email: Email },
+                success: function myfunction(result) {
+                    if (result == true) {
+                        //returnBool(result);
+                        isExists = true;
+                    }
+                    else {
+                        $(".field-validation-error span").html(result);
+                        //returnBool(false);
+                        isExists = false;
+                    }
+                },
+                error: function myfunction(result) {
+                }
+            });
+        }
+        else {
+            $(".field-validation-error span").html("Please provide valid email address.");
+        }
+        return isExists;
+    }
+
+
+    $("#Email").keypress(function (e) {
+        if (e.keyCode == 13) {
+            $("#btn_forgotPassword").trigger("click");
+            e.preventDefault();
+        }
+    });
+
+    $("#btn_forgotPassword").click(function () {
+        $(".field-validation-error span").html("");
+        var Email = $("#Email").val();
+        var isUserExists = isEmailExists(Email);
+        if (isUserExists) {
+            $.ajax({
+                url: '@Url.Action("SendForgotPasswordNotification", "ForgotPassword")',
+                type: 'GET',
+                data: { EmailTo: Email },
+                success: function myfunction(result) {
+
+                    if (result) {
+                        bootbox.alert("An email has been sent to your registered email address.\n Please check your inbox.", function () {
+                            $("#btn_closeLogin").trigger('click');
+                        });
+                    }
+                    else {
+                        bootbox.alert("Something went wrong...");
+                    }
+                },
+                error: function myfunction(result) {
+                }
+            });
+        }
+    });
+
+    function ValidateEmail(email) {
+        //expr is a regex defined in Custom.js
+        return expr.test(email);
+    }
+
+
+</script>

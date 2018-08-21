@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "DiscourseSignup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DiscourseSignup</h2>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    });
+
+</script>

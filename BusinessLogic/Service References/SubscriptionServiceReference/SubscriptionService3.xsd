@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/BusinessObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/BusinessObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfPaymentCardTypes">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PaymentCardTypes" nillable="true" type="tns:PaymentCardTypes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPaymentCardTypes" nillable="true" type="tns:ArrayOfPaymentCardTypes" />
+  <xs:complexType name="PaymentCardTypes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ID" type="xs:long" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PaymentCardTypes" nillable="true" type="tns:PaymentCardTypes" />
+  <xs:complexType name="ArrayOfSubscriptionOption">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SubscriptionOption" nillable="true" type="tns:SubscriptionOption" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSubscriptionOption" nillable="true" type="tns:ArrayOfSubscriptionOption" />
+  <xs:complexType name="SubscriptionOption">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:double" />
+      <xs:element minOccurs="0" name="AmountPerMonth" type="xs:double" />
+      <xs:element minOccurs="0" name="BillSavingAmount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingCycle" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Caption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="PlanName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoleId" type="xs:long" />
+      <xs:element minOccurs="0" name="Save" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SubscriptionOption" nillable="true" type="tns:SubscriptionOption" />
+</xs:schema>

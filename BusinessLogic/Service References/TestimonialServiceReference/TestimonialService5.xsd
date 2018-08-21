@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/BusinessObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/BusinessObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfTestimonialModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TestimonialModel" nillable="true" type="tns:TestimonialModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTestimonialModel" nillable="true" type="tns:ArrayOfTestimonialModel" />
+  <xs:complexType name="TestimonialModel">
+    <xs:sequence>
+      <xs:element name="_x003C_Author_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_CreatedDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_Description_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ID_x003E_k__BackingField" type="xs:int" />
+      <xs:element name="_x003C_ImagePath_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_IsActive_x003E_k__BackingField" type="xs:boolean" />
+      <xs:element name="_x003C_ModifiedDate_x003E_k__BackingField" type="xs:dateTime" />
+      <xs:element name="_x003C_TestimonialImagePath_x003E_k__BackingField" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TestimonialModel" nillable="true" type="tns:TestimonialModel" />
+</xs:schema>

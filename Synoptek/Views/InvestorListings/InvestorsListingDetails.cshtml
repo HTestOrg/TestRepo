@@ -1,0 +1,419 @@
+﻿@model BusinessObjects.InvestorListingWrapper
+@using System.Security.Claims;
+
+@{
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.Role);
+}
+
+@{
+    ViewBag.Title = "Search Opportunities";
+}
+
+<style>
+    .custom-select {
+        padding-left: 10px;
+    }
+    /* Always set the map height explicitly to define the size of the div element that contains the map. */
+    #map {
+        height: 100%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+
+    #infowindow-content .title {
+        font-weight: bold;
+    }
+
+    #infowindow-content {
+        display: none;
+    }
+
+    #map #infowindow-content {
+        display: inline;
+    }
+
+    .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+    }
+
+    #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+    }
+
+    .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+    }
+
+        .pac-controls label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+    #target {
+        width: 345px;
+    }
+</style>
+
+@Styles.Render("~/bundles/sumoselectCss")
+@Scripts.Render("~/bundles/sumoselect")
+
+@if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Investor || claim.Value == Synoptek.Helpers.Constants.UserRoles.Admin)
+{
+    using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frm_InvestorListing" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <input type="hidden" id="hdn_FeaturedBrokerID" />
+
+        <div class="signUpBlog pb-4">
+            <div class="container">
+                <h2 class="text-left">Search Opportunities</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mt-2 mb-2">
+                            <input type="text" name="LoanID" class="form-control" id="LoanID" placeholder="Loan ID" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mt-2 mb-2">
+                            @Html.DropDownListFor(model => model.LienPositionID, new SelectList(Model.LienPosition, "ID", "Name"), "Lien Position", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mt-2 mb-2">
+                            @Html.DropDownListFor(model => model.ActualLoanStatusID, new List<SelectListItem>
+                                {
+                                    new SelectListItem{Text="Loan Status",Value="0"},
+                                    new SelectListItem{Text="Performing",Value="1"},
+                                    new SelectListItem{Text="Non Performing",Value="2"},
+                                    new SelectListItem{Text="Newly Originated",Value="3"},
+                                    }, new { @class = "custom-select form-control-lg skill-icon" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mt-2 mb-2">
+                            <input type="text" name="State" class="form-control" id="State" placeholder="State" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="AdvFields" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mt-2 mb-2">
+                                @Html.DropDownListFor(model => model.ListingTypeID, new SelectList(Model.ListingType, "ID", "Name"), "Loan Type", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mt-2 mb-2">
+                                <input type="text" name="address" class="form-control" id="address" placeholder="Address/Zip Code" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mt-2 mb-2">
+                                @Html.DropDownListFor(model => model.PropertyTypeID, new SelectList(Model.PropertyType, "ID", "Name"), "Property Type", new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mt-2 mb-2">
+                                @Html.DropDownListFor(model => model.PricipalBalance, new List<SelectListItem>
+                                {
+                                    new SelectListItem{Text="Pricipal Balance",Value="0"},
+                                    new SelectListItem{Text="$0 - 50,000",Value="0-50000"},
+                                    new SelectListItem{Text="$50,000 - $100,000",Value="50000-100000"},
+                                    new SelectListItem{Text="$100,000 - 250,000",Value="100000-250000"},
+                                    new SelectListItem{Text="$250,000 - Up",Value="250000-999999999"},
+                                    }, new { @class = "custom-select form-control-lg skill-icon" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mt-2 mb-2">
+                                <input type="text" name="city" class="form-control" id="city" placeholder="City" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mt-2 mb-2">
+                                @Html.DropDownListFor(model => model.InterestRate, new List<SelectListItem>
+                                    {
+                                        new SelectListItem{Text="Interest Rate",Value="0"},
+                                        new SelectListItem{Text="< 5%",Value="0-4.9"},
+                                        new SelectListItem{Text="5% - 7.5%",Value="5-7.5"},
+                                        new SelectListItem{Text="7.5% - 10%",Value="7.5-10"},
+                                        new SelectListItem{Text="10% - 12%",Value="10-12"},
+                                        new SelectListItem{Text="12% - 15%",Value="12-15"},
+                                        new SelectListItem{Text="15% - Up",Value="15-999999999"},
+                                        }, new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mt-2 mb-2">
+                                @Html.DropDownListFor(model => model.AskingPrice, new List<SelectListItem>
+                                {
+                                    new SelectListItem{Text="Asking Price",Value="0"},
+                                    new SelectListItem{Text="< 10%",Value="0-9.9"},
+                                    new SelectListItem{Text="10 - 20%",Value="10-20"},
+                                    new SelectListItem{Text="20 - 30%",Value="20-30"},
+                                    new SelectListItem{Text="30 - 40%",Value="30-40"},
+                                    new SelectListItem{Text="40 - 50%",Value="40-50"},
+                                    new SelectListItem{Text="50 - 60%",Value="50-60"},
+                                    new SelectListItem{Text="70 - 80%",Value="70-80"},
+                                    new SelectListItem{Text="90 - 100%",Value="90-100"},
+                                    }, new { @class = "pl-12 custom-select form-control-lg skill-icon" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 text-center mt-4">
+                        <input type="button" class="btn btn-primary" value="Search" id="btnSearch" />
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div id="AdvSearch"> Advanced Search</div>
+        </div>
+
+        <div class="educationPage">
+            <div class="container mb-5">
+                <div>
+                    <div id="FeaturedListingPartial">
+                        @{
+                            Html.RenderPartial("_FeaturedListings", Model.PagedListFeaturedListings);
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="educationPage">
+            <div class="container mb-5">
+                <div class="col-md-9 col-lg-9"></div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label for="SortingOrder">Sort By</label>
+                        <div class="position-relative">
+                            @Html.DropDownList("SortingOrder", new List<SelectListItem>
+                {
+                new SelectListItem{ Text="Recently Posted", Value = "RecentlyPosted" },
+                new SelectListItem{ Text="Low To High", Value = "LowToHigh" },
+                new SelectListItem{ Text="High To Low", Value = "HighToLow" },
+                new SelectListItem{ Text="Is Sponsored", Value = "IsSponsored" },
+             }, new { @class = "custom-select form-control-lg skill-icon" })
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="InvestorListingPartial">
+                        @{
+                            Html.RenderPartial("_InvestorListings", Model.PagedListInvestorListings);
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Contact Broker Modal-->
+                            <div class="modal fade" id="InvestorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content custom-modal">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <div class="modal-body text-center">
+                                            <form>
+                                                <h3 class="mb-5 mt-5" id="deal_title">Contact Broker</h3>
+                                                <div class="text-center modalData">
+                                                    <div class="form-group text-left" id="messageBody">
+                                                        <label for="description" class="LightGrey">Message will be sent to broker<span class='redcolor'>*</span> </label>
+                                                        <textarea id="txt_Description" class="form-control" rows="3" placeholder="Type anything here…"></textarea>
+                                                        <input type="hidden" id="hdn_ListingId" />
+                                                        <span class="redcolor" id="lbl_errorforContactBroker"></span>
+                                                    </div>
+                                                    <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_send" data-target="#ContactBrokerModal">SEND</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                }
+                            }
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        $(document).ready(function () {
+            $("#btnSearch").on("click", function () {
+                var SortingBy = $("#SortingOrder").val();
+                setSessionValues();
+                SearchDeals();
+                $("#SortingOrder").val("RecentlyPosted");
+            });
+
+            $("#SortingOrder").on("change", function () {
+                var SortingBy = $("#SortingOrder").val();
+                $.ajax({
+                    url: "InvestorsListingDetailsPartial",
+                    data: { SortingBy: SortingBy },
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#InvestorListingPartial').html("");
+                        $('#InvestorListingPartial').html(result);
+                    }
+                });
+            });
+
+            $("#AdvSearch").click(function () {
+                $(".AdvFields").slideToggle("fast");
+            });
+
+            $('#dropdownMenuLink').dropdown();
+        });
+
+        function setSessionValues() {
+            
+            var formdata = $('#frm_InvestorListing').serializeArray(); //changeListingTypes()
+            $.ajax(
+            {
+                url: "SetTempDataForInvestor",
+                data: formdata,
+                success: function () { }
+            });
+        }
+
+        function SearchDeals() {
+            var formdata = $('#frm_InvestorListing').serializeArray();//changeListingTypes();
+            $.ajax(
+            {
+                url: "InvestorsListingDetailsPartial",
+                data: formdata,
+                success: function (result) {
+                    $('#InvestorListingPartial').html("");
+                    $("#InvestorListingPartial").html(result);
+                },
+                error: function (result) {
+                    bootbox.alert(result.toString());
+                }
+            });
+        }
+
+        function ContactBroker(listingID, brokerName, brokerID) {
+            
+        $('#InvestorModal').modal({ backdrop: 'static', keyboard: false })
+        $("#deal_title").html("Contact Broker : " + brokerName);
+        $("#hdn_ListingId").val(listingID);
+        $("#hdn_FeaturedBrokerID").val(brokerID);
+    }
+</script>
+
+    <script>
+        $(document).ready(function () {
+
+            //Send message to broker -------------------------
+            $("#btn_send").on("click", function () {
+                try {
+                    var ListingId = $("#hdn_ListingId").val();
+                    Message = $("#txt_Description").val().trim();
+                    var BrokerId = $("#hdn_FeaturedBrokerID").val();
+                    if (Message != "") {
+                        $.ajax({
+                            url: "ContactBroker",
+                            data: { ListingId: ListingId, Message: Message, BrokerId: BrokerId },
+                            success: function (result) {
+                                if (result == 1) {
+                                    $('#InvestorModal').modal('hide');
+                                    bootbox.alert("Message has been sent to broker. Broker may contact you soon...", function () {
+                                        $("#txt_Description").val("");
+                                        $("#lbl_errorforContactBroker").html("");
+                                        $("#hdn_ListingId").val("");
+                                    });
+                                }
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    }
+                    else {
+                        $("#lbl_errorforContactBroker").html("Message is required.");
+                        return false;
+                    }
+                }
+                catch (ex) {
+                    ShowErrorMessage(ex.message);
+                }
+            });
+            //Send message to broker -------------------------
+
+
+            //Close Modal -------------------------
+            $("#btn_cancel").on("click", function () {
+                $("#lbl_errorforContactBroker").html("");
+                $("#txt_Description").val("");
+                $("#hdn_ListingId").val("");
+            });
+            //Close Modal -------------------------
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.asd = $('.SlectBox').SumoSelect({ csvDispCount: 4, selectAll: true, captionFormatAllSelected: "Yeah, OK, so everything." });
+            window.test = $('.testsel').SumoSelect({ okCancelInMulti: true, captionFormatAllSelected: "Yeah, OK, so everything." });
+
+            window.testSelAll = $('.testSelAll').SumoSelect({ okCancelInMulti: true, selectAll: true });
+
+            window.testSelAll2 = $('.testSelAll2').SumoSelect({ selectAll: true });
+
+            window.testSelAlld = $('.SlectBox-grp').SumoSelect({ okCancelInMulti: true, selectAll: true, isClickAwayOk: true });
+
+            window.Search = $('.search-box').SumoSelect({ csvDispCount: 4, search: true, searchText: 'Enter here.' });
+            window.sb = $('.SlectBox-grp-src').SumoSelect({ csvDispCount: 4, search: true, searchText: 'Enter here.', selectAll: true });
+            window.searchSelAll = $('.search-box-sel-all').SumoSelect({ csvDispCount: 4, selectAll: true, search: true, searchText: 'Enter here.', okCancelInMulti: true });
+            window.searchSelAll = $('.search-box-open-up').SumoSelect({ csvDispCount: 4, selectAll: true, search: false, searchText: 'Enter here.', up: true });
+            window.Search = $('.search-box-custom-fn').SumoSelect({
+                csvDispCount: 4, search: true, searchText: 'Enter here.', searchFn: function (haystack, needle) {
+                    var re = RegExp('^' + needle.replace(/([^\w\d])/gi, '\\$1'), 'i');
+                    return !haystack.match(re);
+                }
+            });
+
+            window.groups_eg_g = $('.groups_eg_g').SumoSelect({ selectAll: true, search: true });
+
+
+            $('.SlectBox').on('sumo:opened', function (o) {
+                console.log("dropdown opened", o)
+            });
+
+        });
+    </script>
+
+}

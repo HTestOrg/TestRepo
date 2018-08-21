@@ -1,0 +1,638 @@
+﻿@model BusinessObjects.LearnModel
+
+@{
+    ViewBag.Title = "Add Resource";
+}
+
+
+<link href="~/Content/dropzone.css" rel="stylesheet" />
+<script src="~/Scripts/dropzone.js"></script>
+<style>
+    .attachment li {
+        padding: 5px;
+        border: solid 1px gray;
+        border-radius: 5px;
+        background: #f7f5f1;
+        margin-bottom: 15px;
+    }
+
+    .dz-preview, .dz-file-preview {
+        display: none !important;
+    }
+
+    .dropzone .dz-message {
+        margin: 0 !important;
+    }
+
+    .dropzone.dz-started .dz-message {
+        display: block !important;
+    }
+
+    .deletefile {
+        border-left: 1px solid;
+        padding-left: 5px;
+    }
+</style>
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">Admin - Create a Resource</h2>
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    @using (Html.BeginForm("SaveLearnData", "Learn", FormMethod.Post, new { @id = "frmLearn" }))
+    {
+        @Html.HiddenFor(model => model.ID)
+
+        @Html.ValidationSummary(true)
+
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control editorHtml" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                    <b><span id="error_description" class="redcolor"></span></b>
+                </div>
+
+                <div class="form-group">
+                    <label for="ExperienceLevel">Experience Level</label>
+                    <div class="position-relative">
+                        <span class="label-Icon"><img src="~/images/skill.png" /></span>
+                        @Html.DropDownListFor(model => model.ExperienceLevelID, new SelectList(Model.ExperienceLevelList, "ID", "Name"), "Experience Level", new { @class = "custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.ExperienceLevelID)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-group mb-1">
+                        <label for="url">Type</label>
+                    </div>
+
+                    @foreach (var item in Model.LearnTypeList)
+                    {
+                        <div class="form-check form-check-inline">
+                            <label class="customForm">
+                                <span class="customlabel">@item.Name</span>
+                                @Html.RadioButtonFor(m => m.LearnTypeID, item.ID, new { @id = item.Name, @onclick = "GetTopics()" })
+                                @Html.Hidden("LearnType_ID", item.ID)
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label for="topic">Topic</label>
+                            <div class="position-relative">
+                                <span class="label-Icon"><img src="~/images/type.png" /></span>
+                                @Html.DropDownListFor(model => model.TopicID, new SelectList(Model.TopicList, "ID", "Name"), "Select Topic", new { @class = "custom-select form-control-lg skill-icon" })
+                                @Html.ValidationMessageFor(model => model.TopicID)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="url">URL</label>
+                    <div class="position-relative">
+                        <span class="label-Icon"><img src="~/images/search.png" /></span>
+                        @Html.TextBoxFor(model => model.Url, new { @id = "url", @class = "form-control pl45" })
+                        @Html.ValidationMessageFor(model => model.Url)
+                        <b><span id="error_Url" class="redcolor"></span></b>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="url">Author Name</label>
+                    <div class="position-relative">
+                        <span class="label-Icon"></span>
+                        @Html.TextBoxFor(model => model.AuthorName, new { @id = "AuthorName", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AuthorName)
+                    </div>
+                </div>
+
+                @Html.HiddenFor(m => m.IsSponsored)
+
+                @Html.HiddenFor(m => m.ListingStatusID, new { @id = "ListingStatusID" })  @*Hidden control To save publish and draft status*@
+
+
+                <div class="clearfix"></div>
+                <!--New radio buttons for teaser and basic flag-->
+                <div class="form-group mb-1">
+                    <label for="contentType">Content Type</label>
+                </div>
+                @foreach (var value in Enum.GetValues(typeof(BusinessObjects.LearnModel.ContentTypeList)))
+                {
+                    <div class="form-check form-check-inline">
+                        <label class="customForm">
+                            @Html.Label(@value.ToString(), new { @class = "customlabel" })
+                            @Html.RadioButtonFor(m => m.ContentTypeID, Convert.ToInt32(value))
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                }
+
+                <div class="clearfix"></div>
+                <div class="form-group mb-1">
+                    <label for="contentFor">Content For</label>
+                </div>
+                @foreach (var value in Enum.GetValues(typeof(BusinessObjects.LearnModel.ContentFor)))
+                {
+                    <div class="form-check form-check-inline">
+                        <label class="customForm">
+                            @Html.Label(@value.ToString(), new { @class = "customlabel" })
+                            @Html.RadioButtonFor(m => m.ContentForID, Convert.ToInt32(value))
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                }
+                <br/><br/>
+                <div class="form-group">
+                    <div class="form-group mb-1">
+                        <label for="url">Documents</label>
+                    </div>
+                    <div class="attachment nopadding" id="attachment" style="list-style-type: none;">
+                        @if (Model.DocumentList != null)
+                        {
+                            foreach (var item in Model.DocumentList)
+                            {
+                                <div class="border p-2 white-two rounded font-italic mb-3">
+                                    <i class="fa fa-paperclip font25 mr-3 ml-2 align-middle"></i>
+                                    @item.FileName
+                                    <div class="deletefile float-right border-left border-dark pl-3 pr-3"><i class="fa fa-trash font21" onclick="RemoveUploadFile('@item.FileName')"></i></div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.IsSponsored)
+
+                <div class="dropzone fileuploadborder dropzonediv" id="DocumentUploadDropzone">
+                    <div class="fallback">
+                        <i class="fa fa-cloud-upload" style="font-size: 50px;"></i>
+                        <input name="file" type="file" multiple />
+                    </div>
+                </div>
+
+
+                <div class="text-center mt-4 mb-5"><button type="submit" class="btn btn-primary w-250px font14" id="btn_PublishBottom">Publish</button></div>
+
+            </div>
+            <div class="col-md-4 offset-md-2">
+                <div class="CreateResource text-center">
+                    <button type="submit" class="btn btn-primary w-100 font14" id="btn_Publish">Publish Resource</button>
+                    <button type="submit" class="btn GhostButton Respon-left" id="btn_SaveAsDraft">Save as Draft</button>
+                    <button type="submit" class="btn GhostButton Respon-right" id="btn_SaveAndQuit">Save Draft & View</button>
+                </div>
+                <div class="clearfix"></div>
+                <br /><br />
+                <div class="form-group mb-2">
+                    <label for="url">Resource Image</label>
+                </div>
+                <div id="ImageContainer" class="row mt-2">
+                    @if (Model.ResourcePath != null)
+                    {
+                        <div class="col-md-12 col-lg-12">
+                            <div>
+                                <img width=100% height=250 src="@Model.ResourcePath" alt="@Model.ResourcePath" />
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="clearfix"></div>
+                <br />
+                <div id="divEditPhoto">
+                    <label class="btn-bs-file btn btn-primary">
+                        Edit Photo
+                        <input type="file" name="image_Uploader" id="image_Uploader" onclick="ValidateProfileImage()" style="display:none" />
+                    </label>
+                </div>
+                <br />
+                <div class="clearfix"></div>
+
+                <div class="form-group">
+                    <div class="dropzone fileuploadborder dropzonediv" id="ImageUploadDropzone">
+                        <div class="fallback">
+                            <input name="file" type="file" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                @Html.HiddenFor(model => model.ID)
+            </div>
+        </div>
+    }
+</div>
+
+
+<div class="col-md-8 col-lg-8">
+</div>
+
+
+@Styles.Render("~/bundles/TinyMCECss")
+@Scripts.Render("~/bundles/TinyMCEJs")
+
+<script>
+    $(document).ready(function () {
+        var LearnID = $('#ID').val();
+        var image_dropholder = $("#ImageUploadDropzone");
+        if (LearnID > 0) {
+            $('#divEditPhoto').show();
+            image_dropholder.hide();
+        } else {
+            $('#divEditPhoto').hide();
+            image_dropholder.show();
+        }
+
+        tinymce.init({
+            selector: '#Description',
+            setup: function (editor) {
+                editor.on('keyup', function (e) {
+                    console.debug('Editor contents was modified. Contents: ' + editor.getContent({
+                        format: 'text'
+                    }));
+                    $('#frmLearn').bootstrapValidator('revalidateField', 'Description');
+                });
+            }
+        });
+
+        $('#frmLearn')
+        .bootstrapValidator({
+            excluded: function (res) {
+            },  // [':disabled'],
+            fields: {
+                Description: {
+                    validators: {
+                        callback: {
+                            message: 'The Description is requied field.',
+                            callback: function (value, validator, $field) {
+                                var text = tinyMCE.activeEditor.getContent({
+                                    format: 'text'
+                                });
+                                return text.trim().length > 0;
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        .on('success.form.bv', function (e) {
+            e.preventDefault();
+        });
+    });
+
+    //image upload control
+    Dropzone.autoDiscover = false;
+    Dropzone.options.ImageUploadDropzone = {
+        maxFiles: 1,
+        addRemoveLinks: true,
+        url: "/Learn/UploadLearnImage",
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".png, .jpg, .jpeg, .bmp, .gif, .jfif",
+        init: function () {
+            this.on("complete", function (file) {
+                if (!file.type.match('image.*')) {
+                    bootbox.alert("Upload Image Only!");
+                    return false;
+                }
+            }),
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var result = "<div class='col-md-12 col-lg-12'><div><img width=100% height=250 src=" + response + " id='img_'" + file.name + "  alt='" + file.name + "' /></div> <div class='form-group mt-1'>";
+                $("#ImageContainer").append(result);
+                var image_holder = $("#ImageUploadDropzone");
+                image_holder.hide();
+                $('#divEditPhoto').show();
+            });
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveTempFile',
+                data: "filename=" + name,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#ImageUploadDropzone').dropzone();
+    // end of image upload method
+
+    // upload document method
+    Dropzone.autoDiscover = false;
+    Dropzone.options.DocumentUploadDropzone = {
+        addRemoveLinks: true,
+        url: "/Learn/UploadResourceDocuments",
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: ".jpg, .jpeg, .bmp, .gif, .png, .DOC, DOCX, .ODT, .PDF, .XLS, XLSX, .ODS, .PPT, .PPTX, .TXT, .MP4, .FLV, .mp4",
+        init: function () {
+            this.on("addedfile", function (file) {
+            }),
+            this.on("success", function (file, response) {
+                var result = "<div class='border p-2 white-two rounded font-italic mb-3'><i class='fa fa-paperclip font25 mr-3 ml-2 align-middle'></i>" + file.name;
+                result += '<div class="deletefile float-right border-left border-dark pl-3 pr-3"><i class="fa fa-trash font21" onclick="RemoveUploadFile(\' ' + $.trim(file.name) + '\',\'' + ($('#ID').val()) + ' \')"></i></div></div>';
+                $("#attachment").append(result);
+            })
+        },
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: 'RemoveUploadFile',
+                data: "filename=" + name + '&id=' + id,
+                dataType: 'html'
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        },
+    }
+    $('#DocumentUploadDropzone').dropzone();
+    // end upload document method
+
+    $(".close").each(function (index) {
+        $(this).on("click", function () {
+            $(this).siblings().remove();
+        });
+    });
+
+    $("#attachment").on('click', '.deletefile', function () {
+        $(this).parent().remove();
+    });
+
+
+    //Learn Image uplaod
+    $('#image_Uploader').on('change', function (e) {
+        try {
+            if (typeof (FileReader) != "undefined") {
+                var image_holder = $("#ImageContainer");
+                image_holder.empty();
+                var image_dropholder = $("#ImageUploadDropzone");
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("<img />", {
+                        "src": e.target.result,
+                        //"class": "thumb-image",
+                        "height": "250",
+                        "width": "100%",
+                    }).appendTo(image_holder);
+                }
+                image_dropholder.hide();
+                var image_buttonholder = $("#image_holder");
+                image_buttonholder.show();
+
+                image_holder.show();
+                $('#divEditPhoto').show();
+                reader.readAsDataURL($(this)[0].files[0]);
+            } else {
+                alert("This browser does not support FileReader.");
+            }
+            var files = e.target.files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: '/Learn/UploadLearnImage',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function (xhr, status, p3, p4) {
+                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                err = JSON.parse(xhr.responseText).Message;
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("This browser doesn't support HTML5 file uploads!");
+                }
+            }
+        } catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    });
+
+    // default value for Learn is set to Education
+    $("#Education").prop('checked', true);
+
+    // settting learn status on click of buttons
+    $("#btn_Publish").on("click", function () {
+        $("#ListingStatusID").val("1");
+    });
+    $("#btn_PublishBottom").on("click", function () {
+        $("#ListingStatusID").val("1");
+    });
+
+    $("#btn_SaveAsDraft").on("click", function () {
+        $("#ListingStatusID").val("2");
+    });
+
+    $("#btn_SaveAndQuit").on("click", function () {
+        $("#ListingStatusID").val("2");
+    });
+
+
+    function RemoveUploadFile(fileName) {
+        try {
+            var id = $('#ID').val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RemoveUploadFile", "Learn")?fileName=' + fileName + '&id=' + id,//+'&documentid='+documentid,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    if (xhr.responseText && xhr.responseText[0] == "{")
+                        err = JSON.parse(xhr.responseText).Message;
+                    console.log(err);
+                }
+            });
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    }
+
+
+    $("#frmLearn").submit(function (e) {
+        try {
+            e.preventDefault();
+            var isValid = false;
+            var Title = $("#Name").val();
+            var ExperienceLevelID = $("#ExperienceLevelID").val();
+            var TopicID = $("#TopicID").val();
+            var Description = tinyMCE.activeEditor.getContent({
+                format: 'html'
+            });
+
+            if (Title.trim().length <= 0) {
+                isValid = false;
+            }
+            else if (TopicID <= 0) {
+                isValid = false;
+            }
+            else if (Description.trim().length <= 0) {
+                isValid = false;
+            }
+            else if (ExperienceLevelID <= 0) {
+                isValid = false;
+            }
+
+            else {
+                isValid = true;
+            }
+
+            $('#frmLearn').bootstrapValidator('revalidateField', 'Description');
+            $("#Description").val(Description);
+            var self = this;
+            if (isValid) {
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    data: new FormData(this),
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    success: function (data) {
+                        bootbox.alert("Resource details has been modified successfully.", function () {
+                            window.location.href = data// "/Learn/Index";
+                        });
+
+                    }
+                });
+            }
+            return (false);
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    });
+
+    $('#news_uploader').on('change', function (e) {
+        try {
+            if (typeof (FileReader) != "undefined") {
+                var image_holder = $("#image-holder");
+                image_holder.empty();
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("<video />", {
+                        "src": e.target.result,
+                        "class": "thumb-image",
+                        "height": "200",
+                        "width": "200",
+                    }).appendTo(image_holder);
+                }
+                image_holder.show();
+                reader.readAsDataURL($(this)[0].files[0]);
+            } else {
+                alert("This browser does not support FileReader.");
+            }
+            var files = e.target.files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: '/Webinar/UploadWebinarResources',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function (xhr, status, p3, p4) {
+                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                err = JSON.parse(xhr.responseText).Message;
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("This browser doesn't support HTML5 file uploads!");
+                }
+            }
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    });
+
+    var _validImageFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+    function ValidateProfileImage(oInput) {
+        if (oInput.type == "file") {
+            var sFileName = oInput.value;
+            if (sFileName.length > 0) {
+                var blnValid = false;
+                for (var j = 0; j < _validImageFileExtensions.length; j++) {
+                    var sCurExtension = _validImageFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        blnValid = true;
+                        break;
+                    }
+                }
+                if (!blnValid) {
+                    alert("Sorry, these extensions are not valid");
+                    oInput.value = "";
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    function GetTopics() {
+        try {
+            var ID = $('input[name=LearnTypeID]:checked').val();
+            $.ajax({
+                url: '/Learn/GetTopicList',
+                data: { typeID: ID },
+                success: function (data) {
+                    $('#TopicID').html('');
+                    var optionhtml1 = '<option value="' +
+                     0 + '">' + "Select Topic" + '</option>';
+                    $('#TopicID').append(optionhtml1);
+
+                    $.each(data, function (i) {
+                        var optionhtml = '<option value="' +
+                    data[i].ID + '">' + data[i].Name + '</option>';
+                        $('#TopicID').append(optionhtml);
+                    });
+                }
+            });
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    }
+</script>

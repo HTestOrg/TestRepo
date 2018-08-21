@@ -1,0 +1,158 @@
+﻿@model PagedList.IPagedList<BusinessObjects.LearnModel>
+@using PagedList.Mvc;
+
+<div class="container">
+    @foreach (var item in Model)
+    {
+        string LearnID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+        <div class="row" id="resource-@item.ID">
+            <div class="col-md-6 col-lg-3">
+                <div><strong>ID#@item.ID</strong></div>
+                <h4>@item.Name</h4>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                <div><strong>Type:</strong> @item.LearnTypeName </div>
+                <div class="mt-1"><strong>Created: </strong> @item.CreatedDate.ToString("dd-MM-yyyy")</div>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                @if (@item.ModifiedDate == DateTime.MinValue)
+                {<div><strong>Last Updated: </strong>@item.CreatedDate.ToString("dd-MM-yyyy")</div> }
+                else
+                {<div><strong>Last Updated: </strong> @item.ModifiedDate.ToString("dd-MM-yyyy")</div> }
+                <div><strong>Staus: </strong> @item.Status</div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="mt-2 text-right ResponviseCenter AdminButton">
+                    <button type="button" class="GhostButton Respon-right w-30per mr-3" onclick="DeleteRecord('@LearnID', 'Resources', @item.ID )"><i class="fa fa-trash"></i></button>
+                    <a href="@Url.Action("Edit", "Learn", new { learnID = LearnID })"><button type="button" class="GhostButton Respon-right"><i class="fa fa-pencil"></i></button></a>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="DividerBot mt-2 mb-3"></div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Count <= 0)
+    {
+        <div>
+            <h4 class="text-center">No resources found</h4>
+        </div>
+    }
+
+    <nav aria-label="Page navigation pagination" id="ResourcesTabNav">
+        <ul class="pagination justify-content-center">
+            @Html.PagedListPager(Model, page => Url.Action("Admin", new { Page = page, Tab = "Resources" }))
+        </ul>
+    </nav>
+
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+
+        //Pagination event handling ----------------------------
+        $('#ResourcesTabNav .pagination a').click(function () {
+            try {
+                var searchTxt = $('#searchResourcestxt').val();
+                var sortingOrder = $("#inputGroupSelectResources").val();
+                var url = '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (this.href != "" && this.href != undefined) {
+                    $.ajax({
+                        url: this.href + url,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#pills-tab3-child').html("");
+                            $('#pills-tab3-child').html(result);
+                            $('#pills-tab3').addClass('tab-pane fade show active in');
+
+                            $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        }
+                    });
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        //Pagination event handling ----------------------------
+
+        //search
+        $('#searchResourcestxt').keyup(function (e) {
+            try {
+                var searchTxt = $('#searchResourcestxt').val();
+                var page = $('#ResourcesTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectResources").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Resources" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    if (searchTxt.length >= 2 || searchTxt.length == 0) {
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            cache: false,
+                            success: function (result) {
+                                $('#pills-tab3-child').html("");
+                                $('#pills-tab3-child').html(result);
+                                $('#pills-tab3').addClass('tab-pane fade show active in');
+
+                                $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            }
+                        });
+                    }
+                    e.handled = true;
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+
+        //on sorting change
+
+        $('#inputGroupSelectResources').change(function (e) {
+            try {
+                var searchTxt = $('#searchResourcestxt').val();
+                var page = $('#ResourcesTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectResources").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Resources" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#pills-tab3-child').html("");
+                            $('#pills-tab3-child').html(result);
+                            $('#pills-tab3').addClass('tab-pane fade show active in');
+
+                            $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        }
+                    });
+                    e.handled = true;
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+    });
+</script>

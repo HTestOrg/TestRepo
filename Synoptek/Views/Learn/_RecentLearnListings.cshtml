@@ -1,0 +1,116 @@
+﻿@model  PagedList.IPagedList<BusinessObjects.LearnModel>
+
+
+<div class="BottonLine mt-3 mb-4"></div>
+<div class="row pt-2">
+    @foreach (var item in Model)
+    {
+        string LearnID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+        string TopicID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.TopicID), true);
+        <div class="col-md-3" id="RowID_@(item.ID)">
+
+            @if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Admin")
+            {
+                if (@item.ResourcePath != null && item.ResourcePath != "")
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails","Learn", new { LearnID = LearnID , TopicID = TopicID })" class="marginRT5 ">
+                        <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath">
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails","Learn", new { LearnID = LearnID , TopicID = TopicID })" class="marginRT5 ">
+                        <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name">
+                    </a>
+                }
+            }
+            else if (Synoptek.SessionController.UserSession.UserId == null)
+            {
+                if (item.ContentTypeID == 0)
+                {
+                    if (@item.ResourcePath != null && item.ResourcePath != "")
+                    {
+                        <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                            <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath">
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                            <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name">
+                        </a>
+                    }
+                }
+                else
+                {
+                    if (@item.ResourcePath != null && item.ResourcePath != "")
+                    {
+                        <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath" onclick="GetRoleAccessPopup()">
+                    }
+                    else
+                    {
+                        <img src="~/images/opportunities-lockThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name" onclick="GetRoleAccessPopup()">
+                    }
+                }
+
+            }
+            else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.IsPaid == false)
+            {
+                if (@item.ContentTypeID == 1)
+                {
+                    if (@item.ResourcePath != null && item.ResourcePath != "")
+                    {
+                        <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                            <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath">
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                            <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name">
+                        </a>
+                    }
+                }
+                else
+                {
+                    if (@item.ResourcePath != null && item.ResourcePath != "")
+                    {
+                        <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath" onclick="GetPaywallPopup()">
+                    }
+                    else
+                    {
+                        <img src="~/images/opportunities-lockThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name" onclick="GetPaywallPopup()">
+                    }
+                }
+            }
+            else if (Synoptek.SessionController.UserSession.UserId != null && (Synoptek.SessionController.UserSession.RoleType == "Investor" || Synoptek.SessionController.UserSession.RoleType == "Broker"))
+            {
+                if (@item.ResourcePath != null && item.ResourcePath != "")
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                        <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath">
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                        <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name">
+                    </a>
+                }
+            }
+            <h4><span id="lbl_RecentName@(item.ID)">@Html.DisplayFor(modelItem => item.Name)</span></h4>
+            <h5 class="category">@(item.LearnTypeName.ToUpper()) - @(item.TopicName.ToUpper()) (@item.ContentForName)</h5>
+            <p><div id="lbl_Recentdescription@(item.ID)">@Html.Raw(item.Description)</div></p>
+
+            @Html.HiddenFor(modelItem => item.Name, new { id = "hdnRecentName" + item.ID })
+            @Html.HiddenFor(modelItem => item.Description, new { id = "hdnRecentDescription" + item.ID })
+
+        </div>
+    }
+    @if (Model.Count <= 0)
+    {
+        <div>
+            <h4 class="text-center">No resources found</h4>
+        </div>
+    }
+</div>

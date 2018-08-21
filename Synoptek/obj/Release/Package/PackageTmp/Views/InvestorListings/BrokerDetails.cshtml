@@ -1,0 +1,128 @@
+﻿@model BusinessObjects.BrokerDetailsWrapper
+@{
+    ViewBag.Title = "Broker Details";
+}
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">@Model.BrokerName</h2>
+    </div>
+</div>
+@{ string BrokerID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(Model.BrokerID), true);
+    string BrokerName = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(Model.BrokerName), true);
+}
+<div class="container mt-5 mb-5">
+    <form>
+        @Html.HiddenFor(m => m.BrokerName, new { @id = "BrokerName" })
+        @Html.HiddenFor(m => m.BrokerID, new { @id = "BrokerId" })
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Featured Listings @Html.ActionLink("View All", "BrokerDetails", new { Page = 1, BrokerName = BrokerName, BrokerId = BrokerID, Featured = "0" }, new { @class = "ml-3", @id = "lnk_ViewAll" }) </h2>
+                <div class="BottonLine mt-3 mb-4"></div>
+                <div id="brokerListingDiv">
+                    @Html.Partial("_BrokerListings", Model.PagedListingDetails)
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="CreateResource">
+                    <div><img class="w-100 mb-3" src="@Model.BrokerImage" /></div>
+                    <h2>@Model.BrokerName</h2>
+                    <button type="button" class="btn btn-primary w-100 font14 mb-3" id="btn_ContactBroker">Send Message</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<!--Contact Broker Modal-->
+<div class="modal fade" id="ContactBrokerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <h3 class="mb-5 mt-5" id="deal_title">Contact Broker</h3>
+                    <div class="text-center modalData">
+                        <div class="form-group text-left" id="messageBody">
+                            <label for="description" class="LightGrey">Message will be sent to broker <span class='redcolor'>*</span> </label>
+                            <textarea id="txt_Description" class="form-control" rows="3" placeholder="Type anything here…"></textarea>
+                            <input type="hidden" id="hdn_ListingId" />
+                            <span class="redcolor" id="lbl_errorforContactBroker"></span>
+                        </div>
+                        <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_send">SEND</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Contact Broker Modal-->
+<script>
+    $(document).ready(function () {
+        $("#lnk_ViewAll").on("click", function (e) {
+            try {
+                e.preventDefault();
+                var BrokerName = $("#BrokerName").val();
+                var BrokerId = $("#BrokerId").val();
+                $.ajax({
+                    url: this.href,
+                    data: { BrokerName: BrokerName, BrokerId: BrokerId, Featured: "0" },
+                    type: 'GET',
+                    success: function (result) {
+                        $('#brokerListingDiv').html(result);
+                    }
+                });
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+        // Contact broker
+        $("#btn_ContactBroker").on("click", function () {
+            ClearContactBroker();
+            $('#ContactBrokerModal').modal({ backdrop: 'static', keyboard: false })
+            var BrokerName = '@(Model.BrokerName)'
+            $("#deal_title").html("Contact Broker : " + BrokerName);
+            $("#hdn_ListingId").val(0);
+        });
+        function ClearContactBroker() {
+            $("#lbl_errorforContactBroker").html("");
+            $("#txt_Description").val("");
+            $("#hdn_ListingId").val("");
+        }
+
+        $("#btn_send").on("click", function () {
+            var ListingId = $("#hdn_ListingId").val();
+            Message = $("#txt_Description").val().trim();
+            var BrokerId = $("#BrokerId").val();
+
+            if (Message != "") {
+                $.ajax({
+                    url: "ContactBroker",
+                    data: { ListingId: ListingId, Message: Message, BrokerId: BrokerId },
+                    success: function (result) {
+                        if (result == 1) {
+                            $('#ContactBrokerModal').modal('hide');
+                            bootbox.alert("Message has been sent to broker. Broker may contact you soon...", function () {
+                                $("#txt_Description").val("");
+                                $("#lbl_errorforContactBroker").html("");
+                                $("#hdn_ListingId").val("");
+                            });
+                        }
+                    },
+                    error: function (result) {
+                    }
+                });
+            }
+            else {
+                $("#lbl_errorforContactBroker").html("Message is required.");
+                return false;
+            }
+        });
+        // end contact broker
+    });
+</script>

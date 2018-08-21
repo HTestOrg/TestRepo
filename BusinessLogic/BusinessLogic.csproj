@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6989E9B3-6E03-4494-BCAF-06C7E79539AA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BusinessLogic</RootNamespace>
+    <AssemblyName>BusinessLogic</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Stage|AnyCPU'">
+    <OutputPath>bin\Stage\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\BrokerListings.cs" />
+    <Compile Include="Models\Dashboard.cs" />
+    <Compile Include="Models\EmailNotifications.cs" />
+    <Compile Include="Models\HomePage.cs" />
+    <Compile Include="Models\InvestorListings.cs" />
+    <Compile Include="Models\Learn.cs" />
+    <Compile Include="Models\Listings.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Subscription.cs" />
+    <Compile Include="Models\Testimonial.cs" />
+    <Compile Include="Models\UserRegistration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\BrokerListingServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\DashboardServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\EmailNotificationServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\HomePageServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\InvestorListingsServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\LearnServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ListingServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\LoginServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\SubscriptionServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TestimonialServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\UserRegistrationServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\DataSources\BusinessObjects.ArticlesCategory.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.ArticlesModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.BrokerListingsModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.BrokerListingsWrapper.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.Categories.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.HomePageLatestResources.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.InvestorListingsModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.ListingComments.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.ListingLoanDocuments.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.ListingModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.ListingType.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.Location.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.LoginModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.NewsCategory.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.NewsModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.OutgoingEmailLogModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.PaymentCardTypes1.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.ResourcesModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.SecurityQuestion.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.SecurityQuestionsModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.SubscriptionOption.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.TestimonialModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.UserProfileEditModel.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.UserRole.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.WebinarDetails.datasource" />
+    <None Include="Properties\DataSources\BusinessObjects.WebinarList.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\BrokerListingServiceReference\BrokerListingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\BrokerListingServiceReference\BrokerListingService1.wsdl" />
+    <None Include="Service References\BrokerListingServiceReference\BrokerListingService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DashboardServiceReference\DashboardService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DashboardServiceReference\DashboardService1.wsdl" />
+    <None Include="Service References\DashboardServiceReference\DashboardService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EmailNotificationServiceReference\EmailNotificationService2.wsdl" />
+    <None Include="Service References\EmailNotificationServiceReference\EmailNotificationService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EmailNotificationServiceReference\EmailNotificationService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\HomePageServiceReference\HomePageService2.wsdl" />
+    <None Include="Service References\HomePageServiceReference\HomePageService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\HomePageServiceReference\HomePageService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\HomePageServiceReference\HomePageService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\InvestorListingsServiceReference\InvestorListingsService2.wsdl" />
+    <None Include="Service References\InvestorListingsServiceReference\InvestorListingsService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\InvestorListingsServiceReference\InvestorListingsService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\InvestorListingsServiceReference\InvestorListingsService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LearnServiceReference\LearnService1.wsdl" />
+    <None Include="Service References\LearnServiceReference\LearnService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LearnServiceReference\LearnService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ListingServiceReference\ListingService.wsdl" />
+    <None Include="Service References\ListingServiceReference\ListingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ListingServiceReference\ListingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ListingServiceReference\ListingService2.wsdl" />
+    <None Include="Service References\ListingServiceReference\ListingService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ListingServiceReference\ListingService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ListingServiceReference\ListingService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ListingServiceReference\ListingService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LoginServiceReference\LoginService2.wsdl" />
+    <None Include="Service References\LoginServiceReference\LoginService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LoginServiceReference\LoginService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SubscriptionServiceReference\SubscriptionService1.wsdl" />
+    <None Include="Service References\SubscriptionServiceReference\SubscriptionService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SubscriptionServiceReference\SubscriptionService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SubscriptionServiceReference\SubscriptionService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TestimonialServiceReference\TestimonialService1.wsdl" />
+    <None Include="Service References\TestimonialServiceReference\TestimonialService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TestimonialServiceReference\TestimonialService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TestimonialServiceReference\TestimonialService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserRegistrationServiceReference\UserRegistrationService.wsdl" />
+    <None Include="Service References\UserRegistrationServiceReference\UserRegistrationService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserRegistrationServiceReference\UserRegistrationService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserRegistrationServiceReference\UserRegistrationService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\BrokerListingServiceReference\" />
+    <WCFMetadataStorage Include="Service References\DashboardServiceReference\" />
+    <WCFMetadataStorage Include="Service References\EmailNotificationServiceReference\" />
+    <WCFMetadataStorage Include="Service References\HomePageServiceReference\" />
+    <WCFMetadataStorage Include="Service References\InvestorListingsServiceReference\" />
+    <WCFMetadataStorage Include="Service References\LearnServiceReference\" />
+    <WCFMetadataStorage Include="Service References\ListingServiceReference\" />
+    <WCFMetadataStorage Include="Service References\LoginServiceReference\" />
+    <WCFMetadataStorage Include="Service References\SubscriptionServiceReference\" />
+    <WCFMetadataStorage Include="Service References\TestimonialServiceReference\" />
+    <WCFMetadataStorage Include="Service References\UserRegistrationServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserRegistrationServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserRegistrationServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserRegistrationServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\BrokerListingServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\BrokerListingServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\BrokerListingServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EmailNotificationServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EmailNotificationServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EmailNotificationServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LoginServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LoginServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LoginServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HomePageServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HomePageServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HomePageServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TestimonialServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TestimonialServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TestimonialServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\InvestorListingsServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\InvestorListingsServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\InvestorListingsServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DashboardServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DashboardServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DashboardServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ListingServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ListingServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ListingServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LearnServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LearnServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LearnServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessObjects\BusinessObjects.csproj">
+      <Project>{58ed71ac-70fa-4796-8f2f-3d048f39cf51}</Project>
+      <Name>BusinessObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{9404b9f5-52bc-417e-bac0-93878063746d}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SubscriptionServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SubscriptionServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SubscriptionServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ListingServiceReference\ListingService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\BrokerListingServiceReference\BrokerListingService1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DashboardServiceReference\DashboardService1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EmailNotificationServiceReference\EmailNotificationService2.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HomePageServiceReference\HomePageService2.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\InvestorListingsServiceReference\InvestorListingsService2.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LearnServiceReference\LearnService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ListingServiceReference\ListingService2.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LoginServiceReference\LoginService2.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SubscriptionServiceReference\SubscriptionService1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TestimonialServiceReference\TestimonialService1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserRegistrationServiceReference\UserRegistrationService2.disco" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

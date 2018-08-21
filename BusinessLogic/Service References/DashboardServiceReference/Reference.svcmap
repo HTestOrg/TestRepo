@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4117a07d-fda8-4df1-b5f7-46f11d658722" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://geraciwcfservices.azurewebsites.net/DashboardService/DashboardService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="DashboardService1.wsdl" MetadataType="Wsdl" ID="9756e101-07fe-4287-ae3a-f251205696e1" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/DashboardService/DashboardService.svc?wsdl" />
+    <MetadataFile FileName="DashboardService1.disco" MetadataType="Disco" ID="284d59f9-a33b-4db6-98c2-75eabd0751bd" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/DashboardService/DashboardService.svc?disco" />
+    <MetadataFile FileName="DashboardService.xsd" MetadataType="Schema" ID="11dbfdc3-a8d4-4050-9963-50c6e332f645" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/DashboardService/DashboardService.svc?xsd=xsd1" />
+    <MetadataFile FileName="DashboardService1.xsd" MetadataType="Schema" ID="1f53d99d-d051-4026-8858-e49d67a03093" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/DashboardService/DashboardService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

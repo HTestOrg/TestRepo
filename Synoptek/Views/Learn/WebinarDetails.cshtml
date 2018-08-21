@@ -1,0 +1,478 @@
+﻿@model BusinessObjects.LearnModel
+
+@{
+    ViewBag.Title = "Webinar Details";
+    string shareURL = "";
+    if(Model.ResourcePath == "" || Model.ResourcePath == null)
+    {
+        shareURL = Model.Url;
+    }else
+    {
+        shareURL = Model.ResourcePath;
+    }
+}
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">@Model.LearnTypeName - @Model.TopicName</h2>
+    </div>
+</div>
+<head>
+    <!-- Added fo social shared functionality for facebook -->
+    <meta property="og:title" content="@Model.Name" />
+    <meta property="og:description" content="@Model.Description" />
+    <meta property="og:url" content="@shareURL" />
+    <meta property="og:video" content="@shareURL" />
+    <meta property="og:type" content="video" />
+
+    <meta name="twitter:title" content="@Model.Name">
+    <meta name="twitter:description" content="@Model.Description">
+    <meta name="twitter:image" content="@Model.ResourcePath">
+    <meta name="twitter:card" content="summary_large_image">
+    <!----->
+
+</head>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div class="educationPage">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-10">
+                    <h2 class="pt-4">@Model.ExperienceLevelName - @Model.Name</h2>
+                    <div class="BottonLine mt-3 mb-4"></div>
+                    <div class="ResponviseCenter">
+                        @if (Model.ResourcePath != "")
+                        {
+                            <div>
+                                <video class="white-two" width="960" height="540" controls>
+                                    <source src="@(Model.ResourcePath)" type="video/WebM">
+                                    <source src="@(Model.ResourcePath)" type="video/mp4">
+                                    <source src="@(Model.ResourcePath)" type="video/ogg">
+                                    Your browser does not support HTML5 video.
+                                </video>
+                            </div>
+                            <div class="mt-4">
+                                @if (Model.Url != null && Model.Url != "")
+                                {
+                                    <p>Video URL: <span class="cursorPointer coolBlue darkBlue" data-toggle="modal" data-target="#YoutubeVideoModal" onclick="rediretToURL('@Model.Url')">  @Model.Url</span></p>
+                                }
+                            </div>
+                        }
+                        else if (Model.ResourcePath == "" && Model.Url != null && Model.Url != "")
+                        {
+                            @Html.HiddenFor(m => m.Url, new { @id = "hdnUrl" })
+                            <embed id="videoOnSamePage" src="" wmode="transparent" type="application/x-shockwave-flash"
+                                   width="960" height="540" allowfullscreen="true" title="Adobe Flash Player">
+                        }
+                        else
+                        {
+                            <div><b><span> No Video Available</span></b></div>
+                        }
+                        <p class="mt-4">Interested in taking the next step?</p>
+                        <button type="button" class="btn btn-primary w-250px mr-4 mb-3" id="btn_ScheduleAConsultation" data-target="#ScheduleConsultationModal" data-id="@(Model.ID)">Schedule a Consultation</button>
+                        <button type="button" class="btn btn-primary w-250px mr-4 mb-3" id="btnShare" data-toggle="modal" data-target="#SocialShareModal">Share</button>
+
+                        <div style="margin-top: 10px;">
+                            @Html.Raw(Model.Description)
+                            <div class="clearfix"></div>
+                        </div>
+                        @Html.HiddenFor(model => model.ID)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="white-two">
+            <div class="container pb-5">
+                <h2 class="pt-4">Next Videos</h2>
+                <div class="BottonLine mt-3 mb-4"></div>
+                <div class="clearfix"></div>
+                <div class="row pt-2 ResponviseCenter">
+                    @if (Model.LatestSimillarArticleList != null)
+                    {
+                        if (Model.LatestSimillarArticleList.Count > 0 && Model.LatestSimillarArticleList != null)
+                        {
+                            foreach (var resource in Model.LatestSimillarArticleList)
+                            {
+                                string LearnID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(resource.ID), true);
+                                string TopicID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(resource.TopicID), true);
+
+                                @Html.HiddenFor(modelItem => resource.Name, new { id = "hdnName" + resource.ID })
+                                @Html.HiddenFor(modelItem => resource.Description, new { id = "hdnDescription" + resource.ID })
+
+                                <div class="col-md-3">
+                                    @if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Admin")
+                                    {
+                                        <a href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })'>
+                                            <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News">
+                                        </a>
+                                    }
+                                    else if (Synoptek.SessionController.UserSession.UserId == null)
+                                    {
+                                        if (resource.ContentTypeID == 0)
+                                        {
+
+                                            <a href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = LearnID })'>
+                                                <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News">
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/opportunities-lockThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News" onclick="GetRoleAccessPopup()"><br />
+                                        }
+                                    }
+                                    else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.IsPaid == false)
+                                    {
+                                        if (@resource.ContentTypeID == 1)
+                                        {
+
+                                            <a href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = LearnID })'>
+                                                <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News">
+                                            </a>
+
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/opportunities-lockThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News" onclick="GetPaywallPopup()"><br />
+
+                                        }
+                                    }
+                                    else if (Synoptek.SessionController.UserSession.UserId != null && (Synoptek.SessionController.UserSession.RoleType == "Investor" || Synoptek.SessionController.UserSession.RoleType == "Broker"))
+                                    {
+                                        <a href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = LearnID })'>
+                                            <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News">
+                                        </a>
+                                    }
+                                    <h4 class="ResponviseCenter"><div id="lbl_Name@(resource.ID)">@Html.Raw(resource.Name)</div></h4>
+                                    <h5 class="category">@(resource.LearnTypeName.ToUpper()) - @(resource.TopicName.ToUpper()) (@resource.ContentForName)</h5>
+                                    <p><div id="lbl_description@(resource.ID)">@Html.Raw(resource.Description)</div></p>
+                                </div>
+
+                                <script>
+                                    $(document).ready(function ()
+                                    {
+                                        var actualvalue = $('#hdnDescription@(resource.ID)').val();
+                                        var result = actualvalue.replace(/<[^>] +>/ g, '');
+                                        if (result.length > 50)
+                                        {
+                                            $("#lbl_description@(resource.ID)").html(result.substr(0, 50) + "...");
+                                        }
+                                        else
+                                        {
+                                            $("#lbl_description@(resource.ID)").html(result.substr(0, 50));
+                                        }
+                                        var actualname = $('#hdnName@(resource.ID)').val();
+                                        var resultname = actualname.replace(/<[^>] +>/ g, '');
+                                        if (resultname.length > 50)
+                                        {
+                                            $("#lbl_Name@(resource.ID)").html(resultname.substr(0, 50) + "...");
+                                        }
+                                        else
+                                        {
+                                            $("#lbl_Name@(resource.ID)").html(resultname.substr(0, 50));
+                                        }
+                                    });
+                                </script>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!--Social Share Modal-->
+<div class="modal fade" id="SocialShareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <h3 class="mb-2 mt-5">Share this on your favorite social <br /> media channels.</h3>
+                    <div class="mt-4 pt-2 SocialShare">
+                        <div class="text-left form-group">
+                            <label for="viaurl">Via URL</label>
+                            <input type="text" class="form-control" id="viaurl" value="@TempData["Link"]">
+                        </div>
+                        <div class="text-left form-group mt-5 mb-5">
+                            <label for="viasocial">Via Social Networks</label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="socialbox">
+                                        <a title="Share on Facebook" href="@TempData["FacebookURL"]" onclick="CenterWindow(600, 600, 50, this.href, 'Share on Facebook'); return false;">
+                                            <i class="fa fa-facebook"> </i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="socialbox">
+                                        <a title="Share on linkedin" href="@ViewBag.LinkedInURL" onclick="CenterWindow(600, 600, 50, this.href, 'Share on LinkedIn'); return false;">
+                                            <i class="fa fa-linkedin"> </i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="socialbox">
+                                        <a title="Share on twitter" href="@ViewBag.TwitterURL" onclick="CenterWindow(600,600,50,this.href, 'Share on Twitter'); return false;">
+                                            <i class="fa fa-twitter"> </i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Social Share Modal-->
+<!--  Schedule Consultation Modal -->
+<div class="modal fade" id="ScheduleConsultationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                @{
+                    var userName = "";
+                    var Email = "";
+                }
+                @if (Synoptek.SessionController.UserSession.UserId != null)
+                {
+                    userName = Synoptek.SessionController.UserSession.UserName;
+                    Email = Synoptek.SessionController.UserSession.EmailAddress;
+                }
+                @Html.Hidden("hdnUserName", userName)
+                @Html.Hidden("hdnEmail", Email)
+                <form>
+                    <h3 class="mb-5 mt-5">Schedule a Consultation</h3>
+                    <div class="text-center mt-4 pt-2 modalData" id="ScheduleConsultationBody">
+                        <div class="form-group has-warning text-left">
+                            <label for="Name" class="LightGrey">Name <span class='redcolor'>*</span></label>
+                            <input type="text" class="form-control" value="@userName" id="txt_Name" placeholder="Name" maxlength="50">
+                            <span class="redcolor" id="lbl_errorforName"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="Email" class="LightGrey">Email <span class='redcolor'>*</span> </label>
+                            <input type="text" class="form-control" value="@Email" id="txt_EmailID" placeholder="Email Address" maxlength="100">
+                            <span class="redcolor" id="lbl_errorforEmail"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="phone" class="LightGrey">Phone Number </label>
+                            <input type="text" class="form-control" id="txt_Phone" placeholder="Phone Number" maxlength="10">
+                            <span class="redcolor" id="lbl_errorforPhone"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="description" class="LightGrey">Description <span class='redcolor'>*</span> </label>
+                            <textarea rows="3" id="txt_Consultation" class="form-control" placeholder="Description" maxlength="500"></textarea>
+                            <input type="hidden" id="hdn_ConsultationListingId" />
+                            <span class="redcolor" id="lbl_errorforConsultation"></span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_sendConsultaion">Send Consultation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Schedule Consultation Modal -->
+
+<div class="modal fade" id="YoutubeVideoModal" tabindex="-1" role="dialog" aria-labelledby="YoutubeVideoModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" id="youtubeClose" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <div class="pt-4 font25">@Model.ExperienceLevelName - @Model.Name</div>
+                    <div class="pt-2">
+                        <div class="text-left form-group">
+                            <embed id="video" src="" wmode="transparent" type="application/x-shockwave-flash"
+                                   class="width100" height="380" allowfullscreen="true" title="Adobe Flash Player">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $(document).ready( function () {
+        var url = $("#hdnUrl").val();
+        url = url.split('v=')[1];
+        $("#videoOnSamePage")[0].src = "https://www.youtube.com/v/" + url;
+    });
+
+    function rediretToURL(url) {
+        url = url.split('v=')[1];
+        $("#video")[0].src = "https://www.youtube.com/v/" + url;
+    }
+
+    $('body').on('click', "#YoutubeVideoModal .close", function () {
+
+    });
+    function GetRoleAccessPopup() {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    }
+    function CenterWindow(windowWidth, windowHeight, windowOuterHeight, url, wname, features) {
+        var centerLeft = parseInt((window.screen.availWidth - windowWidth) / 2);
+        var centerTop = parseInt(((window.screen.availHeight - windowHeight) / 2) - windowOuterHeight);
+
+        var misc_features;
+        if (features) {
+            misc_features = ', ' + features;
+        }
+        else {
+            misc_features = ', status=no, location=no, scrollbars=yes, resizable=yes';
+        }
+        var windowFeatures = 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + centerLeft + ',top=' + centerTop + misc_features;
+        var win = window.open(url, wname, windowFeatures);
+        win.focus();
+        return win;
+    }
+
+    $('#YoutubeVideoModal').on('hidden.bs.modal', function () {
+        $("#YoutubeVideoModal iframe").attr("src", $("#YoutubeVideoModal iframe").attr("src"));
+    });
+
+    //$('#YoutubeVideoModal').on('hidden.bs.modal', function () {
+    //    callPlayer('yt-player', 'stopVideo');
+    //});
+
+    //$("#youtubeClose").click(function(){
+
+    //    callPlayer('yt-player', 'stopVideo');
+    //});
+
+
+    // Schedule Consultation
+    $("#btn_ScheduleAConsultation").on('click', function () {
+        var userName = $("#hdnUserName").val();
+        var emailAddress = $("#hdnEmail").val();
+        $("#txt_EmailID").val(emailAddress);
+        $("#txt_Name").val(userName);
+        $("#txt_Phone").val('');
+        $("#txt_Consultation").val("");
+        $("#lbl_errorforEmail").html("");
+        $("#lbl_errorforConsultation").html("");
+        $("#hdn_ConsultationListingId").val("");
+        $("#lbl_errorforPhone").html('');
+        $("#lbl_errorforName").html('');
+        $('#ScheduleConsultationModal').modal({ backdrop: 'static', keyboard: false })
+    });
+
+    $("#btn_sendConsultaion").on("click", function () {
+        try {
+            var Email = $("#txt_EmailID").val().trim();
+            var Name = $("#txt_Name").val().trim();
+            var Phone = $("#txt_Phone").val().trim();
+
+            var userName = $("#hdnUserName").val();
+            var emailAddress = $("#hdnEmail").val();
+
+            Message = $("#txt_Consultation").val().trim();
+            $("#lbl_errorforConsultation").html('');
+            $("#lbl_errorforEmail").html('');
+            $("#lbl_errorforPhone").html('');
+            $("#lbl_errorforName").html('');
+
+            if (Name != "" & Message != "" & Email != "") {
+                var result = ValidateDataForScheduleConsultation(Email, Name, Phone);
+                if (result) {
+                    $.ajax({
+                        url: '@Url.Action("ScheduleConsultationForPublicUser", "HomePage")',
+                        data: { Email: Email, Name: Name, Phone: Phone, Message: Message },
+                        success: function (result) {
+                            if (result == 1) {
+                                $('#ScheduleConsultationModal').modal('hide');
+                                bootbox.alert("Your request for consultation has been sent.", function () {
+                                    $("#txt_EmailID").val(emailAddress);
+                                    $("#txt_Name").val(userName);
+                                    $("#txt_Phone").val('');
+                                    $("#txt_Consultation").val("");
+                                    $("#lbl_errorforEmail").html("");
+                                    $("#lbl_errorforConsultation").html("");
+                                    $("#hdn_ConsultationListingId").val("");
+                                    $("#lbl_errorforPhone").html('');
+                                    $("#lbl_errorforName").html('');
+                                });
+                            }
+                        },
+                        error: function (result) {
+                            bootbox.alert("An error has been occured..");
+                        }
+                    });
+                }
+            }
+            else {
+                if (Name == "") {
+                    $("#lbl_errorforName").html("Name is required.");
+                }
+                if (Message == "") {
+                    $("#lbl_errorforConsultation").html("Description is required.");
+                } if (Email == "") {
+                    $("#lbl_errorforEmail").html("Email address is required.");
+                }
+                return false;
+            }
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    });
+
+    function ValidateDataForScheduleConsultation(Email, Name, Phone) {
+        var result = false;
+        var filter = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+        var onlycharacter = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+        if (Name.match(onlycharacter)) {
+            result = true;
+        } else {
+            result = false;
+            $("#lbl_errorforName").html("Enter valid Name.");
+        }
+
+        if (result) {
+            if (filter.test(Email)) {
+                result = true;
+            }
+            else {
+                result = false;
+                $("#lbl_errorforEmail").html("Enter valid Email address.");
+            }
+        }
+        if (result && Phone.length > 0) {
+            var numericExpression = /^[0-9]+$/;
+            if (Phone.match(numericExpression) && Phone.length == 10) {
+                result = true;
+            } else {
+                result = false;
+                $("#lbl_errorforPhone").html("Enter valid Phone Number.");
+            }
+        }
+
+        if (result)
+            return true;
+        else
+            return false;
+    }
+</script>

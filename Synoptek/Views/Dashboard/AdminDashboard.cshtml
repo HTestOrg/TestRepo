@@ -1,0 +1,248 @@
+﻿@model BusinessObjects.DashboardWrapper
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "AdminSection";
+}
+<style>
+.sortBy{
+    top: 5px !important;
+}
+</style>
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">Admin</h2>
+    </div>
+</div>
+
+<div class="ActionBar mb-5">
+    <ul class="nav justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pills-tab1-tab" data-toggle="pill" href="#pills-tab1" role="tab" aria-controls="pills-tab1" aria-selected="true">LISTINGS</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-tab2-tab" data-toggle="pill" href="#pills-tab2" role="tab" aria-controls="pills-tab2" aria-selected="false">USERS</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-tab3-tab" data-toggle="pill" href="#pills-tab3" role="tab" aria-controls="pills-tab3" aria-selected="false">RESOURCES</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-tab4-tab" data-toggle="pill" href="#pills-tab4" role="tab" aria-controls="pills-tab4" aria-selected="false">TESTIMONIALS</a>
+        </li>
+    </ul>
+</div>
+
+
+<!--Partial view for content div-->
+<div class="tab-content mb-5 educationPage" id="pills-tabContent">
+    <!--Listings-->
+    <div class="tab-pane fade show active in" id="pills-tab1" role="tabpanel" aria-labelledby="pills-tab1-tab">
+        <div class="container" id="ListingsContainer">
+            <div class="row mb-5">
+                <div class="col-md-12 col-lg-4">
+                    <div class="input-group mt-3px">
+                        <div class="position-relative w-100">
+                            <span class="label-Icon"><img src="../images/search.png" /></span>
+                            <input class="form-control custom-input form-control-lg pl45" id="searchListingstxt" placeholder="Search Listings…" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-5 text-right">
+                    <a href="@Url.Action("AddListing", "ListingDetails")"><button type="button" class="btn btn-primary Respon-right font14 mt-2 mb-2">Add New</button></a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="sortBy">
+                        <span>Sort by :</span>
+                        <div class="input-group">
+                            <select class="custom-select form-control-lg" id="inputGroupSelectListings">
+                                <option value="RecentlyPosted" selected="">Most Recent</option>
+                                <option value="LowToHigh">Low To High</option>
+                                <option value="HighToLow">High To Low</option>
+                                <option value="IsSponsored">Is Sponsored</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="pills-tab1-child">
+            @Html.Partial("_AdminListingsTab", Model.PagedListAdminListings)
+        </div>
+    </div>
+
+    <!--Users-->
+    <div class="tab-pane fade" id="pills-tab2" role="tabpanel" aria-labelledby="pills-tab2-tab">
+        <div class="container" id="UsersContainer">
+            <div class="row mb-5">
+                <div class="col-md-12 col-lg-4">
+                    <div class="input-group mt-3px">
+                        <div class="position-relative w-100">
+                            <span class="label-Icon"><img src="../images/search.png" /></span>
+                            <input class="form-control custom-input form-control-lg pl45" id="searchUserstxt" placeholder="Search Users…" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="sortBy">
+                        <span>Sort by :</span>
+                        <div class="input-group">
+                            <select class="custom-select form-control-lg" id="inputGroupSelectUsers">
+                                <option value="RecentlyPosted" selected="">Most Recent</option>
+                                <option value="Alphabetical">Alphabetical</option>
+                                <option value="PaidBroker">Paid Broker</option>
+                                <option value="PaidInvestor">Paid Investor</option>
+                                @*<option value="Type">Type</option>*@
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="pills-tab2-child">
+            @Html.Partial("_AdminUsersTab", Model.PagedListUsers)
+        </div>
+
+    </div>
+    <!--Resources-->
+    <div class="tab-pane fade" id="pills-tab3" role="tabpanel" aria-labelledby="pills-tab3-tab">
+        <div class="container" id="ResourcesContainer">
+            <div class="row mb-5">
+                <div class="col-md-12 col-lg-4">
+                    <div class="input-group mt-3px">
+                        <div class="position-relative w-100">
+                            <span class="label-Icon"><img src="../images/search.png" /></span>
+                            <input class="form-control custom-input form-control-lg pl45" id="searchResourcestxt" placeholder="Search Resources…" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-5 text-right">
+                    <a href="@Url.Action("AddResource", "Learn")"><button type="button" class="btn btn-primary Respon-right font14 mt-2 mb-2">Add New</button></a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="sortBy">
+                        <span>Sort by :</span>
+                        <div class="input-group">
+                            <select class="custom-select form-control-lg" id="inputGroupSelectResources">
+                                <option value="RecentlyPosted" selected="">Most Recent</option>
+                                <option value="Alphabetical">Alphabetical</option>
+                                <option value="Type">Type</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="pills-tab3-child">
+            @Html.Partial("_AdminResourcesTab", Model.PagedListResource)
+        </div>
+    </div>
+
+    <!--Testimonials-->
+    <div class="tab-pane fade" id="pills-tab4" role="tabpanel" aria-labelledby="pills-tab4-tab">
+        <div class="container" id="TestimonialsContainer">
+            <div class="row mb-5">
+                <div class="col-md-12 col-lg-4">
+                    <div class="input-group mt-3px">
+                        <div class="position-relative w-100">
+                            <span class="label-Icon"><img src="../images/search.png" /></span>
+                            <input class="form-control custom-input form-control-lg pl45" id="searchTestimonialstxt" placeholder="Search Testimonials…" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-5 text-right">
+                    <a href="@Url.Action("AddTestimonial", "Testimonial")"><button type="button" class="btn btn-primary Respon-right font14 mt-2 mb-2">Add New</button></a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="sortBy">
+                        <span>Sort by :</span>
+                        <div class="input-group">
+                            <select class="custom-select form-control-lg" id="inputGroupSelectTestimonials">
+                                <option value="RecentlyPosted" selected="">Most Recent</option>
+                                <option value="Alphabetical">Alphabetical</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="pills-tab4-child">
+            @Html.Partial("_AdminTestimonialsTab", Model.PagedListTestimonial)
+        </div>
+    </div>
+
+</div>
+<!--End content-->
+
+<script>
+
+    function DeleteRecord(ID, Tab, rowId) {
+        var Id = ID;
+        var tab = Tab;
+        bootbox.confirm({
+            message: "Do you want to delete this Record?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-primary'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-default'
+                }
+            },
+            callback: function (result) {
+
+                if (result) {
+                    if (Tab == "Listings") {
+                        $.ajax({
+                            url: '@Url.Action("Delete","Dashboard")',
+                            data: { listingID: Id },
+                            success: function (result) {
+                                $("#listing-" + rowId).remove();
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    }
+
+                    if (Tab == "Users") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "UserRegistration" )',
+                            data: { selectedUserID: Id },
+                            success: function (result) {
+                                $("#user-" + rowId).remove();
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    }
+
+                    if (Tab == "Resources") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "Learn" )',
+                            data: { learnID: Id },
+                            success: function (result) {
+                                $("#resource-" + rowId).remove();
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    }
+
+                    if (Tab == "Testimonials") {
+                        $.ajax({
+                            url: "@Url.Action("Delete", "Testimonial")",
+                            data: { testimonialID: Id },
+                            success: function (result) {
+                                $("#testimonial-" + rowId).remove();
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    }
+
+                }
+            }
+        });
+    }
+</script>

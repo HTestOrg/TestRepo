@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="bce604ed-20d1-45c0-80f1-b3b4ed291f94" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://geraciwcfservices.azurewebsites.net/EmailNotificationService/EmailNotificationService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="EmailNotificationService2.wsdl" MetadataType="Wsdl" ID="95b5a46f-0e2d-41d3-b7d0-01bf22d2cd17" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/EmailNotificationService/EmailNotificationService.svc?wsdl" />
+    <MetadataFile FileName="EmailNotificationService3.xsd" MetadataType="Schema" ID="9e18edd1-a2b5-4581-b065-12463ec26228" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/EmailNotificationService/EmailNotificationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="EmailNotificationService4.xsd" MetadataType="Schema" ID="f0b65d98-2cf9-46e2-a379-525b33594c80" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/EmailNotificationService/EmailNotificationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="EmailNotificationService2.disco" MetadataType="Disco" ID="7ef18f44-fed2-4113-b445-0e1ef3c2ad85" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/EmailNotificationService/EmailNotificationService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

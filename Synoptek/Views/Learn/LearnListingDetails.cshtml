@@ -1,0 +1,260 @@
+﻿@model BusinessObjects.LearnWrapper
+@{
+    ViewBag.Title = "Learn Details";
+}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frm_LearnListing" }))
+{
+    @*@Html.AntiForgeryToken()*@
+    @Html.ValidationSummary(true)
+
+    <div class="signUpBlog">
+        <div class="container">
+            @{
+                var header = "";
+                if (ViewBag.TopicName == "")
+                {
+                    header = ViewBag.ExperienceLevel;
+                }
+                else
+                {
+                    header = ViewBag.TopicName;
+                }
+            }
+            <h2 class="mb-0 text-left">@ViewBag.LearnType - @header</h2>
+        </div>
+    </div>
+
+
+    <div class="ActionBar">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-3">
+                    <div class="input-group mt-3px">
+                        <div class="position-relative w-100">
+                            <span class="label-Icon"><img src="~/images/type.png" /></span>
+                            @Html.DropDownListFor(modelItem => Model.SelectedTopic, new SelectList(Model.TopicList, "ID", "Name"), "Types", new { @class = "custom-select form-control-lg" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3" id="divExpLevel">
+                    <div class="input-group mt-3px">
+                        <div class="position-relative w-100">
+                            <span class="label-Icon"><img src="~/images/skill.png" /></span>
+                            @Html.DropDownListFor(modelItem => Model.SelectedExperienceLevel, new SelectList(Model.ExperienceLevelList, "ID", "Name"), "Skill Level", new { @class = "custom-select form-control-lg skill-icon" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group mt-3px">
+                        <div class="position-relative w-100">
+                            <span class="label-Icon"><img src="~/images/search.png" /></span>
+                            @Html.TextBoxFor(modelItem => modelItem.SearchText, new { @placeholder = "Search Resources...", @class = "form-control custom-input form-control-lg pl45" })
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(modelitem => modelitem.SelectedLearnType, new { @class = "learnType" })
+            </div>
+        </div>
+    </div>
+
+    <div class="educationPage">
+        <div class="container">
+            <div>
+                <h2 class="pt-5">Recent</h2>
+                <div id="RecentLearnListingPartial">
+                    @{
+                        Html.RenderPartial("_RecentLearnListings", Model.RecentLearnList);
+                    }
+                </div>
+            </div>
+            <div>
+                <div class="position-relative">
+                    <h2 class="pt-5">All</h2>
+                    <div class="sortBy">
+                        <span>Sort by :</span>
+                        <div class="input-group">
+                            @Html.DropDownList("SortingOrder", new List<SelectListItem>
+            {
+                new SelectListItem{ Text="Most Recent", Value = "RecentlyPosted" },
+                new SelectListItem{ Text="Alphabetical", Value = "Alphabetical" },
+                new SelectListItem{ Text="Type", Value = "Type" }
+             }, new { @class = "custom-select form-control-lg" })
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="BottonLine mt-3 mb-4"></div>
+                <div class="clearfix"></div>
+                <div id="LearnListingPartial">
+                    @{
+                        Html.RenderPartial("_LearnListings", Model.LearnPagedList);
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+                        }
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            var url = new URL(window.location.href);
+            var SelectedLearnType = url.searchParams.get("SelectedLearnType");
+            $("#SelectedLearnType").val(SelectedLearnType);
+
+            var SelectedExperienceLevel = url.searchParams.get("SelectedExperienceLevel");
+            if (SelectedLearnType == 2) {
+                $("#SelectedExperienceLevel").hide();
+                $("#divExpLevel").hide();
+            }
+
+
+            setSessionValues();
+
+            $("#SortingOrder").on("change", function () {
+                var SortingBy = $("#SortingOrder").val();
+                var url = '@Url.Action("LearnListingDetailsPartial", "Learn")';
+                $.ajax({
+                    url: url,
+                    data: { SortingBy: SortingBy },
+                    type: 'POST',
+                    cache: false,
+                    success: function (result) {
+                        $('#LearnListingPartial').html("");
+                        $('#LearnListingPartial').html(result);
+                    }
+                });
+            });
+
+            $("#SelectedTopic").on("change", function () {
+                setSessionValues();
+                SearchDeals();
+            });
+            $("#SelectedExperienceLevel").on("change", function () {
+                setSessionValues();
+                SearchDeals();
+            });
+
+            $("#SearchText").keyup(function () {
+                setSessionValues();
+                SearchDeals();
+            });
+
+            function SearchDeals() {
+                var SortingBy = $("#SortingOrder").val();
+                var searchTxt = $('#SearchText').val();
+                var url = '@Url.Action("LearnListingDetailsPartial", "Learn")';
+                if (searchTxt.length >= 2 || searchTxt.length == 0) {
+                    $.ajax(
+                    {
+                        url: url,
+                        data: $("#frm_LearnListing").serialize(),
+                        type: "POST",
+                        success: function (result) {
+                            $('#LearnListingPartial').html("");
+                            $("#LearnListingPartial").html(result);
+                            $("#SortingOrder").val("RecentlyPosted");
+                        },
+                        error: function (result) {
+                            bootbox.alert(result.toString());
+                        }
+                    });
+                }
+            }
+            function setSessionValues() {
+                var url = '@Url.Action("SetTempDataForLearnFilters", "Learn")';
+                $.ajax(
+                {
+                    url: url,
+                    data: $("#frm_LearnListing").serialize(),
+                    type: "POST",
+                    success: function () { }
+                });
+            }
+        });
+    </script>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfUtwHjVoCA1gmp3xlT_fAWITPjeW6SMA&libraries=places&callback=initAutocomplete" async defer></script>
+
+    @*Google Location autocomplete js*@
+    <script>
+        function initAutocomplete() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -33.8688, lng: 151.2195 },
+                zoom: 13,
+                mapTypeId: 'roadmap'
+            });
+
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById('LocationName');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function () {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            var markers = [];
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function () {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function (marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function (place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        }
+    </script>
+
+}

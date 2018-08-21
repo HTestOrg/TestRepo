@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+
+    @Styles.Render("~/bundles/lightboxCss")
+    @Styles.Render("~/bundles/bootstrapCss", "~/Content/css")
+   
+    @Scripts.Render("~/bundles/lightbox")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr", "~/bundles/bootstrapJs")
+    @Scripts.Render("~/bundles/bootbox")
+
+    @RenderSection("scripts", required: false)
+     
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet"> 
+
+    <script>
+        $(document).ready(function () {
+            $('input[type="text"], input[type="password"] ').keypress(function (e) {
+                var code = e.keyCode || e.which;
+                if (code === 13)
+                    e.preventDefault();
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        @Html.Partial("_LoginPartial")
+    </header>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+</body>
+</html>

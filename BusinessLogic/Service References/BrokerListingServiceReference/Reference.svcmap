@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="e100c06b-00d7-4613-9915-3440b92deb37" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://geraciwcfservices.azurewebsites.net/BrokerListingService/BrokerListingService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="BrokerListingService1.wsdl" MetadataType="Wsdl" ID="72523d5f-a166-4bf1-afb3-a540056772cb" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/BrokerListingService/BrokerListingService.svc?wsdl" />
+    <MetadataFile FileName="BrokerListingService.xsd" MetadataType="Schema" ID="3c2d4d3d-8806-42f3-8345-49ec641652f7" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/BrokerListingService/BrokerListingService.svc?xsd=xsd0" />
+    <MetadataFile FileName="BrokerListingService1.disco" MetadataType="Disco" ID="bdb21eb1-8161-4b57-84ea-61a30d8ee85b" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/BrokerListingService/BrokerListingService.svc?disco" />
+    <MetadataFile FileName="BrokerListingService2.xsd" MetadataType="Schema" ID="73078dfb-0d44-4d10-a5f7-55892cda4875" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/BrokerListingService/BrokerListingService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

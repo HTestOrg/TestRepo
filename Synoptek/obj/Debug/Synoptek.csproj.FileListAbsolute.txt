@@ -1,0 +1,131 @@
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\NLog.config
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Synoptek.dll.config
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Synoptek.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Synoptek.pdb
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\AntiXssLibrary.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Antlr3.Runtime.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\BusinessLogic.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\BusinessObjects.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\HtmlSanitizationLibrary.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Mandrill.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.AspNet.Identity.Core.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.AspNet.Identity.Owin.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Host.SystemWeb.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Security.Cookies.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Security.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Security.OAuth.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Web.Helpers.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Web.Infrastructure.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Newtonsoft.Json.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\NLog.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Owin.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\PagedList.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\PagedList.Mvc.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\RestSharp.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Scrypt.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Stripe.net.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Net.Http.Formatting.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Helpers.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Http.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Http.WebHost.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Mvc.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Optimization.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Razor.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.WebPages.Deployment.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.WebPages.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.WebPages.Razor.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\WebGrease.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\WebMatrix.Data.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\WebMatrix.WebData.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\BusinessLogic.pdb
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\BusinessObjects.pdb
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\AntiXssLibrary.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\HtmlSanitizationLibrary.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.AspNet.Identity.Core.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.AspNet.Identity.Owin.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Mandrill.pdb
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Mandrill.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Host.SystemWeb.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Security.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Security.Cookies.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Microsoft.Owin.Security.OAuth.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\Newtonsoft.Json.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\NLog.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\PagedList.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\PagedList.Mvc.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\RestSharp.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Net.Http.Formatting.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Helpers.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Http.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Http.WebHost.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Mvc.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.Razor.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.WebPages.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.WebPages.Deployment.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\System.Web.WebPages.Razor.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\WebMatrix.Data.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\bin\WebMatrix.WebData.xml
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\obj\Debug\Synoptek.csprojResolveAssemblyReference.cache
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\obj\Debug\Synoptek.dll
+F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\Synoptek\obj\Debug\Synoptek.pdb
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\NLog.config
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Synoptek.dll.config
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Synoptek.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Synoptek.pdb
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\AntiXssLibrary.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Antlr3.Runtime.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\BusinessLogic.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\BusinessObjects.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\HtmlSanitizationLibrary.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.Web.Helpers.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.Web.Infrastructure.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\PagedList.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\PagedList.Mvc.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Scrypt.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Net.Http.Formatting.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Helpers.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Http.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Http.WebHost.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Mvc.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Optimization.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Razor.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.WebPages.Deployment.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.WebPages.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.WebPages.Razor.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\WebGrease.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\WebMatrix.Data.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\WebMatrix.WebData.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\BusinessLogic.pdb
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\BusinessObjects.pdb
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\AntiXssLibrary.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\HtmlSanitizationLibrary.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.AspNet.Identity.Core.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.AspNet.Identity.Owin.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Mandrill.pdb
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Mandrill.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.Owin.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.Owin.Host.SystemWeb.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.Owin.Security.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.Owin.Security.Cookies.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Microsoft.Owin.Security.OAuth.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\Newtonsoft.Json.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\NLog.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\PagedList.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\PagedList.Mvc.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\RestSharp.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Net.Http.Formatting.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Helpers.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Http.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Http.WebHost.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Mvc.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.Razor.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.WebPages.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.WebPages.Deployment.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\System.Web.WebPages.Razor.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\WebMatrix.Data.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\bin\WebMatrix.WebData.xml
+F:\vishal\temp\back up\ss\Demo\Synoptek\obj\Debug\Synoptek.csprojResolveAssemblyReference.cache
+F:\vishal\temp\back up\ss\Demo\Synoptek\obj\Debug\Synoptek.dll
+F:\vishal\temp\back up\ss\Demo\Synoptek\obj\Debug\Synoptek.pdb

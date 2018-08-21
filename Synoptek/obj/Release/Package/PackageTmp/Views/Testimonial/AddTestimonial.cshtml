@@ -1,0 +1,208 @@
+﻿@model BusinessObjects.TestimonialModel
+
+@{
+    ViewBag.Title = "Add Testimonial";
+}
+
+<style>
+    .has-error .help-block {
+        color: #e80c4d;
+        font-family: Verdana,Arial,Helvetica,sans-serif;
+    }
+
+    .help-block {
+        font-weight: bold;
+    }
+
+    .has-error .control-label {
+        color: black;
+    }
+</style>
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">Admin - Add Testimonial</h2>
+    </div>
+</div>
+
+@if (Synoptek.SessionController.UserSession.RoleType == "Admin")
+{
+    <div class="container mt-5 mb-5">
+        @using (Html.BeginForm("SaveTestimonialDetails", "Testimonial", FormMethod.Post, new { @id = "frmTestimonial" }))
+        {
+            @Html.HiddenFor(model => model.ID)
+
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label for="name">Author</label>
+                        @Html.TextBoxFor(model => model.Author, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Author)
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control editorHtml" })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImagePath, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            <input type="file" name="Testimonial_uploader" id="Testimonial_uploader" onchange="ValidateTestimonialImage(this);">
+                            <p>&nbsp; <b>Note:</b> Files with .jpg, .jpeg, .bmp, .gif, .png extensions are allowed.</p>
+                            <div id="image-holder">
+                                @if (Model.ID <= 0)
+                    {
+                    }
+                    else if (Model.ImagePath != null && Model.ImagePath != "")
+                    {
+                                    <img src="@ViewBag.Logo" width="200" height="200" class="thumb-image" />
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            @if (Model.ID <= 0)
+                    {
+                                <input type="submit" value="Save" class="btn btn-primary btn-small" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Update" class="btn btn-primary btn-small" />
+                            }
+                           
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@Styles.Render("~/bundles/TinyMCECss")
+@Scripts.Render("~/bundles/TinyMCEJs")
+
+<script>
+    $(document).ready(function () {
+        tinymce.init({
+            selector: '#Description',
+            setup: function (editor) {
+                editor.on('keyup', function (e) {
+                    console.debug('Editor contents was modified. Contents: ' + editor.getContent({
+                        format: 'text'
+                    }));
+                    $('#frmTestimonial').bootstrapValidator('revalidateField', 'Description');
+                });
+            }
+        });
+
+        $('#frmTestimonial')
+        .bootstrapValidator({
+            excluded: function (res) {
+            },  // [':disabled'],
+            fields: {
+                Description: {
+                    validators: {
+                        callback: {
+                            message: 'The Description is requied field.',
+                            callback: function (value, validator, $field) {
+                                var text = tinyMCE.activeEditor.getContent({
+                                    format: 'text'
+                                });
+                                return text.trim().length > 0;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    $('#Testimonial_uploader').on('change', function (e) {
+        if (typeof (FileReader) != "undefined") {
+            var image_holder = $("#image-holder");
+            image_holder.empty();
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image",
+                    "height": "200",
+                    "width": "200",
+                }).appendTo(image_holder);
+            }
+            image_holder.show();
+            reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+            alert("This browser does not support FileReader.");
+        }
+        var files = e.target.files;
+        if (files.length > 0) {
+            try {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: '/Testimonial/UploadTestimonialImage',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function (xhr, status, p3, p4) {
+                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                err = JSON.parse(xhr.responseText).Message;
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("This browser doesn't support HTML5 file uploads!");
+                }
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        }
+    });
+
+    var _validTestimonialFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+    function ValidateTestimonialImage(oInput) {
+        if (oInput.type == "file") {
+            var sFileName = oInput.value;
+            if (sFileName.length > 0) {
+                var blnValid = false;
+                for (var j = 0; j < _validTestimonialFileExtensions.length; j++) {
+                    var sCurExtension = _validTestimonialFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        blnValid = true;
+                        break;
+                    }
+                }
+                if (!blnValid) {
+                    alert("Sorry, these extensions are not valid");
+                    oInput.value = "";
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+</script>

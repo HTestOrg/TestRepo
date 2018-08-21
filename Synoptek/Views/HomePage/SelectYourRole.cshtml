@@ -1,0 +1,725 @@
+﻿@model BusinessObjects.HomePageModel
+@using System.Security.Claims;
+
+@{
+    ViewBag.Title = "Broker/Investor Landing Page";
+    Layout = null;
+    string Investor = "2";
+    string Broker = "3";
+
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.Role);
+}
+
+<head>
+    <title>Home Page</title>
+
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    @Styles.Render("~/bundles/bootstrapCss", "~/Content/css")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr", "~/bundles/bootstrapJs")
+    @Scripts.Render("~/bundles/bootbox")
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
+</head>
+
+<header>
+    <div class="header">
+        <div class="HeaderTop container-fluid">
+            <div class="row">
+                <div class="col-md-4 col-lg-3">
+                    <a class="navbar-brand" href="@Url.Action("Homepage","Homepage")">
+                        <img src="~/images/logo.png" />
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-6">
+
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href='@Url.Action("Index", "Learn")'>LEARN</a>
+                                </li>
+                                <li class="nav-item">
+                                    @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                                    {
+                                        <a class="nav-link" href="#" onclick="GetSignUpPopup()">COMMUNITY</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="nav-link" href="http://www.unbot.com/">COMMUNITY</a>
+                                    }
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href='@Url.Action("SelectYourRole", "HomePage")'>LENDER / INVESTOR EXCHANGE</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                </div>
+                @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                {
+                    <div class="col-md-4 col-lg-3">
+                        <div class="float-right">
+                            <a id="lnklogin" class="nav-link float-left mt-1" href="#"><span class="pr-2 align-text-top"><img src="~/images/account-icon.png" /></span> SIGN IN</a>
+                            <form class="form-inline my-2 my-lg-0">
+                                <button id="lnkSignup" type="button" class="btn btn-primary w-125px">SIGN UP</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Investor && Synoptek.SessionController.UserSession.IsPaid == true)
+                {
+                    <div class="col-md-4 col-lg-3 col">
+                        <div class="float-right mobileDropdown">
+                            <div class="dropdown">
+                                <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                    @Html.ActionLink("My Investments", "Investor", "Dashboard", null, new { @class = "dropdown-item " })
+                                    @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Inbox", "Inbox", "MessageCenter", null, new { @class = "dropdown-item " })
+                                    @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown mt-4 float-right" id="mydrop">
+                            <a id="Notifications" class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-envelope"></i><span id="notificationCount" class="label label-warning"></span>
+                            </a>
+                            <ul id="listNotifications" class="dropdown-menu dropdown-messages dropdown-menu-right arrow_box"></ul>
+                        </div>
+                    </div>
+                }
+                else if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Broker && Synoptek.SessionController.UserSession.IsPaid == true)
+                {
+                    <div class="col-md-4 col-lg-3 col">
+                        <div class="float-right mobileDropdown">
+                            <div class="dropdown">
+                                <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                    @Html.ActionLink("My loan posts", "Broker", "Dashboard", null, new { @class = "dropdown-item " })
+                                    @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Inbox", "Inbox", "MessageCenter", null, new { @class = "dropdown-item " })
+                                    @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown mt-4 float-right" id="mydrop">
+                            <a id="Notifications" class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-envelope"></i><span id="notificationCount" class="label label-warning"></span>
+                            </a>
+                            <ul id="listNotifications" class="dropdown-menu dropdown-messages dropdown-menu-right arrow_box"></ul>
+                        </div>
+                    </div>
+                }
+                else if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Admin)
+                {
+                    <div class="col-md-4 col-lg-3 col">
+                        <div class="float-right mobileDropdown">
+                            <div class="dropdown">
+                                <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                    @Html.ActionLink("My Dashboard", "Admin", "Dashboard", null, new { @class = "dropdown-item" })
+                                    @*@Html.ActionLink("Login as..", "DashboardPage", "InvestorListings", null, new { @class = "dropdown-item" })*@
+                                    @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Inbox", "Inbox", "MessageCenter", null, new { @class = "dropdown-item " })
+                                    @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown mt-4 float-right" id="mydrop">
+                            <a id="Notifications" class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-envelope"></i><span id="notificationCount" class="label label-warning"></span>
+                            </a>
+                            <ul id="listNotifications" class="dropdown-menu dropdown-messages dropdown-menu-right arrow_box"></ul>
+                        </div>
+                    </div>
+                }
+                else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.IsPaid == false)
+                {
+                    <div class="col-md-4 col-lg-3 col">
+                        <div class="float-right mobileDropdown">
+                            <div class="dropdown">
+                                <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                    @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="container HeaderBottom">
+            <h1>Find and Post Investment Loan Opportunities</h1>
+            <div class="row justify-content-md-center mt-5">
+                <div class="col-md-4">
+                    <img src="~/images/learn.png" alt="Learn" />
+                    <h2>Invest</h2>
+                    <span>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-white mt-4" type="button" id="btn_PaymentSubscription" data-target="#SubscriptionPopup" onclick="GetSubscriptionPupup(@Investor)">Get Started</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-white mt-4" type="button" onclick="GetUserRole(@Investor, @Synoptek.SessionController.UserSession.UserId)">Get Started</button>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <img src="~/images/connect.png" alt="Connect" />
+                    <h2>Broker / Sell</h2>
+                    <span>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-white mt-4" type="button" id="btn_PaymentSubscription" data-target="#SubscriptionPopup" onclick="GetSubscriptionPupup(@Broker)">Get Started</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-white mt-4" type="button" onclick="GetUserRole(@Broker, @Synoptek.SessionController.UserSession.UserId)">Get Started</button>
+                    }
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div style="margin-bottom: 20px;">
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="FooterSlider mt-0 p-5">
+    <div id="featuredCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            @{
+                var i = 0;
+                foreach (var item in Model.FeaturedList)
+                {
+                    if (i == 0)
+                    {
+                        <li data-target="#featuredCarousel" data-slide-to="@i" class="active"></li>
+                    }
+                    else
+                    {
+                        <li data-target="#featuredCarousel" data-slide-to="@i"></li>
+                    }
+                    i++;
+                }
+            }
+        </ol>
+        <div class="carousel-inner">
+            @{
+                var j = 0;
+                var activeclass = "";
+                foreach (var item in Model.FeaturedList)
+                {
+                    if (j == 0)
+                    {
+                        activeclass = "active";
+                    }
+                    else
+                    {
+                        activeclass = "";
+                    }
+                    <div class="carousel-item @activeclass">
+                        <div class="row justify-content-md-center">
+                            <div class="col-lg-5 col-md-12" data-id="@(item.ID)">
+                                @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                                {
+                                    <a class="webkitcenter" href='#' onclick="GetSignUpPopup()">
+                                        <img src="@(item.ImagePath)" class="d-block" height="250" alt="@(item.Name)">
+                                    </a>
+                                }
+                                else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.IsPaid == false)
+                                {
+                                    <a class="webkitcenter" href='#' onclick="GetPaywallPopup('@claim.Value')">
+                                        <img src="@(item.ImagePath)" class="d-block" height="250" alt="@(item.Name)">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="webkitcenter" href='@Url.Action("GetSingleListingDetails", "InvestorListings", new { listingId = item.ID })'>
+                                        <img src="@(item.ImagePath)" class="d-block" height="250" alt="@(item.Name)">
+                                    </a>
+                                }
+                            </div>
+                            <div class="col-lg-5 col-md-12 text-center">
+                                <span>FEATURED LISTING</span>
+                                <h4>@item.Name</h4>
+                                <p class="mt-4">@Html.Raw(item.Description)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    j++;
+                }
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-5 mb-5">
+    <h2>Lorem Ipsum Dolar Ist Int</h2>
+    <p class="pt-4 pb-4">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Curabitur blandit tempus <br> porttitor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nulla vitae elit libero, a <br> pharetra augue. Sed posuere consectetur est at lobortis.</p>
+    <button type="button" class="btn btn-primary w-15per" id="btn_ScheduleAConsultation" data-target="#ScheduleConsultationModal">Schedule a Consultation</button>
+</div>
+
+<div class="FooterSlider">
+    <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            @{
+                var k = 0;
+            }
+            @foreach (var item in Model.TestimonialList)
+            {
+                if (k == 0)
+                {
+                    <li data-target="#testimonialCarousel" data-slide-to="@k" class="active"></li>
+                    k++;
+                }
+                else
+                {
+                    <li data-target="#testimonialCarousel" data-slide-to="@k"></li>
+                }
+            }
+        </ol>
+        <div class="carousel-inner mb-5">
+            @{
+                var counter = 0;
+                foreach (var testimonial in Model.TestimonialList)
+                {
+                    if (counter == 0)
+                    {
+                        activeclass = "active";
+                    }
+                    else
+                    {
+                        activeclass = "";
+                    }
+                    <div class="carousel-item @activeclass">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 text-center maxheight100px">
+                                <p class="">@Html.Raw(testimonial.Description)</p>
+                                <div class="clearfix"></div>
+                                <h5 class="text-center">@Html.Raw(testimonial.Author)</h5>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="webkitcenter">
+                                    <img class="d-block testimonialHomePage" src="@(testimonial.ImagePath)" alt="@(testimonial.Author)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    counter++;
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+<!--  Schedule Consultation Modal -->
+<div class="modal fade" id="ScheduleConsultationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                @{
+                    var userName = "";
+                    var Email = "";
+                }
+                @if (Synoptek.SessionController.UserSession.UserId != null)
+                {
+                    userName = Synoptek.SessionController.UserSession.UserName;
+                    Email = Synoptek.SessionController.UserSession.EmailAddress;
+                }
+                @Html.Hidden("hdnUserName", userName)
+                @Html.Hidden("hdnEmail", Email)
+                <form>
+                    <h3 class="mb-5 mt-5">Schedule a Consultation</h3>
+                    <div class="text-center mt-4 pt-2 modalData" id="ScheduleConsultationBody">
+                        <div class="form-group has-warning text-left">
+                            <label for="Name" class="LightGrey">Name <span class='redcolor'>*</span></label>
+                            <input type="text" class="form-control" value="@userName" id="txt_Name" placeholder="Name" maxlength="50">
+                            <span class="redcolor" id="lbl_errorforName"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="Email" class="LightGrey">Email <span class='redcolor'>*</span> </label>
+                            <input type="text" class="form-control" value="@Email" id="txt_EmailID" placeholder="Email Address" maxlength="100">
+                            <span class="redcolor" id="lbl_errorforEmail"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="phone" class="LightGrey">Phone Number </label>
+                            <input type="text" class="form-control" id="txt_Phone" placeholder="Phone Number" maxlength="10">
+                            <span class="redcolor" id="lbl_errorforPhone"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="description" class="LightGrey">Description <span class='redcolor'>*</span> </label>
+                            <textarea rows="3" id="txt_Consultation" class="form-control" placeholder="Description" maxlength="500"></textarea>
+                            <input type="hidden" id="hdn_ConsultationListingId" />
+                            <span class="redcolor" id="lbl_errorforConsultation"></span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_sendConsultaion">Send Consultation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Schedule Consultation Modal -->
+<!-- Subscription Modal -->
+<div class="modal fade" id="SubscriptionpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal" style="border-radius:43px;" id="SubscriptionContent">
+        </div>
+    </div>
+</div>
+
+
+<!--Terms And Conditions Popup-->
+<div class="modal fade" id="TermsAndConditions" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" id="TermsConditionsClose" data-target="#SubscriptionpModal" class="close" data-toggle="modal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <h3 class="text-center">Terms And Conditions</h3>
+
+                <div class="documentlinks mt-4">
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--Terms And Conditions Popup-->
+<!--Login Modal-->
+<div class="modal fade" id="LoginModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal" id="loginContent">
+        </div>
+    </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="SignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal" id="Signupcontent">
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        Stripe.setPublishableKey('pk_test_Hg95OWVHfWBveMX5rUrmud7y'); //Ethan
+
+        $.ajax({
+            url: "/MessageCenter/GetUnreadMessageCount",
+            success: function (result) {
+                $("#notificationCount").html(result);
+            }
+        });
+    });
+
+    //$(document).on('click', "body", function () {
+    //    if ($("#listNotifications").html() != undefined) {
+    //        if ($("#listNotifications").html().trim() != "") {
+    //            if (!$(event.target).closest('#listNotifications').length) {
+    //                $("#listNotifications").hide();
+    //            }
+    //        }
+    //    }
+    //});
+
+    function MakeSubscription() {
+        var expmonth = $("#ExpirationMonth option:selected").text();
+        var year = $("#ExpirationYear option:selected").text();
+
+        Stripe.card.createToken({
+            number: $('#txtCardNumber').val(),
+            cvc: $('#txtCvc').val(),
+            exp_month: expmonth,
+            exp_year: year,
+            name: $('#txtNameOnCard').val(),
+        }, stripeResponseHandler);
+        function stripeResponseHandler(status, response) {
+            var $form = $('#frmSubscription');
+
+            if (response.error) {
+                //alert(response.error.message);
+            } else {
+                var token = response.id;
+                $('#hdnToken').val(token);
+                $form.get(0).submit();
+            }
+        }
+    }
+
+    function showPaymentPopUp(model){
+        //alert("x");
+        $.ajax({
+            url: "/Subscription/GetSubscriptionPopup",
+            type: "POST",
+            data: model,
+            success: function(result){
+                $("#SubscriptionpModal").modal();
+                $("#SubscriptionContent").html(result);
+            }
+        });
+    }
+
+    function GetUserRole(roleID, userID) {
+        $('#hdn_userrole_ID').val(roleID);
+        $.ajax({
+            url: "GetUserRole",
+            data: { roleID: roleID, userID: userID },
+            success: function (result) {
+                if (result = "Public")
+                    $.ajax({
+                        url: "/UserRegistration/Register",
+                        success: function (result) {
+                            $("#SignUpModal").modal();
+                            $("#Signupcontent").html(result);
+                        }
+                    });
+            },
+            error: function (result) {
+                bootbox.alert("An error has been occured..");
+            }
+        });
+    }
+
+    function GetSubscriptionPupup(roleID) {
+
+        $('#hdn_userrole_ID').val(roleID);
+        $.ajax({
+            url: "/Subscription/GetSubscriptionOptions",
+            data: { roleID: roleID },
+            success: function (result) {
+                $("#SubscriptionpModal").modal();
+                $("#SubscriptionContent").html(result);
+            }
+        });
+    }
+
+    var handleSuccess = function (result) {
+        if (result == "success") {
+            //Removes validation from input-fields
+            $('.input-validation-error').addClass('input-validation-valid');
+            $('.input-validation-error').removeClass('input-validation-error');
+            //Removes validation message after input-fields
+            $('.field-validation-error').addClass('field-validation-valid');
+            $('.field-validation-error').removeClass('field-validation-error');
+            //Removes validation summary
+            $('.validation-summary-errors').addClass('validation-summary-valid');
+            $('.validation-summary-errors').removeClass('validation-summary-errors');
+
+            $("#SubscriptionModel_NameOnCard").val("");
+            $("#SubscriptionModel_CardNumber").val("");
+            $("#SubscriptionModel_SecurityCode").val("");
+
+            $('#SubscriptionpModal').modal('hide');
+            bootbox.alert("Payment has been made Successfully..!!!");
+        }
+        else {
+            $("#SubscriptionContent").html(result);
+        }
+    };
+
+    function showError(error) {
+        //bootbox.alert(error.responseText);
+    };
+
+    // Schedule Consultation
+    $("#btn_ScheduleAConsultation").on('click', function () {
+        var userName = $("#hdnUserName").val();
+        var emailAddress = $("#hdnEmail").val();
+        $("#txt_EmailID").val(emailAddress);
+        $("#txt_Name").val(userName);
+        $("#txt_Phone").val('');
+        $("#txt_Consultation").val("");
+        $("#lbl_errorforEmail").html("");
+        $("#lbl_errorforConsultation").html("");
+        $("#hdn_ConsultationListingId").val("");
+        $("#lbl_errorforPhone").html('');
+        $("#lbl_errorforName").html('');
+        $('#ScheduleConsultationModal').modal({ backdrop: 'static', keyboard: false })
+    });
+
+    $("#btn_sendConsultaion").on("click", function () {
+        try {
+            var Email = $("#txt_EmailID").val().trim();
+            var Name = $("#txt_Name").val().trim();
+            var Phone = $("#txt_Phone").val().trim();
+
+            var userName = $("#hdnUserName").val();
+            var emailAddress = $("#hdnEmail").val();
+
+            Message = $("#txt_Consultation").val().trim();
+            $("#lbl_errorforConsultation").html('');
+            $("#lbl_errorforEmail").html('');
+            $("#lbl_errorforPhone").html('');
+            $("#lbl_errorforName").html('');
+
+            if (Name != "" & Message != "" & Email != "") {
+
+                var result = ValidateDataForScheduleConsultation(Email, Name, Phone);
+                if (result) {
+                    $.ajax({
+                        url: "ScheduleConsultationForPublicUser",
+                        data: { Email: Email, Name: Name, Phone: Phone, Message: Message },
+                        success: function (result) {
+                            if (result == 1) {
+                                $('#ScheduleConsultationModal').modal('hide');
+                                bootbox.alert("Your request for consultation has been sent.", function () {
+                                    $("#txt_EmailID").val(emailAddress);
+                                    $("#txt_Name").val(userName);
+                                    $("#txt_Phone").val('');
+                                    $("#txt_Consultation").val("");
+                                    $("#lbl_errorforEmail").html("");
+                                    $("#lbl_errorforConsultation").html("");
+                                    $("#hdn_ConsultationListingId").val("");
+                                    $("#lbl_errorforPhone").html('');
+                                    $("#lbl_errorforName").html('');
+                                });
+                            }
+                        },
+                        error: function (result) {
+                            bootbox.alert("An error has been occured..");
+                        }
+                    });
+                }
+            }
+            else {
+                if (Name == "") {
+                    $("#lbl_errorforName").html("Name is required.");
+                }
+                if (Message == "") {
+                    $("#lbl_errorforConsultation").html("Description is required.");
+                } if (Email == "") {
+                    $("#lbl_errorforEmail").html("Email address is required.");
+                }
+                return false;
+            }
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    });
+    // End Schedule Consultation
+
+    $(document).on('click', "#lnklogin", function () {
+        $.ajax({
+            url: "/Login/Login",
+            success: function (result) {
+                $("#LoginModal").modal();
+                $("#loginContent").html(result);
+            }
+        });
+    });
+
+    $(document).on('click', "#lnkSignup", function () {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    });
+
+    $(document).on('click', "#Notifications", function () {
+        $.ajax({
+            url: "/MessageCenter/GetUnreadMessages",
+            success: function (result) {
+                $("#listNotifications").html(result);
+                $("#listNotifications").show();
+            }
+        });
+    });
+
+    function GetSignUpPopup() {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $('#LoginModal').modal('hide');
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    }
+    function GetPaywallPopup(roleType) {
+        var roleID;
+        if (roleType == "Investor")
+            roleID = 2;
+        else (roleType == "Broker")
+        roleID = 3;
+
+        $.ajax({
+            url: "/Subscription/GetSubscriptionOptions",
+            data: { roleID: roleID },
+            success: function (result) {
+                $("#SubscriptionpModal").modal();
+                $("#SubscriptionContent").html(result);
+            }
+        });
+    }
+    function ValidateDataForScheduleConsultation(Email, Name, Phone) {
+        var result = false;
+        var filter = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+        var onlycharacter = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+        if (Name.match(onlycharacter)) {
+            result = true;
+        } else {
+            result = false;
+            $("#lbl_errorforName").html("Enter valid Name.");
+        }
+        if (result) {
+            if (filter.test(Email)) {
+                result = true;
+            }
+            else {
+                result = false;
+                $("#lbl_errorforEmail").html("Enter valid Email address.");
+            }
+        }
+        if (result && Phone.length > 0) {
+            var numericExpression = /^[0-9]+$/;
+            if (Phone.match(numericExpression) && Phone.length == 10) {
+                result = true;
+            } else {
+                result = false;
+                $("#lbl_errorforPhone").html("Enter valid Phone Number.");
+            }
+        }
+        if (result)
+            return true;
+        else
+            return false;
+    }
+    function GetLoginPopup() {
+        $.ajax({
+            url: "/Login/Login",
+            success: function (result) {
+                $('#SignUpModal').modal('hide');
+                $("#LoginModal").modal();
+                $("#loginContent").html(result);
+            }
+        });
+    }
+</script>

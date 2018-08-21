@@ -1,0 +1,252 @@
+﻿@model BusinessObjects.PropertyInformation
+
+<h4>Property Information</h4>
+<style>
+    .datepicker > div {
+        display: block;
+    }
+</style>
+
+@using (Html.BeginForm("SavePropertyInformation", "ListingDetails", FormMethod.Post, new { @id = "frmAddListings" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(m => m.ListingStatusID, new { @id = "ListingStatusID" })
+
+<div class="white-two p-4 mb-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(m => m.PropertyTypeID, new { @class = "font13" })
+                <div class="position-relative">
+                    <span class="label-Icon"><img src="~/images/type.png" /></span>
+                    @Html.DropDownListFor(model => model.PropertyTypeID, new SelectList(Model.PropertyType, "ID", "Name"), "Select Property Type", new { @class = "custom-select form-control-lg skill-icon" })
+                    @Html.ValidationMessageFor(model => model.PropertyTypeID)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.PropertyAddress, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.PropertyAddress, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PropertyAddress)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.City, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.City)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Country, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.Country, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Country)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Zip, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.Zip, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Zip)
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(m => m.OccupancyStatusID, new { @class = "font13" })
+                <div class="position-relative">
+                    <span class="label-Icon"><img src="~/images/type.png" /></span>
+                    @Html.DropDownListFor(model => model.OccupancyStatusID, new SelectList(Model.OccupancyStatus, "ID", "Name"), "Select Occupancy Status", new { @class = "custom-select form-control-lg skill-icon" })
+                    @Html.ValidationMessageFor(model => model.OccupancyStatusID)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.StateName, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.StateName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StateName)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.PropertyMarketValue, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.PropertyMarketValue, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PropertyMarketValue)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.PropertyValuationDate, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.PropertyValuationDate, new { @class = "form-control date_picker" })
+                @Html.ValidationMessageFor(model => model.PropertyValuationDate)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.ValuationTypeID, new { @class = "font13" })
+                <div class="position-relative">
+                    <span class="label-Icon"><img src="~/images/type.png" /></span>
+                    @Html.DropDownListFor(model => model.ValuationTypeID, new SelectList(Model.ValuationType, "ID", "Name"), "Select Valuation Type", new { @class = "custom-select form-control-lg skill-icon" })
+                    @Html.ValidationMessageFor(model => model.ValuationTypeID)
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@*<h4>Borrower Information</h4>
+<div class="white-two p-4 mb-4">
+    <div class="mt-1">
+        <div class="form-check form-check-inline">
+            <label class="customForm">
+                <span class="customlabel">@Html.LabelFor(m => m.IsCompany)</span>
+                @Html.CheckBoxFor(m => m.IsCompany)
+                <span class="checkmark"></span>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(m => m.PrimaryBorrowerFirstName, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.PrimaryBorrowerFirstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PrimaryBorrowerFirstName)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.LastName, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LastName)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.MailingAddress, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.MailingAddress, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MailingAddress)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerCity, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerCity, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerCity)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerState, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerState, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerState)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerZip, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerZip, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerZip)
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerHomePh, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerHomePh, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerHomePh)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerWorkPh, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerWorkPh, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerWorkPh)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerMobilePh, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerMobilePh, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerMobilePh)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerEmail, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerEmail, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerEmail)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerFax, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerFax, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerFax)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.BorrowerSSTaxIDNoPrimary, new { @class = "font13" })
+                @Html.TextBoxFor(m => m.BorrowerSSTaxIDNoPrimary, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BorrowerSSTaxIDNoPrimary)
+            </div>
+        </div>
+    </div>
+</div>*@
+
+}
+
+<div class="f1-buttons" id="step1_Buttons"> 
+    <button type="button" id="btn_Previous_PropertyInformation" class="btn btn-previous">Previous</button>
+    <button type="button" id="btn_Next_PropertyInformation" class="btn btn-next btn-primary">Next</button>  
+</div> 
+
+<script type="text/javascript">
+     $(document).ready(function () {
+         $('.date_picker').datepicker({
+             format: "mm/dd/yyyy",
+             pickerPosition: 'bottom'
+         });
+
+         ////////// Properties sections
+
+         $("#btn_Previous_PropertyInformation").click(function () {
+             $.ajax({
+                 url: '@Url.Action("Edit", "ListingDetails")',
+                 type: "GET",
+                 data: { listingID: $("#hdn_Listings_ID").val(), Internal: true },
+                 success: function (result) {
+                     $("#ActiveStep").show();
+                     $("#ActiveStep").html(result);
+                     PreviousJS();
+                 },
+                 error: function (result) {
+                     bootbox.alert(result.toString());
+                 }
+             });
+         });
+
+
+         $("#btn_Next_PropertyInformation").click(function () {
+             $.ajax({
+                 url: '@Url.Action("SavePropertyInformation", "ListingDetails")',
+                 type: "POST",
+                 data: $("#frmAddListings").serialize(),
+                 success: function (jsonResult) {
+                     if (jsonResult[0].ID > 0) {
+                         var listingID = jsonResult[0].ListingID;
+                         $("#hdn_Listings_ID").val(listingID);
+                         $.ajax(
+                          {
+                              url: '@Url.Action("EditCommentsInformation", "ListingDetails")',
+                              type: "GET",
+                              data: { listingID: listingID },
+                              success: function (result) {
+                                  $("#ActiveStep").show();
+                                  $("#ActiveStep").html(result);
+                                  NextJS();
+                              }
+                          });
+                     }
+                     else {
+                         $("#ActiveStep").show();
+                         $("#ActiveStep").html(jsonResult);
+                     }
+                 },
+                 error: function (result) {
+                     bootbox.alert(result.toString());
+                 }
+             });
+         });
+         ////////// End Of Properties sections
+     });
+</script>

@@ -1,0 +1,779 @@
+﻿@model BusinessObjects.HomePageModel
+@using System.Security.Claims;
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = null;
+
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.Role);
+}
+
+<html>
+<head>
+    <style>
+        #listNotifications {
+         transform: translate3d(-263px, 15px, 0px) !important;
+        }
+    </style>
+    <title>Home Page</title>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    @Styles.Render("~/bundles/bootstrapCss", "~/Content/css")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr", "~/bundles/bootstrapJs")
+    @Scripts.Render("~/bundles/bootbox")
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
+
+    <!-- Google Tag Manager -->
+    <script>
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WZGKZCD');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122381334-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      var dimensionValue = @Convert.ToString(Synoptek.SessionController.UserSession.UserId);
+        var LoginType = "@Convert.ToString(Synoptek.SessionController.UserSession.RoleType)";
+      dataLayer.push({
+          'event': 'LoginSuccess',
+          'LoggedIn': dimensionValue, //unique non-personally identifiable id
+          'LoginType' : LoginType
+      });
+      gtag('js', new Date());
+
+      gtag('config', 'UA-122381334-1');
+
+
+      gtag('create', 'UA-122381334-1','auto');
+
+       // gtag('set', 'dimension1', dimensionValue);
+       // gtag('set', 'dimension2', LoginType);
+
+        //gtag('send', 'event', 'Login and Signup', 'Login Success', {
+        //    'dimension1': dimensionValue, //Dimension for Login/Signup Source
+        //});
+
+        gtag('send', 'pageview', {
+            'dimension1':  dimensionValue,
+            'dimension2':  LoginType
+        });
+
+       // gtag('send', 'pageview');
+    </script>
+
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WZGKZCD"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <header>
+        <div class="header">
+            <div class="HeaderTop container-fluid">
+                <div class="row">
+                    <div class="col-md-4 col-lg-3">
+                        <a class="navbar-brand" href="@Url.Action("Homepage","Homepage")">
+                            <img src="~/images/logo.png" />
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-6">
+
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav mx-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href='@Url.Action("Index", "Learn")'>LEARN</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                                        {
+                                            <a class="nav-link" href="#" onclick="GetDiscoursePopup()">COMMUNITY</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="nav-link" href="http://www.unbot.com/">COMMUNITY</a>
+                                        }
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href='@Url.Action("SelectYourRole", "HomePage")'>LENDER / INVESTOR EXCHANGE</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+
+                    </div>
+                    @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                    {
+                        <div class="col-md-4 col-lg-3">
+                            <div class="float-right mt-1">
+                                <a id="lnklogin" class="nav-link float-left mt-1" href="#"><span class="pr-2 align-text-top"><img src="~/images/account-icon.png" /></span> SIGN IN</a>
+                                <form class="form-inline my-2 my-lg-0">
+                                    <button id="lnkSignup" type="button" class="btn btn-primary w-125px">SIGN UP</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Investor && Synoptek.SessionController.UserSession.IsPaid == true)
+                    {
+                        <div class="col-md-4 col-lg-3 col">
+                            <div class="float-right mobileDropdown">
+                                <div class="dropdown">
+                                    <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                        @Html.ActionLink("My Investments", "Investor", "Dashboard", null, new { @class = "dropdown-item " })
+                                        @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Inbox", "Inbox", "MessageCenter", null, new { @class = "dropdown-item " })
+                                        @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown maccount-4 float-right" id="mydrop">
+                                <a id="Notifications" class="dropdown-toggle count-info " onclick="GetNotificationDetails(this);" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-envelope"></i><span id="notificationCount" class="label label-warning"></span>
+                                </a>
+                                <ul id="listNotifications" class="dropdown-menu dropdown-messages dropdown-menu-right arrow_box"></ul>
+                            </div>
+                        </div>
+                    }
+                    else if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Broker && Synoptek.SessionController.UserSession.IsPaid == true)
+                    {
+                        <div class="col-md-4 col-lg-3 col">
+                            <div class="float-right mobileDropdown">
+                                <div class="dropdown">
+                                    <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                        @Html.ActionLink("My loan posts", "Broker", "Dashboard", null, new { @class = "dropdown-item " })
+                                        @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Inbox", "Inbox", "MessageCenter", null, new { @class = "dropdown-item " })
+                                        @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown maccount-4 float-right" id="mydrop">
+                                <a id="Notifications" class="dropdown-toggle count-info " onclick="GetNotificationDetails(this);" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-envelope"></i><span id="notificationCount" class="label label-warning"></span>
+                                </a>
+                                <ul id="listNotifications" class="dropdown-menu dropdown-messages dropdown-menu-right arrow_box"></ul>
+                            </div>
+                        </div>
+                    }
+                    else if (HttpContext.Current.User.Identity.IsAuthenticated && claim.Value == Synoptek.Helpers.Constants.UserRoles.Admin)
+                    {
+                        <div class="col-md-4 col-lg-3 col">
+                            <div class="float-right mobileDropdown">
+                                <div class="dropdown">
+                                    <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                        @Html.ActionLink("My Dashboard", "Admin", "Dashboard", null, new { @class = "dropdown-item" })
+                                        @*@Html.ActionLink("Login as..", "DashboardPage", "InvestorListings", null, new { @class = "dropdown-item" })*@
+                                        @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Inbox", "Inbox", "MessageCenter", null, new { @class = "dropdown-item " })
+                                        @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown maccount-4 float-right" id="mydrop">
+                                <a id="Notifications" class="dropdown-toggle count-info " onclick="GetNotificationDetails(this);" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-envelope"></i><span id="notificationCount" class="label label-warning"></span>
+                                </a>
+                                <ul id="listNotifications" class="dropdown-menu dropdown-messages dropdown-menu-right arrow_box"></ul>
+                            </div>
+                        </div>
+                    }
+                    else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.IsPaid == false)
+                    {
+                        <div class="col-md-4 col-lg-3 col">
+                            <div class="float-right mobileDropdown">
+                                <div class="dropdown">
+                                    <a class="nav-link float-left solidActive dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 28px;"><span class="pr-2"><img src="~/Images/account-icon.png" alt="Sign In" /></span> <span class="accountLabel">MY ACCOUNT</span></a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                        @Html.ActionLink("Preferences/Settings", "UserProfile", "UserRegistration", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Logout", "LogOff", "Login", null, new { @class = "dropdown-item" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+            <div class="container HeaderBottom">
+                <h1>The Non-Conventional Lending Exchange</h1>
+                <p>The place to learn, connect and invest/sell in Non-Conventional, Private Lending and Hard Money Lending loans.</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src='@Url.Content("~/Images/Learn.png")' alt="Learn" />
+                        <a href='@Url.Action("Index", "Learn")'><h2>Learn</h2></a>
+                        <span>Whether you're an investor or lender, learn how to underwrite Non-Conventional loans.</span>
+                        <a href='@Url.Action("Index", "Learn")' class="btn btn-white mt-4">Browse Resources</a>
+                    </div>
+                    <div class="col-md-4">
+                        <img src='@Url.Content("~/Images/Connect.png")' alt="Connect" />
+                        @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                        {
+                            <a href="#" onclick="GetDiscoursePopup()"><h2>Connect</h2></a>
+                        }
+                        else
+                        {
+                            <a href="http://www.unbot.com/"><h2>Connect</h2></a>
+                        }
+
+                        <span>Connect with fellow investors and lenders and talk about deals and anything.</span>
+                        @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                        {
+                            <button type="button" class="btn btn-white mt-4" onclick="GetDiscoursePopup()">Browse Community </button>
+                        }
+                        else
+                        {
+                            <a class="btn btn-white mt-4" href="http://www.unbot.com/">Browse Community </a>
+                        }
+                    </div>
+                    <div class="col-md-4">
+                        <img src='@Url.Content("~/Images/Invest.png")' alt="Invest / Sell" />
+                        <a href='@Url.Action("SelectYourRole", "HomePage")'><h2>Invest / Sell</h2></a>
+                        <span>Browse our marketplace for the perfect Non-Conventional Loan to add to your portfolio</span>
+                        <a href='@Url.Action("SelectYourRole", "HomePage")' class="btn btn-white mt-4">Browse Listings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+    {
+        <div class="signUpBlog text-center">
+            <h2>Access More Content with a Free Account</h2>
+            
+            <button id="lnkSignupFooter" type="button" class="btn btn-primary">Sign Up</button>
+        </div>
+    }
+
+    <div class="container BookProduct ResponviseCenter">
+        <div class="row">
+            <div class="col-md-12 col-lg-6 text-center" style="margin-top:42px;">
+                <img src='@Url.Content("~/Images/GeraciBook.jpg")' alt="Product" />
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <h2>"Earning Money While You Sleep - The Authority on Non-Conventional Lending"</h2>
+                <span>By - Anthony Geraci </span>
+                <div class="BottonLine mt-3 mb-4 DivCenter"></div>
+                <p>There’s a well-kept secret in the investment world, one with an upside that’s so up, it’s hard to believe that more investors―many, many more investors―aren’t involved. If you’re an investor, relying on a volatile investment like securities for needs such as income after retirement doesn’t make sense. You need a more stable source of income.</p>
+                <p>The answer is non-conventional lending. This is an investment that pays off in good times and bad. It’s appropriate for investors with $15,000 to invest, as well as those with $150,000 or $1.5 million to invest. It takes advantage of one of the best cash flow owing asset classes in the world―real estate―while providing the stability of fixed-income bonds. And it allows the investor to be in control of the investment.</p>
+                <p>In Earning Money While You Sleep, author Anthony Geraci takes you through his own investments to show you how, with non-conventional lending, things can go wrong, and mainly, how things usually go right. As a lawyer and as someone who has done non-conventional lending for his own personal investment for years, and he will teach you how these investments are too good to be ignored and how to protect yourself if the worst should happen.</p>
+                <button type="button" onclick="buynow();" target="_blank" class="btn btn-primary mt-5">Buy Now</button> @*onclick="buynow()"*@
+            </div>
+        </div>
+    </div>
+
+    @if (Model.resourceList.Count > 0)
+    {
+        <article>
+            <div class="container">
+                <h2 class="pt-5">Latest Articles & Webinar</h2>
+                <div class="BottonLine mt-3 mb-5"></div>
+                <div class="row">
+                    @foreach (var resource in Model.resourceList)
+                {
+                    string ResourceID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(resource.ID), true);
+                    string TopicID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(resource.TopicID), true);
+
+                        <div class="col-md-4">
+                            @if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Admin")
+                            {
+                                if (@resource.ImagePath != null && resource.ImagePath != "")
+                                {
+                                    <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { learnID = ResourceID, topicID = TopicID })'>
+                                        <img src=@Url.Content(resource.ImagePath) class="img-rounded height200" alt="Articles and News">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = ResourceID, TopicID = TopicID })'>
+                                        <img src="~/images/opportunities-openThumb.png" class="img-rounded height200" alt="Articles and News">
+                                    </a>
+                                }
+                            }
+                            else if (Synoptek.SessionController.UserSession.UserId == null)
+                            {
+                                if (resource.ContentType == 0)
+                                {
+                                    if (@resource.ImagePath != null && resource.ImagePath != "")
+                                    {
+                                        <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = ResourceID, TopicID = TopicID })'>
+                                            <img src="@resource.ImagePath" class="img-rounded height200" alt="@resource.ImagePath">
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = ResourceID, TopicID = TopicID })'>
+                                            <img src="~/images/opportunities-openThumb.png" class="img-rounded height200" alt="Articles and News">
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    if (@resource.ImagePath != null && resource.ImagePath != "")
+                                    {
+                                        <img src="@resource.ImagePath" class="img-rounded height200" alt="@resource.ImagePath" onclick="GetRoleAccessPopup()">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/opportunities-lockThumb.png" class="img-rounded height200" alt="Articles and News" onclick="GetRoleAccessPopup()">
+                                    }
+                                }
+                            }
+                            else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.IsPaid == false)
+                            {
+                                if (@resource.ContentType == 1)
+                                {
+                                    if (@resource.ImagePath != null && resource.ImagePath != "")
+                                    {
+                                        <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = ResourceID, TopicID = TopicID })'>
+                                            <img src="@resource.ImagePath" class="img-rounded height200" alt="@resource.ImagePath">
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = ResourceID, TopicID = TopicID })'>
+                                            <img src="~/images/opportunities-openThumb.png" class="img-rounded height200" alt="Articles and News">
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    if (@resource.ImagePath != null && resource.ImagePath != "")
+                                    {
+                                        <img src="@resource.ImagePath" class="img-rounded height200" alt="@resource.ImagePath" onclick="GetPaywallPopup()">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/opportunities-lockThumb.png" class="img-rounded height200" alt="Articles and News" onclick="GetPaywallPopup()">
+                                    }
+                                }
+                            }
+                            else if (Synoptek.SessionController.UserSession.UserId != null && (Synoptek.SessionController.UserSession.RoleType == "Investor" || Synoptek.SessionController.UserSession.RoleType == "Broker"))
+                            {
+                                if (@resource.ImagePath != null && resource.ImagePath != "")
+                                {
+                                    <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = ResourceID, TopicID = TopicID })'>
+                                        <img src="@resource.ImagePath" class="img-rounded height200" alt="@resource.ImagePath">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="webkitcenter" href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = ResourceID, TopicID = TopicID })'>
+                                        <img src="~/images/opportunities-openThumb.png" class="img-rounded height200" alt="Articles and News">
+                                    </a>
+                                }
+                            }
+
+                            <h2>@resource.Title</h2>
+                            <h5 class="category">@(resource.LearnCategory.ToUpper()) - @(resource.Category.ToUpper()) (@resource.ContentName)</h5>
+                        </div>
+                    }
+                </div>
+            </div>
+        </article>
+    }
+
+    <div class="ListingNpost">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="pt-5">Latest Broker Listings</h2>
+                    <div class="BottonLine mt-3"></div>
+                    <div class='row'>
+                        @foreach (var listing in Model.brokerList)
+                        {
+                            string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(listing.ID), true);
+                            <div class="col-md-3">
+
+                                @if (!(HttpContext.Current.User.Identity.IsAuthenticated))
+                                {
+                                    <a href='#' onclick="GetSignUpPopup()" class="webkitcenter">
+                                        <img src=@Url.Content(listing.ImagePath) class="img-rounded height200" alt="Listings">
+                                    </a>
+                                }
+                                else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Admin")
+                                {
+                                    <a href='@Url.Action("GetSingleListingDetails", "InvestorListings", new { listingId = ListingID })'>
+                                        <img src=@Url.Content(listing.ImagePath) class="img-rounded height200" alt="Listings">
+                                    </a>
+                                }
+                                else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.IsPaid == false)
+                                {
+                                    <a href = '#' onclick = "GetPaywallPopup('@claim.Value')" >
+                                    <img src = @Url.Content(listing.ImagePath) class="img-rounded height200" alt="Listings">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href='@Url.Action("GetSingleListingDetails", "InvestorListings", new { listingId = ListingID })'>
+                                        <img src=@Url.Content(listing.ImagePath) class="img-rounded height200" alt="Listings">
+                                    </a>
+                                }
+                                <h2>@listing.Name</h2> @*class="mb-0 mt-1"*@
+                                <h5 class="category">@listing.ListingType.ToUpper()</h5>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="FooterSlider">
+        <div id="carouselBottom" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                @{
+                    var careouselCounter = 0;
+                    foreach (var testimonial in Model.TestimonialList)
+                    {
+                        if (careouselCounter == 0)
+                        {
+                            <li data-target="#carouselBottom" data-slide-to="@careouselCounter" class="active"></li>
+                        }
+                        else
+                        {
+                            <li data-target="#carouselBottom" data-slide-to="@careouselCounter"></li>
+                        }
+                        careouselCounter++;
+                    }
+                }
+            </ol>
+            <div class="carousel-inner">
+                @{
+                    var i = 0;
+                    foreach (var testimonial in Model.TestimonialList)
+                    {
+                        if (i == 0)
+                        {
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 text-center maxheight100px">
+                                        <p>
+                                            @Html.Raw(testimonial.Description)
+                                        </p>
+                                        <h5> @Html.Raw(testimonial.Author) </h5>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12">
+                                        <div class="webkitcenter">
+                                            <img class="d-block testimonialHomePage" src="@(testimonial.ImagePath)" alt="@(testimonial.Author)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            i++;
+                        }
+                        else
+                        {
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 text-center maxheight100px">
+                                        <p>
+                                            @Html.Raw(testimonial.Description)
+                                        </p>
+                                        <h5> @Html.Raw(testimonial.Author) </h5>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12">
+                                        <div class="webkitcenter">
+                                            <img class="d-block testimonialHomePage" src="@(testimonial.ImagePath)" alt="@(testimonial.Author)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (!HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        <div class="signUpBlog text-center">
+            <h2>Access More Content with a Free Account</h2>
+            
+            <button id="lnkSignupFooterBottom" type="button" class="btn btn-primary">Sign Up</button>
+        </div>
+    }
+
+    <!--Login Modal-->
+    <div class="modal fade" id="LoginModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content custom-modal" id="loginContent">
+
+            </div>
+        </div>
+    </div>
+    <!--Login Modal--
+        <!-- Sign Up Modal -->
+    <div class="modal fade" id="SignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content custom-modal" id="Signupcontent">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="DiscourseSignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content custom-modal" id="DiscourseSignupcontent">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Modal -->
+    <div class="modal fade" id="SubscriptionpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content custom-modal" id="SubscriptionContent">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@Scripts.Render("~/bundles/modernizr", "~/bundles/bootstrapJs")
+<script>
+    $(document).ready(function () {
+        Stripe.setPublishableKey('pk_test_Hg95OWVHfWBveMX5rUrmud7y'); //Ethan
+
+        $('.carousel').carousel()
+        $('#dropdownMenuLink').dropdown();
+
+        $.ajax({
+            url: "/MessageCenter/GetUnreadMessageCount",
+            success: function (result) {
+                $("#notificationCount").html(result);
+            }
+        });
+    });
+
+
+    $(document).on('click', "body", function () {
+        if ($("#listNotifications").html() != undefined) {
+            if ($("#listNotifications").html().trim() != "") {
+                if (!$(event.target).closest('#listNotifications').length) {
+                    $("#listNotifications").hide();
+                }
+            }
+        }
+    });
+
+    function GetNotificationDetails(obj){
+        $.ajax({
+            url: "/MessageCenter/GetUnreadMessages",
+            success: function (result) {
+                $("#listNotifications").html(result);
+                $("#listNotifications").show();
+                //transform: translate3d(-263px, 15px, 0px);
+            }
+        });
+    }
+
+    function buynow() {
+        var url = "https://www.amazon.com/Earning-Money-While-You-Sleep/dp/1599329255";
+        window.open(url, '_blank');
+    }
+</script>
+
+<script>
+    $(document).on('click', "#lnklogin", function () {
+        $.ajax({
+            url: "/Login/Login",
+            success: function (result) {
+                $("#LoginModal").modal();
+                $("#loginContent").html(result);
+            }
+        });
+    });
+
+    $(document).on('click', "#lnkSignup", function () {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    });
+
+    $(document).on('click', "#lnkSignupnew", function () {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    });
+
+    $(document).on('click', "#lnkSignupFooter, #lnkSignupFooterBottom", function () {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    });
+
+    //Close button click event of sign up
+    $("#btn_signupcancel").on("click", function () {
+        //Removes validation from input-fields
+        $('.input-validation-error').addClass('input-validation-valid');
+        $('.input-validation-error').removeClass('input-validation-error');
+        //Removes validation message after input-fields
+        $('.field-validation-error').addClass('field-validation-valid');
+        $('.field-validation-error').removeClass('field-validation-error');
+        //Removes validation summary
+        $('.validation-summary-errors').addClass('validation-summary-valid');
+        $('.validation-summary-errors').removeClass('validation-summary-errors');
+
+        $("#UserProfileModel_Name").val("");
+        $("#UserProfileModel_Email").val("");
+        $("#UserProfileModel_Address").val("");
+        $("#UserProfileModel_CompanyName").val("");
+        $("#UserProfileModel_LicenceNumber").val("");
+        $("#UserProfileModel_PhoneNumber").val("");
+        $("#UserProfileModel_Password").val("");
+        $("#UserProfileModel_ConfirmPassword").val("");
+        $("#UserProfileModel_RoleId").val("");
+        $("#brokerrole").attr('checked', false);
+        $("#investorrole").attr('checked', false);
+        $('#SignUpModal').modal('hide');
+    });
+
+    //Close button click event of login
+    $("#btn_logincancel").on("click", function () {
+        //Removes validation from input-fields
+        $('.input-validation-error').addClass('input-validation-valid');
+        $('.input-validation-error').removeClass('input-validation-error');
+        //Removes validation message after input-fields
+        $('.field-validation-error').addClass('field-validation-valid');
+        $('.field-validation-error').removeClass('field-validation-error');
+        //Removes validation summary
+        $('.validation-summary-errors').addClass('validation-summary-valid');
+        $('.validation-summary-errors').removeClass('validation-summary-errors');
+
+        $("#LoginModel_UserName").val("");
+        $("#LoginModel_Password").val("");
+        $('#LoginModal').modal('hide');
+    });
+
+    function GetSignUpPopup() {
+        $("#DiscourseSignUpModal").modal('hide');
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $('#LoginModal').modal('hide');
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    }
+    function GetDiscoursePopup() {
+        
+        $.ajax({
+            url: "/UserRegistration/DiscoursePopup",
+            success: function (result) {
+                $("#DiscourseSignUpModal").modal();
+                $("#DiscourseSignupcontent").html(result);
+            }
+        });
+
+        setTimeout(GetSignUpPopup, 10000);
+    }
+
+    function GetRoleAccessPopup() {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    }
+
+    function GetPaywallPopup(roleType) {
+        var roleID;
+        if (roleType == "Investor")
+            roleID = 2;
+        else (roleType == "Broker")
+        roleID = 3;
+
+        $.ajax({
+            url: "/Subscription/GetSubscriptionOptions",
+            data: { roleID: roleID },
+            success: function (result) {
+                $("#SubscriptionpModal").modal();
+                $("#SubscriptionContent").html(result);
+            }
+        });
+    }
+  
+    function MakeSubscription() {
+        // var result = validateDetails();
+        //if (result) {
+        var expmonth = $("#ExpirationMonth option:selected").text();
+        var year = $("#ExpirationYear option:selected").text();
+
+        Stripe.card.createToken({
+            number: $('#txtCardNumber').val(),
+            cvc: $('#txtCvc').val(),
+            exp_month: expmonth,
+            exp_year: year,
+            name: $('#txtNameOnCard').val(),
+        }, stripeResponseHandler);
+        //}
+        function stripeResponseHandler(status, response) {
+            var $form = $('#frmSubscription');
+
+            if (response.error) {
+                alert(response.error.message);
+            } else {
+                var token = response.id;
+                $('#hdnToken').val(token);
+                $form.get(0).submit();
+            }
+        }
+    }
+
+    function showPaymentPopUp(model) {
+        //alert("x");
+        $.ajax({
+            url: "/Subscription/GetSubscriptionPopup",
+            type: "POST",
+            data: model,
+            success: function (result) {
+                $("#SubscriptionpModal").modal();
+                $("#SubscriptionContent").html(result);
+            }
+        });
+    }
+    function GetLoginPopup() {
+        $.ajax({
+            url: "/Login/Login",
+            success: function (result) {
+                $('#SignUpModal').modal('hide');
+                $("#LoginModal").modal();
+                $("#loginContent").html(result);
+            }
+        });
+    }
+</script>

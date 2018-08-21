@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="8a20fd79-5dd7-47cc-b8e3-cb888e65b11c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://geraciwcfservices.azurewebsites.net/UserRegistrationService/UserRegistrationService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="UserRegistrationService.xsd" MetadataType="Schema" ID="b2cb9bbe-1490-431b-944a-cf19b5083696" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/UserRegistrationService/UserRegistrationService.svc?xsd=xsd2" />
+    <MetadataFile FileName="UserRegistrationService1.xsd" MetadataType="Schema" ID="c85a8189-6440-46b7-b8a5-429a75614f08" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/UserRegistrationService/UserRegistrationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="UserRegistrationService.wsdl" MetadataType="Wsdl" ID="feaec5a7-abdb-4edd-a9e0-1cc77002b0c2" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/UserRegistrationService/UserRegistrationService.svc?wsdl" />
+    <MetadataFile FileName="UserRegistrationService2.disco" MetadataType="Disco" ID="543e8b8d-9211-4a17-bb2f-471dfae675c8" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/UserRegistrationService/UserRegistrationService.svc?disco" />
+    <MetadataFile FileName="UserRegistrationService2.xsd" MetadataType="Schema" ID="a1a7397f-c466-4ad8-b21b-c3862c24ce41" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/UserRegistrationService/UserRegistrationService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

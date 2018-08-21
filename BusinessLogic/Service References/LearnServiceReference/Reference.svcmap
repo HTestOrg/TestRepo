@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3cb0336f-348d-4729-ac5a-4e484897415e" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="LearnService2.xsd" MetadataType="Schema" ID="4f23a643-1bfd-40cf-9b87-422c1e1d6ba4" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc?xsd=xsd1" />
+    <MetadataFile FileName="LearnService3.xsd" MetadataType="Schema" ID="5e51c71f-a976-4649-8f47-50d65723e828" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc?xsd=xsd0" />
+    <MetadataFile FileName="LearnService.disco" MetadataType="Disco" ID="8b5e21a9-f762-40d5-829a-816711a320c2" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc?disco" />
+    <MetadataFile FileName="LearnService1.wsdl" MetadataType="Wsdl" ID="1279b462-2b17-4441-8983-ab2afbf84087" SourceId="1" SourceUrl="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

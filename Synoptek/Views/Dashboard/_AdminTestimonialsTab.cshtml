@@ -1,0 +1,181 @@
+﻿@model PagedList.IPagedList<BusinessObjects.TestimonialModel>
+@using PagedList.Mvc;
+@using System.Text.RegularExpressions;
+
+<div class="container">
+    @foreach (var item in Model)
+    {
+        string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+        string noHTML = @item.Description;
+        var step1 = Regex.Replace(noHTML, "<[^>]+>|&nbsp;", "").Trim();
+        var step2 = Regex.Replace(step1, "\\s{2,}", " ");
+        var Id = "ID#" + item.ID;
+        <div class="row" id="testimonial-@item.ID">
+            <div class="col-md-6 col-lg-3">
+                <div><strong>@Id</strong></div>
+                <div title="@step2">
+                    <h4>
+                        @if (item.Description.Length > 200)
+                        {
+                            @Html.Raw(item.Description.Substring(0, 200)) <text>...</text>
+                        }
+                        else
+                        {
+                            @Html.Raw(item.Description)
+                        }
+
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                <div><strong>Author: </strong> @item.Author </div>
+                <div class="mt-1"><strong>Created: </strong> @item.CreatedDate.ToString("dd-MM-yyyy")</div>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                @if (@item.ModifiedDate == DateTime.MinValue)
+                {<div><strong>Last Updated: </strong> @item.CreatedDate.ToString("dd-MM-yyyy")</div> }
+                else
+                {<div><strong>Last Updated: </strong> @item.ModifiedDate.ToString("dd-MM-yyyy")</div> }
+
+                <div><strong>Status: </strong>@item.IsActive</div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="mt-2 text-right ResponviseCenter AdminButton">
+                    <button type="button" class="GhostButton Respon-right w-30per mr-3" onclick="DeleteRecord('@ListingID', 'Testimonials', @item.ID)"><i class="fa fa-trash"></i></button>
+                    <a href="@Url.Action("Edit", "Testimonial", new { testimonialID = ListingID })" class="marginRT5 "><button type="button" class="GhostButton Respon-right w-30per"><i class="fa fa-pencil"></i></button></a>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="DividerBot mt-2 mb-3"></div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Count <= 0)
+    {
+        <div>
+            <h4 class="text-center">No testimonials found</h4>
+        </div>
+    }
+
+    <nav aria-label="Page navigation pagination" id="TestimonialsTabNav">
+        <ul class="pagination justify-content-center">
+            @Html.PagedListPager(Model, page => Url.Action("Admin", new { Page = page, Tab = "Testimonials" }))
+        </ul>
+    </nav>
+
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+
+        //Pagination event handling ----------------------------
+        $('#TestimonialsTabNav .pagination a').click(function (e) {
+            try {
+                var searchTxt = $('#searchTestimonialstxt').val();
+                var sortingOrder = $("#inputGroupSelectTestimonials").val();
+                var url = '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    if (this.href != "" && this.href != undefined) {
+                        $.ajax({
+                            url: this.href + url,
+                            type: 'GET',
+                            cache: false,
+                            success: function (result) {
+                                $('#pills-tab4-child').html("");
+                                $('#pills-tab4-child').html(result);
+                                $('#pills-tab4').addClass('tab-pane fade show active in');
+
+                                $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            }
+                        });
+                    }
+                    e.handled = true;
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        //Pagination event handling ----------------------------
+
+        //search
+        $('#searchTestimonialstxt').keyup(function (e) {
+            try {
+                var searchTxt = $('#searchTestimonialstxt').val();
+                var page = $('#TestimonialsTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectTestimonials").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Testimonials" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#pills-tab4-child').html("");
+                            $('#pills-tab4-child').html(result);
+                            $('#pills-tab4').addClass('tab-pane fade show active in');
+
+                            $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        }
+                    });
+                    e.handled = true;
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+
+        //on sorting change
+
+        $('#inputGroupSelectTestimonials').change(function (e) {
+            try {
+                var searchTxt = $('#searchTestimonialstxt').val();
+                var page = $('#TestimonialsTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectTestimonials").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Testimonials" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    if (searchTxt.length >= 2 || searchTxt.length == 0) {
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            cache: false,
+                            success: function (result) {
+                                $('#pills-tab4-child').html("");
+                                $('#pills-tab4-child').html(result);
+                                $('#pills-tab4').addClass('tab-pane fade show active in');
+
+                                $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            }
+                        });
+                    }
+                    e.handled = true;
+                }
+
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+    });
+</script>

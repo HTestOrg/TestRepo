@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://10.200.97.239:8000/HomePageService/HomePageService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/BusinessObjects" />
+  <xs:element name="GetLatestNewsandArticlesForHomePage">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLatestNewsandArticlesForHomePageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/BusinessObjects" minOccurs="0" name="GetLatestNewsandArticlesForHomePageResult" nillable="true" type="q1:ArrayOfHomePageLatestResources" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLatestBrokerListingDetails">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLatestBrokerListingDetailsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/BusinessObjects" minOccurs="0" name="GetLatestBrokerListingDetailsResult" nillable="true" type="q2:ArrayOfBrokerListingsModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

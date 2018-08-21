@@ -1,0 +1,143 @@
+﻿@model  PagedList.IPagedList<BusinessObjects.InvestorListingsModel>
+
+<h2 class="pt-5">Featured Opportunities</h2>
+<div class="BottonLine mt-3 mb-4"></div>
+
+@foreach (var item in Model)
+{
+    if (item.IsSponsored)
+    {
+        string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+        string BrokerID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.BrokerId), true);
+
+        <div class="pt-2 BrokerList" id="RowID_@(item.ID)">
+            <div class="row mb-4">
+                <div class="col-md-3 white-two font12 text-left p-2"><a href="#" class="mr-2">@item.ListingType.ToUpper()</a> <strong>ID #@item.ID</strong></div>
+                <div class="col-md-6 white-two">
+                    @if (item.City != null && item.StateName != null)
+                    {
+                        <h6 class="m-0 text-center p-2">
+                            @item.City, @item.StateName
+                        </h6>
+                    }
+                    else if (item.StateName == null)
+                    {
+                        <h6 class="m-0 text-center p-2">
+                            @item.City
+                        </h6>
+                    }
+                </div>
+                <div class="col-md-3 white-two font12 text-right p-2"><strong>Seller ID #@item.BrokerId</strong></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 text-center">
+
+                    <div class="item mb-2" data-id="@(item.ID)">
+                        <img src="@(item.ImagePath)" class="img-fluid" alt="@(item.Name)">
+                        @if (item.IsSponsored)
+                        {
+                            <div class='item-star'><i class='fa fa-star'></i></div>
+                        }
+                        @*<div class="item-text">$ @item.AmountRequired <br> @item.Location</div>*@
+                    </div>
+                    @Html.ActionLink("View Note Details", "GetSingleListingDetails", new { ListingId = @ListingID })
+                </div>
+                <div class="col-md-5 font-weight-bold">
+                    <p class="text-center DividerBot mt-0 mb-3 pb-1">Note Details</p>
+                    <div class="row mt-2 mb-1">
+                        <div class="col-md-6">Loan Status</div>
+                        <div class="col-md-6 softBlue">@item.ActualLoanStatus</div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-6">Lien Position</div>
+                        <div class="col-md-6 softBlue">@item.LienPositionName<sup></sup></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-6">Original Balance</div>
+                        <div class="col-md-6 softBlue">$@item.PrincipalBalance</div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-6">Principal Balance</div>
+                        <div class="col-md-6 softBlue">$@item.PrincipalBalance</div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-6">Note Rate</div>
+                        <div class="col-md-6 softBlue">@item.NoteInterestRate%</div>
+                    </div>
+                </div>
+                <div class="col-md-4 font-weight-bold text-center">
+                    <p class="text-center DividerBot mt-0 mb-3 pb-1">Minimum Asking Price</p>
+                    <div class="row mb-3 mt-2">
+                        <div class="col-md-6 softBlue">$@item.SellerOfferingPercentage</div>
+                        <div class="col-md-6">100.000% of UPB</div>
+                    </div>
+                    @Html.ActionLink("View Details", "GetSingleListingDetails", new { ListingId = @ListingID }, new { @class = "btn btn-primary w-100 font14" })
+                    <button type="button" class="btn GhostButton mt-3 Respon-left w-45per" id="btnContactBroker" data-broker-id="@(BrokerID)" title="@(item.BrokerName)" onclick="ContactBroker('@ListingID','@item.BrokerName','@BrokerID')"> Message Broker</button>
+                    <button type="button" class="btn GhostButton mt-3 Respon-right w-45per" id="js_favorite@(item.ID)" data-val="@(item.IsFavorite)">
+                        @if (item.IsFavorite)
+                        {
+                            <i class="fa fa-heart float-left font-weight-bold"></i> <span>Favorited</span>
+                        }
+                        else
+                        {
+                            <i class="fa fa-heart-o float-left font-weight-bold"></i> <span>Favorite</span>
+                        }
+                    </button>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="DividerBot"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <script>
+            $(document).ready(function () {
+                $(document).ready(function () {
+                    $("#js_favorite@(item.ID)").on("click", function () {
+                        try {
+
+                            var IsFavorite = $("#js_favorite@(item.ID)").attr("data-val");
+                            var id = '@ListingID'
+                            $.ajax({
+                                url: "Favorite",
+                                data: { listingID: id, IsFavorite: IsFavorite },
+                                success: function (result) {
+                                    if (result == 1) {
+                                        $("#js_favorite@(item.ID) i").removeClass("fa fa-heart-o").addClass("fa fa-heart");
+                                        $("#js_favorite@(item.ID) span").html("Favorited");
+                                        $("#js_favorite@(item.ID)").attr("data-val", "True");
+                                    }
+                                    else {
+                                        $("#js_favorite@(item.ID) i").removeClass("fa fa-heart").addClass("fa fa-heart-o");
+                                        $("#js_favorite@(item.ID) span").html("Favorite");
+                                        $("#js_favorite@(item.ID)").attr("data-val", "False");
+                                    }
+                                },
+                                error: function (result) {
+                                }
+                            });
+                        }
+                        catch (ex) {
+                            ShowErrorMessage(ex.message);
+                        }
+                    });
+                });
+
+                $("#btnViewDetails_@(item.ID)").on("click", function () {
+                    window.location.href = "/InvestorListings/GetSingleListingDetails?ListingId=" + '@(item.ID)';
+                });
+            });
+        </script>
+    }
+}
+@if (Model.Count <= 0)
+{
+    <div>
+        <h4 class="text-center">No deals found</h4>
+    </div>
+}
+
+

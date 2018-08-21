@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BusinessObjects.TestimonialModel>
+@{
+    ViewBag.Title = "Testimonial";
+}
+
+<h3 style="margin-left: 20px;">Testimonial</h3>
+
+@Html.AntiForgeryToken()
+
+@if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Admin")
+{
+    <div class="form-group">
+        <div class="col-md-8 col-lg-8"></div>
+        <div class="col-md-4 col-lg-4">
+            <div class="pull-right">
+                <a class="btn btn-default btn-small" href='@Url.Action("AddTestimonial", "Testimonial")'>Create New</a>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}
+else
+{
+    <br />
+}
+
+@if (TempData["TestimonialSuccess"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["TestimonialSuccess"]</p>
+}
+
+<div class="Testimonialdetails" id="Testimonialdetails">
+    @Html.Partial("_TestimonialList", Model)
+</div>
+
+

@@ -1,0 +1,623 @@
+﻿@model BusinessObjects.LoanInformation
+
+<style>
+    .datepicker > div {
+        display: block;
+    }
+</style>
+
+<h4>Loan Information</h4>
+
+@using (Html.BeginForm("SaveLoanInformation", "ListingDetails", FormMethod.Post, new { @id = "frmAddListings" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(m => m.ListingStatusID, new { @id = "ListingStatusID" })
+
+    <div class="white-two p-4 mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="loantype">Loan Type</label>
+                    <div class="position-relative">
+                        <span class="label-Icon"><img src="~/images/type.png" /></span>
+                        @Html.DropDownListFor(model => model.ListingTypeID, new SelectList(Model.ListingType, "ID", "Name"), "Select Loan Type", new { @class = "custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.ListingTypeID)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="loantype">Rate Type</label>
+                    <div class="position-relative">
+                        <span class="label-Icon"><img src="~/images/type.png" /></span>
+                        @Html.DropDownListFor(model => model.RateTypeID, new SelectList(Model.RateType, "ID", "Name"), "Select Rate Type", new { @class = "custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.RateTypeID)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="AmortizationTypeID">Amortization Type</label>
+                    <div class="position-relative">
+                        <span class="label-Icon"><img src="~/images/type.png" /></span>
+                        @Html.DropDownListFor(model => model.AmortizationTypeID, new SelectList(Model.AmortizationType, "ID", "Name"), "Select Amortization Type", new { @class = "custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.AmortizationTypeID)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div>
+                        <label class="custom-checkbox">
+                            <span class="customlabel">@Html.LabelFor(m => m.PrePayPenalty)</span>
+                            @Html.CheckBoxFor(m => m.PrePayPenalty)
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="custom-checkbox">
+                            <span class="customlabel">@Html.LabelFor(m => m.Registered_wMERS)</span>
+                            @Html.CheckBoxFor(m => m.Registered_wMERS)
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="mt-1">
+                        @Html.LabelFor(m => m.InForeclosureID, new { @class = "font13 mr-2" })
+                        @foreach (var value in Enum.GetValues(typeof(BusinessObjects.YesNoGroup)))
+                    {
+                        <div class="form-check form-check-inline">
+                            <label class="customForm">
+                                <span class="customlabel">@value.ToString()</span>
+                                @Html.RadioButtonFor(m => m.InForeclosureID, value)
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    }
+                        @Html.ValidationMessageFor(model => model.InForeclosureID)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div>
+                        <label class="custom-checkbox">
+                            <span class="customlabel">@Html.LabelFor(m => m.BalloonPayment)</span>
+                            @Html.CheckBoxFor(m => m.BalloonPayment)
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="custom-checkbox">
+                            <span class="customlabel">@Html.LabelFor(m => m.OnForbearance)</span>
+                            @Html.CheckBoxFor(m => m.OnForbearance)
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="mt-1">
+                        @Html.LabelFor(m => m.InBankruptcyID, new { @class = "font13 mr-2" })
+                        @foreach (var value in Enum.GetValues(typeof(BusinessObjects.YesNoGroup)))
+                    {
+                        <div class="form-check form-check-inline">
+                            <label class="customForm">
+                                <span class="customlabel">@value.ToString()</span>
+                                @Html.RadioButtonFor(m => m.InBankruptcyID, value)
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    }
+                        @Html.ValidationMessageFor(model => model.InBankruptcyID)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="custom-checkbox">
+                        <span class="customlabel">@Html.LabelFor(m => m.LoanTermsModified)</span>
+                        @Html.CheckBoxFor(m => m.LoanTermsModified)
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="white-two p-4 mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, new { @class = "font13" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.OriginationDate, new { @class = "font13" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.OriginationDate, new { @class = "form-control date_picker" })
+                            @Html.ValidationMessageFor(model => model.OriginationDate)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PaidToDate, new { @class = "font13" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.PaidToDate, new { @class = "form-control date_picker" })
+                            @Html.ValidationMessageFor(model => model.PaidToDate)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.NextPaymentDate, new { @class = "font13" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.NextPaymentDate, new { @class = "form-control date_picker" })
+                            @Html.ValidationMessageFor(model => model.NextPaymentDate)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PayersLastPaymentMadeDate, new { @class = "font13" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.PayersLastPaymentMadeDate, new { @class = "form-control date_picker" })
+                            @Html.ValidationMessageFor(model => model.PayersLastPaymentMadeDate)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.OriginalLoanAmount)
+                            @Html.TextBoxFor(m => m.OriginalLoanAmount, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OriginalLoanAmount)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.UnpaidPrincipalBalance)
+                            @Html.TextBoxFor(m => m.UnpaidPrincipalBalance, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.UnpaidPrincipalBalance)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.NoteMaturityDate, new { @class = "font13" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.NoteMaturityDate, new { @class = "form-control date_picker" })
+                            @Html.ValidationMessageFor(model => model.NoteMaturityDate)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.AccruedLateCharges)
+                            @Html.TextBoxFor(m => m.AccruedLateCharges, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AccruedLateCharges)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.LoanCharges)
+                            @Html.TextBoxFor(m => m.LoanCharges, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LoanCharges)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.NoOfPaymentsInLast12)
+                    @Html.TextBoxFor(m => m.NoOfPaymentsInLast12, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FirstPaymentDate, new { @class = "font13" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.FirstPaymentDate, new { @class = "form-control date_picker" })
+                            @Html.ValidationMessageFor(model => model.FirstPaymentDate)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-1">
+                    @Html.LabelFor(m => m.EscrowImpounds, new { @class = "font13 mr-2" })
+                    @foreach (var value in Enum.GetValues(typeof(BusinessObjects.YesNoGroup)))
+                {
+                    <div class="form-check form-check-inline">
+                        <label class="customForm">
+                            <span class="customlabel">@value.ToString()</span>
+                            @Html.RadioButtonFor(m => m.EscrowImpounds, value)
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                }
+                    @Html.ValidationMessageFor(model => model.EscrowImpounds)
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.NoteInterestRate)
+                            @Html.TextBoxFor(m => m.NoteInterestRate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.NoteInterestRate)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.SoldInterestRate)
+                            @Html.TextBoxFor(m => m.SoldInterestRate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.SoldInterestRate)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 mt-3"><strong>Seller must be a licensed Broker/Company to have a reduced Sold Rate that results in a servicing spread to the seller.</strong></div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PaymentsFrequencyID)
+                    <div class="position-relative">
+                        <span class="label-Icon"><img src="~/images/type.png" /></span>
+                        @Html.DropDownListFor(model => model.PaymentsFrequencyID, new SelectList(Model.PaymentsFrequency, "ID", "Name"), "Select Payments Frequency", new { @class = "custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.PaymentsFrequencyID)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.LateCharges)
+                            @Html.TextBoxFor(m => m.LateCharges, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LateCharges)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m=>m.LateChargesType)
+                            @Html.DropDownListFor(m => m.LateChargesType, new List<SelectListItem> {    new SelectListItem { Text = "$", Value = "1" },
+                                                                                                                                new SelectListItem { Text = "%", Value = "2" }
+                                                                                                                            }, new { @class = "custom-select form-control-lg" })
+                            @Html.ValidationMessageFor(model => model.LateChargesType)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.LateChargesAfterXDays)
+                            @Html.TextBoxFor(m => m.LateChargesAfterXDays, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LateChargesAfterXDays)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UnpaidInterest)
+                    @Html.TextBoxFor(m => m.UnpaidInterest, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UnpaidInterest)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PropertyTaxesDue)
+                    @Html.TextBoxFor(m => m.PropertyTaxesDue, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PropertyTaxesDue)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PaymentTrust)
+                    @Html.TextBoxFor(m => m.PaymentTrust, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PaymentTrust)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.pAndL)
+                    @Html.TextBoxFor(m => m.pAndL, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.pAndL)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.TotalMonthlyLoanPayment)
+                    @Html.TextBoxFor(m => m.TotalMonthlyLoanPayment, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TotalMonthlyLoanPayment)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="white-two p-4 mb-4 mt-4">
+
+        <p>@Html.LabelFor(m => m.CheckAllThatApplyID, new { @class = "font13 mr-2" })</p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mt-4">  
+                    @foreach (var value in @EnumHelper<BusinessObjects.CheckAllThatApplyGroup>.GetValues(BusinessObjects.CheckAllThatApplyGroup.FirstTrustDeedMortgage))
+                    {
+                        var description = EnumHelper<BusinessObjects.CheckAllThatApplyGroup>.GetDisplayValue(value);
+                        <div class="form-check form-check-inline">
+                            <label class="customForm">
+                                <span class="customlabel">@description.ToString()</span>
+                                @Html.RadioButtonFor(m => m.CheckAllThatApplyID, Convert.ToInt32(value),new { @class= "js_CheckAllThatApplyID" })
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                        @Html.LabelFor(m => m.JuniorTrustDeedORMortgageID, new { @class = "font13" })
+                        <div class="position-relative">
+                            @Html.DropDownListFor(model => model.JuniorTrustDeedORMortgageID, new SelectList(Model.JuniorTrustDeedORMortgageList, "ID", "Name"), "Select", new { @class = "custom-select form-control-lg skill-icon" })
+                            @Html.ValidationMessageFor(model => model.JuniorTrustDeedORMortgageID)
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row juniorTrustDeed">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LienPositionID)
+                    <div class="position-relative">
+                        <span class="label-Icon"><img src="~/images/type.png" /></span>
+                        @Html.DropDownListFor(model => model.LienPositionID, new SelectList(Model.LienPositionType, "ID", "Name"), "Select Lien Position", new { @class = "custom-select form-control-lg skill-icon" })
+                        @Html.ValidationMessageFor(model => model.LienPositionID)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" id="divPrincipalBalance"> 
+                    @Html.LabelFor(m => m.PrincipalBalance, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.PrincipalBalance, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PrincipalBalance)
+                </div>
+            </div>
+        </div>
+
+        <div class="row juniorTrustDeed">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.MonthlyPayment, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.MonthlyPayment, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MonthlyPayment)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" id="divInformationAsOf">
+                    @Html.LabelFor(m => m.InformationAsOf, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.InformationAsOf, new { @class = "form-control date_picker" })
+                    @Html.ValidationMessageFor(model => model.InformationAsOf)
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row juniorTrustDeed">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="mt-1">
+                        @Html.LabelFor(m => m.Modified, new { @class = "font13 mr-2 mt-2" })
+                        @foreach (var value in Enum.GetValues(typeof(BusinessObjects.YesNoUnknownGroup)))
+                    {
+                        <div class="form-check form-check-inline">
+                            <label class="customForm">
+                                <span class="customlabel">@value.ToString()</span>
+                                @Html.RadioButtonFor(m => m.Modified, value)
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    }
+                        @Html.ValidationMessageFor(model => model.Modified)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="mt-1" id="divCurrent">
+                        @Html.LabelFor(m => m.Current, new { @class = "font13 mr-2 mt-2" })
+                        @foreach (var value in Enum.GetValues(typeof(BusinessObjects.YesNoUnknownGroup)))
+                    {
+                        <div class="form-check form-check-inline">
+                            <label class="customForm">
+                                <span class="customlabel">@value.ToString()</span>
+                                @Html.RadioButtonFor(m => m.Current, value)
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    }
+                        @Html.ValidationMessageFor(model => model.Current)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Line of Credit Information</h4>
+    <div class="white-two p-4 mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.DrawPeriodStartDate, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.DrawPeriodStartDate, new { @class = "form-control date_picker" })
+                    @Html.ValidationMessageFor(model => model.DrawPeriodStartDate)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.RepaymentPeriodStartDate, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.RepaymentPeriodStartDate, new { @class = "form-control date_picker" })
+                    @Html.ValidationMessageFor(model => model.RepaymentPeriodStartDate)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Arm Information</h4>
+    <div class="white-two p-4 mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ArmInfo_NextAdjustment, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.ArmInfo_NextAdjustment, new { @class = "form-control date_picker" })
+                    @Html.ValidationMessageFor(model => model.ArmInfo_NextAdjustment)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ArmInfo_AdjPaymentChangeDate, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.ArmInfo_AdjPaymentChangeDate, new { @class = "form-control date_picker" })
+                    @Html.ValidationMessageFor(model => model.ArmInfo_AdjPaymentChangeDate)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ArmInfo_AdjustmentFrequency, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.ArmInfo_AdjustmentFrequency, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ArmInfo_AdjustmentFrequency)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ArmInfo_Floor, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.ArmInfo_Floor, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ArmInfo_Floor)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ArmInfo_IndexName, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.ArmInfo_IndexName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ArmInfo_IndexName)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ArmInfo_Margin, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.ArmInfo_Margin, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ArmInfo_Margin)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ArmInfo_Ceiling, new { @class = "font13" })
+                    @Html.TextBoxFor(m => m.ArmInfo_Ceiling, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ArmInfo_Ceiling)
+                </div>
+            </div>
+        </div>
+    </div>
+
+     
+}
+
+
+<div class="f1-buttons" id="step1_Buttons">
+    <button type="button" id="btn_Next_LoanInformation" class="btn btn-next btn-primary">Next</button>
+</div>
+
+<script type="text/javascript">
+     $(document).ready(function () {
+         $('.date_picker').datepicker({ 
+             format: "mm/dd/yyyy",
+             pickerPosition: 'bottom'
+         });
+
+         $("#btn_Next_LoanInformation").click(function () {
+             var isValid = true;
+             if ($(".js_CheckAllThatApplyID")[1].checked) {
+                 var count = 0;
+                 for (i = 0; i < Current.length; i++) {
+                     if (!Current[i].checked) {
+                         count = count + 1;
+                     }
+                 }
+                 if (count == 3) {
+                     $('#divCurrent .field-validation-error').remove();
+                     $("#divCurrent").append("<span class='field-validation-error' data-valmsg-for='Current' data-valmsg-replace='true'>Current field is required.</span>");
+                     isValid = false;
+                 }
+                 if ($("#PrincipalBalance").val() == "") {
+                     $('#divPrincipalBalance .field-validation-error').remove();
+                     $("#divPrincipalBalance").append("<span class='field-validation-error' data-valmsg-for='PrincipalBalance' data-valmsg-replace='true'>Principal Balance field is required.</span>");
+                     isValid = false;
+                 }
+                 if ($("#InformationAsOf").val() == "") {
+                     $('#divInformationAsOf .field-validation-error').remove();
+                     $("#divInformationAsOf").append("<span class='field-validation-error' data-valmsg-for='InformationAsOf' data-valmsg-replace='true'>Information As Of field is required.</span>");
+                     isValid = false;
+                 }
+             }
+             if (isValid) {
+                 $.ajax({
+                     url: '@Url.Action("SaveLoanInformation", "ListingDetails")',
+                     type: "POST",
+                     data: $("#frmAddListings").serialize(),
+                     success: function (jsonResult) {
+                         if (jsonResult[0].ID > 0) {
+                             var listingID = jsonResult[0].ListingID;
+                             $("#hdn_Listings_ID").val(listingID);
+                             $.ajax(
+                              {
+                                  url: '@Url.Action("EditPropertyInformation", "ListingDetails")',
+                                  type: "GET",
+                                  data: { listingID: listingID },
+                                  success: function (result) {
+                                      $("#ActiveStep").show();
+                                      $("#ActiveStep").html(result);
+                                      NextJS();
+                                  }
+                              });
+                         }
+                         else {
+                             $("#ActiveStep").show();
+                             $("#ActiveStep").html(jsonResult);
+                         }
+                     },
+                     error: function (result) {
+                         bootbox.alert(result.toString());
+                     }
+                 });
+             }
+         });
+          
+        
+         if (!$(".js_CheckAllThatApplyID")[0].checked && !$(".js_CheckAllThatApplyID")[1].checked) {
+             $(".js_CheckAllThatApplyID")[0].checked = true;
+         }
+         toggleJuniorTrustDeed();
+
+         $(".js_CheckAllThatApplyID").click(function () {
+             toggleJuniorTrustDeed();
+         });
+
+         function toggleJuniorTrustDeed() {
+             for (i = 0; i < $(".js_CheckAllThatApplyID").length; i++) {
+
+                 if ($(".js_CheckAllThatApplyID")[i].checked && $(".js_CheckAllThatApplyID")[i].value == "1") {
+                     $("#JuniorTrustDeedORMortgageID").prop("disabled", true);
+                     $("#JuniorTrustDeedORMortgageID").val("")
+                     $(".juniorTrustDeed").hide();
+                     $("#LienPositionID").prop("disabled", true); 
+                     $("#InformationAsOf").prop("disabled", true);
+                     break;
+                 }
+                 else {
+                     $("#JuniorTrustDeedORMortgageID").prop("disabled", false);
+                     $("#LienPositionID").prop("disabled", false);
+                     $("#InformationAsOf").prop("disabled", false);
+                     $(".juniorTrustDeed").show();
+                 }
+             }
+         }
+     });
+</script>

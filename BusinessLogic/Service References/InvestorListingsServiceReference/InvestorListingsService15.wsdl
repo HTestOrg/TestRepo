@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="InvestorListingsService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://10.200.97.239:8000/InvestorListingsService/InvestorListingsService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://10.200.97.239:8000/InvestorListingsService/InvestorListingsService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://10.200.97.239:8000/InvestorListingsService/InvestorListingsService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/BusinessObjects" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IInvestorListingsService_GetBrokerEmailAddress_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBrokerEmailAddress" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetBrokerEmailAddress_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBrokerEmailAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetListingDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingDocuments" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetListingDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetListingTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingTypes" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetListingTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetLocationList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocationList" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetLocationList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocationListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetInvestorListingDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetInvestorListingDetails" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetInvestorListingDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetInvestorListingDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetSingleListingDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSingleListingDetails" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetSingleListingDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSingleListingDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_MarkAsFavorite_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarkAsFavorite" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_MarkAsFavorite_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarkAsFavoriteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_SendMessageToBroker_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessageToBroker" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_SendMessageToBroker_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessageToBrokerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetAllFeaturedList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllFeaturedList" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetAllFeaturedList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllFeaturedListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetUserImage_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserImage" />
+  </wsdl:message>
+  <wsdl:message name="IInvestorListingsService_GetUserImage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserImageResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IInvestorListingsService">
+    <wsdl:operation name="GetBrokerEmailAddress">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetBrokerEmailAddress" message="tns:IInvestorListingsService_GetBrokerEmailAddress_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetBrokerEmailAddressResponse" message="tns:IInvestorListingsService_GetBrokerEmailAddress_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListingDocuments">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetListingDocuments" message="tns:IInvestorListingsService_GetListingDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetListingDocumentsResponse" message="tns:IInvestorListingsService_GetListingDocuments_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListingTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetListingTypes" message="tns:IInvestorListingsService_GetListingTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetListingTypesResponse" message="tns:IInvestorListingsService_GetListingTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLocationList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetLocationList" message="tns:IInvestorListingsService_GetLocationList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetLocationListResponse" message="tns:IInvestorListingsService_GetLocationList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetInvestorListingDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetInvestorListingDetails" message="tns:IInvestorListingsService_GetInvestorListingDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetInvestorListingDetailsResponse" message="tns:IInvestorListingsService_GetInvestorListingDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSingleListingDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetSingleListingDetails" message="tns:IInvestorListingsService_GetSingleListingDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetSingleListingDetailsResponse" message="tns:IInvestorListingsService_GetSingleListingDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MarkAsFavorite">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/MarkAsFavorite" message="tns:IInvestorListingsService_MarkAsFavorite_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/MarkAsFavoriteResponse" message="tns:IInvestorListingsService_MarkAsFavorite_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageToBroker">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/SendMessageToBroker" message="tns:IInvestorListingsService_SendMessageToBroker_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/SendMessageToBrokerResponse" message="tns:IInvestorListingsService_SendMessageToBroker_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllFeaturedList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetAllFeaturedList" message="tns:IInvestorListingsService_GetAllFeaturedList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetAllFeaturedListResponse" message="tns:IInvestorListingsService_GetAllFeaturedList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserImage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IInvestorListingsService/GetUserImage" message="tns:IInvestorListingsService_GetUserImage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IInvestorListingsService/GetUserImageResponse" message="tns:IInvestorListingsService_GetUserImage_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IInvestorListingsService" type="tns:IInvestorListingsService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetBrokerEmailAddress">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetBrokerEmailAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListingDocuments">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetListingDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListingTypes">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetListingTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLocationList">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetLocationList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetInvestorListingDetails">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetInvestorListingDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSingleListingDetails">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetSingleListingDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MarkAsFavorite">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/MarkAsFavorite" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageToBroker">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/SendMessageToBroker" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllFeaturedList">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetAllFeaturedList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserImage">
+      <soap:operation soapAction="http://tempuri.org/IInvestorListingsService/GetUserImage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InvestorListingsService">
+    <wsdl:port name="BasicHttpBinding_IInvestorListingsService" binding="tns:BasicHttpBinding_IInvestorListingsService">
+      <soap:address location="http://10.200.97.239:8000/InvestorListingsService/InvestorListingsService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

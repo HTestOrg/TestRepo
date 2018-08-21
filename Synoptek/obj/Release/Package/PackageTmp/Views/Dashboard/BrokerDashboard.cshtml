@@ -1,0 +1,95 @@
+﻿@model BusinessObjects.BrokerListingsWrapper
+
+@{
+    ViewBag.Title = "My Loan Posts";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="signUpBlog">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 ResponviseCenter">
+                <h2>My Loan Posts</h2>
+            </div>
+            <div class="col-md-6 text-right ResponviseCenter">
+                @if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Broker")
+                {
+                    @Html.ActionLink("Create New Loan Post", "AddListing", "ListingDetails", routeValues: null, htmlAttributes: new { id = "addlistingLink", @class = "btn btn-primary w-250px" })
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ActionBar mb-5 p-0">
+    <ul class="nav justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="li_Active" data-toggle="pill" href="#pills-active" role="tab" aria-controls="pills-active" aria-selected="true">ACTIVE</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="li_Draft" data-toggle="pill" href="#pills-drafts" role="tab" aria-controls="pills-drafts" aria-selected="false">DRAFTS</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="li_Inactive" data-toggle="pill" href="#pills-closed" role="tab" aria-controls="pills-closed" aria-selected="false">ARCHIVED/CLOSED</a>
+        </li>
+    </ul>
+</div>
+
+<div class="tab-content mb-5 educationPage" id="pills-tabContent">
+    <div id="DivActiveContent" class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-active-tab">
+        @Html.Partial("_BrokerMyListings", Model.PagedListActive)
+    </div>
+</div>
+ 
+<script>
+    $(document).ready(function () {
+
+        $("#li_Listings").parent().addClass("active");
+        try {
+            $("#li_Active").on('click', function () {
+                $.ajax({
+                    url: "Broker",
+                    data: { Status: "Active" },
+                    success: function (res) {
+                        $("#DivActiveContent").html(res);
+                    }
+                });
+            });
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+
+        $("#li_Draft").on('click', function () {
+            try {
+                $.ajax({
+                    url: "Broker",
+                    data: { Status: "Draft" },
+                    success: function (res) {
+                        $("#DivActiveContent").html(res);
+                    }
+                });
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+        $("#li_Inactive").on('click', function () {
+            try {
+                $.ajax({
+                    url: "Broker",
+                    data: { Status: "InActive" },
+                    success: function (res) {
+                        $("#DivActiveContent").html(res);
+                    }
+                });
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+    });
+
+</script>

@@ -1,0 +1,138 @@
+﻿@model BusinessObjects.CommentsInformation
+ 
+<h4>Comments</h4>
+
+@using (Html.BeginForm("SaveCommentsInformation", "ListingDetails", FormMethod.Post, new { @id = "frmAddListings" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(m => m.ListingStatusID, new { @id = "ListingStatusID" })
+
+<div class="white-two p-4 mb-4">
+    <p class="font-weight-bold">
+        Please place comments on all important information on the Note.<br />
+        <span class="softBlue">Helpful Hint: The more information the better. Any additional information on the Borrower, Property, or "Story of the Loan" can increase your likelihood of sale.</span>
+    </p>
+    <div class="form-group">
+        @Html.TextAreaFor(m => m.Comments, new { @placeholder = "About yourself...", @class = "f1-about-yourself form-control" })
+        @Html.ValidationMessageFor(model => model.Comments)
+    </div>
+</div>
+
+<h4>Asking Price</h4>
+
+<div class="white-two p-4 mb-4">
+
+    <p class="font-weight-bold">
+        Please indicate pricing as you would like it shown on the Note listing. <br />
+        <span class="softBlue">Helpful Hint: Note pricing in not binding. It should be viewed as a means for streamlining the negotiations process.</span>
+    </p>
+
+    <p>Please check the box if you would like to have this information to appear note listing</p>
+
+    <div class="row mt-4 mb-4">
+        <div class="col-md-4">
+            <div class="mt-3">
+                <div>
+                    <label class="custom-checkbox">
+                        <span class="customlabel"> @Html.LabelFor(m => m.IsSellerOffering)</span>
+                        @Html.CheckBoxFor(m => m.IsSellerOffering)
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.SellerOfferingPercentage, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SellerOfferingPercentage)
+                    </div>
+                </div>
+                <div class="col-md-8"><p class="mt-3">% of the Principal Balance</p></div>
+            </div>
+        </div>
+    </div>
+
+
+    <p class="font-weight-bold softBlue"> Auto Reject: Any offers below 15% of the started percentage above will be automatically rejected. This feature is only to ensure that you do not receive "low ball" offers but allows for seller price demand fluctuations.</p>
+</div>
+
+}
+<div class="f1-buttons" id="step1_Buttons">
+    <button type="button" id="btn_Previous_CommentsInformation" class="btn btn-previous">Previous</button>
+    <button type="button" id="btn_Next_CommentsInformation" class="btn btn-next btn-primary">Next</button>
+</div>
+    <script>
+        $(document).ready(function () {
+            chkIsSellerOffering();
+            $("#IsSellerOffering").click(function () {
+                chkIsSellerOffering();
+            });
+
+            ////////// Comments sections
+
+            $("#btn_Previous_CommentsInformation").click(function () {
+                $.ajax({
+                    url: '@Url.Action("EditPropertyInformation", "ListingDetails")',
+                    type: "GET",
+                    data: { listingID: $("#hdn_Listings_ID").val() },
+                    success: function (result) {
+                        $("#ActiveStep").show();
+                        $("#ActiveStep").html(result);
+                        PreviousJS();
+                    },
+                    error: function (result) {
+                        bootbox.alert(result.toString());
+                    }
+                });
+            });
+
+            $("#btn_Next_CommentsInformation").click(function () {
+                $.ajax({
+                    url: '@Url.Action("SaveCommentsInformation", "ListingDetails")',
+                    type: "POST",
+                    data: $("#frmAddListings").serialize(),
+                    success: function (jsonResult) {
+                        if (jsonResult[0].ID > 0) {
+                            var listingID = jsonResult[0].ListingID;
+                            $("#hdn_Listings_ID").val(listingID);
+                            $.ajax(
+                             {
+                                 url: '@Url.Action("EditDocumentInformation", "ListingDetails")',
+                                 type: "GET",
+                                 data: { listingID: listingID },
+                                 success: function (result) {
+                                     $("#ActiveStep").show();
+                                     $("#ActiveStep").html(result);
+                                     NextJS();
+                                 }
+                             });
+                        }
+                        else {
+                            $("#ActiveStep").show();
+                            $("#ActiveStep").html(jsonResult);
+                        }
+                    },
+                    error: function (result) {
+                        bootbox.alert(result.toString());
+                    }
+                });
+            });
+
+            ////////// End of Comments sections
+        });
+
+        function chkIsSellerOffering() {
+            if ($("#IsSellerOffering")[0].checked) {
+                $("#SellerOfferingPercentage").disabled = false;
+                $("#SellerOfferingPercentage").removeAttr("disabled");
+            }
+            else {
+                $("#SellerOfferingPercentage").val("100.00");
+                $("#SellerOfferingPercentage").attr("disabled", "disabled")
+            }
+        }
+    </script>

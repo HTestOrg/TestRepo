@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+
+    @Styles.Render("~/bundles/lightboxCss")
+    @Styles.Render("~/bundles/bootstrapCss", "~/Content/css")
+
+    @Scripts.Render("~/bundles/lightbox")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr", "~/bundles/bootstrapJs")
+    @Scripts.Render("~/bundles/bootbox")
+
+    @RenderSection("scripts", required: false)
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $('input[type="text"], input[type="password"] ').keypress(function (e) {
+                var code = e.keyCode || e.which;
+                if (code === 13)
+                    e.preventDefault();
+            });
+        });
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WZGKZCD');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122381334-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      var dimensionValue = @Convert.ToString(Synoptek.SessionController.UserSession.UserId);
+        var LoginType = "@Convert.ToString(Synoptek.SessionController.UserSession.RoleType)";
+      dataLayer.push({
+          'event': 'LoginSuccess',
+          'LoggedIn': dimensionValue, //unique non-personally identifiable id
+          'LoginType' : LoginType
+      });
+      gtag('js', new Date());
+
+      gtag('config', 'UA-122381334-1');
+
+
+      gtag('create', 'UA-122381334-1','auto');
+
+       // gtag('set', 'dimension1', dimensionValue);
+       // gtag('set', 'dimension2', LoginType);
+
+        //gtag('send', 'event', 'Login and Signup', 'Login Success', {
+        //    'dimension1': dimensionValue, //Dimension for Login/Signup Source
+        //});
+
+        gtag('send', 'pageview', {
+            'dimension1':  dimensionValue,
+            'dimension2':  LoginType
+        });
+
+       // gtag('send', 'pageview');
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WZGKZCD"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <header>
+        @Html.Partial("_LoginPartial")
+    </header>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+</body>
+</html>

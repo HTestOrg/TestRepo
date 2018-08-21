@@ -1,0 +1,827 @@
+﻿@model BusinessObjects.InvestorListingsModel
+
+
+<style>
+    /* Always set the map height explicitly to define the size of the div element that contains the map. */
+    #map {
+        height: 100%;
+    }
+
+    .gallary-banner-singleview {
+        max-height: 600px;
+        height: auto;
+        background: #303e4d;
+    }
+
+    .max-height520 {
+        max-height: 520px;
+    }
+
+    .singleview-photos {
+        background: #303e4d;
+        padding-bottom: 15px;
+    }
+
+    .border2px {
+        border-top: 2px solid black;
+    }
+</style>
+
+@{ string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(Model.ID), true);
+    string BrokerID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(Model.BrokerId), true);
+    string BrokerName = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(Model.BrokerName), true);
+}
+
+@if (Model.ID > 0 && Model.ImageList.Count > 0)
+{
+    <div class="gallery-banner text-center gallary-banner-singleview">
+        <img src="@(Model.ImagePath)" class="img-rounded max-height520" data-id="@(Model.ID)">
+        <div class="singleview-photos">
+            <a id="btn_ViewPhotos" class="btn btn-primary font14 mt-4" href="@(Model.ImagePath)" data-lightbox="example-set" style="line-height: 25px;">View Photos</a>
+            @{
+                var featuredImage = Model.ImagePath.ToString();
+                foreach (var item in Model.ImageList)
+                {
+                    if (featuredImage != item.ImagePath)
+                    {
+                        <a class="" href="@item.ImagePath" data-lightbox="example-set"></a>
+                    }
+                }
+            }
+        </div>
+    </div>
+                }
+
+
+<div class="breadcrumbBar border2px">
+    <div class="container">
+        <div class="row">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    @if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Investor")
+                    {
+                        <li class="breadcrumb-item" aria-current="page">
+                            @Html.ActionLink("Back to List", "InvestorsListingDetails", null, new { @class = "btn btn-default", @aria_current = "page" })
+                        </li>
+                    }
+                    else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Broker")
+                    {
+                        <li class="breadcrumb-item" aria-current="page">
+                            @Html.ActionLink("Back to List", "Broker", "Dashboard", null, new { @class = "btn btn-default", @aria_current = "page" })
+                        </li>
+                    }
+                    else if (Synoptek.SessionController.UserSession.UserId != null && Synoptek.SessionController.UserSession.RoleType == "Admin")
+                    {
+                        <li class="breadcrumb-item" aria-current="page">
+                            @Html.ActionLink("Back to List", "HomePage", "HomePage", null, new { @class = "btn btn-default", @aria_current = "page" })
+                        </li>
+                    }
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    <form>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row BrokerList">
+                    <div class="col-md-9 text-left">
+                        <div class="font12"><a href="#" class="mr-2">@Model.ListingType.ToUpper()</a> <strong>ID #@Model.ID</strong></div>
+                        <h4 class="font32 font-weight-bold">@Model.Name </h4>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="text-uppercase mb-0 font-weight-bold font12">Apprasied Value:</label>
+                                <div class="font25 darkBlue">$ @Model.AmountRequired</div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label class="text-uppercase mb-0 font-weight-bold font12">Location:</label>
+                                <div class="font25 darkBlue">@Model.Location</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        @if (Synoptek.SessionController.UserSession.RoleType == "Investor")
+                        {
+                            <button type="button" class="btn GhostButton mt-3 Respon-right w-100" id="btn_favorite" data-val="@(Model.IsFavorite)">
+                                @if (Model.IsFavorite)
+                                {
+                                    <i class="fa fa-heart float-left font-weight-bold"></i> <span>Favorited</span>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-heart-o float-left font-weight-bold"></i> <span>Favorite</span>
+                                }
+                            </button>
+                        }
+                    </div>
+                    <div class="col-md-12">
+                        <div class="DividerBot mt-4 mb-4"></div>
+                    </div>
+                </div>
+
+
+                <div class="row BrokerList">
+                    <div class="col-md-6 text-left">
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Note Status:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.ActualLoanStatus</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12"># of Payments last 12 months:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.NumberOfPaymentsLast12Months</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Loan Maturity:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.LoanMaturityDate</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Original Balance:</label>
+                            <div class="font16 FullBlack">$ @Model.noteGeneralInfo.OriginalBalance</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Est. Market Value:</label>
+                            <div class="font16 FullBlack">$ @Model.noteGeneralInfo.EstMarketValue</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Note Rate:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.NoteInterestRate %</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-left">
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Note Type:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.LoanType</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Paid to:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.PaidToDate</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Property Type:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.PropertyType</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Principle Balance:</label>
+                            <div class="font16 FullBlack">$ @Model.noteGeneralInfo.PrincipalBalance</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Payment Amount:</label>
+                            <div class="font16 FullBlack">$ @Model.noteGeneralInfo.PaymentAmount</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-uppercase mb-0 font-weight-bold font12">Sold Rate:</label>
+                            <div class="font16 FullBlack">@Model.noteGeneralInfo.SoldInterestRate %</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="DividerBot mt-3 mb-4"></div>
+                    </div>
+                </div>
+
+                <div class="row BrokerList">
+                    <div class="col-md-12">
+                        <p class="mb-4 pr-0">@Model.Description</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-4 offset-md-1">
+                <div class="CreateResource">
+                    <div style="height: 300px;" class="border1px width100">
+                        <div id="map"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100 font14" id="btn_ViewDocuments">View Documents</button>
+                    @if (Synoptek.SessionController.UserSession.RoleType == "Investor")
+                    {
+                        <button type="button" class="btn btn-primary w-100 font14" id="btn_ScheduleAConsultation" data-target="#ScheduleConsultationModal">Schedule a Document Review Consultation</button>
+                    }
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-12">
+                    <div class="DividerBot mt-5 mb-5"></div>
+                </div>
+                <div class="text-center">
+                    <h4 class="mt-3 mb-3">@Html.ActionLink(Model.BrokerName, "BrokerDetails", "InvestorListings", new { BrokerName = BrokerName, BrokerID = BrokerID }, new { @class = "font25", @id = "Link_BrokerName" }) </h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if (Synoptek.SessionController.UserSession.RoleType == "Investor")
+                            {
+                                <button type="button" class="btn btn-primary w-100 font14" id="btn_ContactBroker" title="@(Model.BrokerName)" data-broker-id="@(Model.BrokerId)" data-target="#ContactBrokerModal">
+                                    Contact Broker
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <div>
+        <div class="ActionBar mb-4 p-0">
+            <ul class="nav justify-content-center" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-noteterm-tab" data-toggle="pill" href="#pills-noteterm" role="tab" aria-controls="pills-noteterm" aria-selected="true">NOTE TERMS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-notedates-tab" data-toggle="pill" href="#pills-notedates" role="tab" aria-controls="pills-notedates" aria-selected="false">NOTE DATES</a>
+                </li>
+                @* Uncomment this code when foreclosure implementation done on create loan page.
+                        <li class="nav-item">
+                        <a class="nav-link" id="pills-foreclosure-tab" data-toggle="pill" href="#pills-foreclosure" role="tab" aria-controls="pills-foreclosure" aria-selected="false">FORECLOSURE</a>
+                    </li>*@
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-propertyinfo-tab" data-toggle="pill" href="#pills-propertyinfo" role="tab" aria-controls="pills-propertyinfo" aria-selected="false">PROPERTY INFORMATION</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content mb-5" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-noteterm" role="tabpanel" aria-labelledby="pills-noteterm-tab">
+                <div class="container">
+                    <div class="row TabTable">
+                        <div class="col-md-4">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Lien Position</th>
+                                        <td>@Model.noteTermsTab.LienPositionName</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Original Balance</th>
+                                        <td>$ @Model.noteTermsTab.OriginalBalance</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Total Payment</th>
+                                        <td>@Model.noteTermsTab.TotalPayment</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Total in Trust</th>
+                                        <td>@Model.noteTermsTab.TotalInTrust</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Unpaid Charges</th>
+                                        <td>@Model.noteTermsTab.UnpaidCharges</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Balloon Payment</th>
+                                        <td>@Model.noteTermsTab.BalloonPayment</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">On Forbearance Plan</th>
+                                        <td>@Model.noteTermsTab.OnForbearancePlan</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-4">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Amortization Type</th>
+                                        <td>@Model.noteTermsTab.AmortizationType</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Current Balance</th>
+                                        <td>@Model.noteTermsTab.CurrentBalance</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Note Rate</th>
+                                        <td>@Model.noteTermsTab.NoteInterestRate</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Unpaid Interest</th>
+                                        <td>$ @Model.noteTermsTab.UnpaidInterest</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Prepayment Penalty</th>
+                                        <td>@Model.noteTermsTab.PrepaymentPenalty</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Loan Terms Modified</th>
+                                        <td>@Model.noteTermsTab.LoanTermsModified</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">In Foreclosure</th>
+                                        <td>@Model.noteTermsTab.InForeclosure</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-4">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Loan Type</th>
+                                        <td>@Model.noteTermsTab.LoanType</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Pl</th>
+                                        <td>@Model.noteTermsTab.PAndL</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Sold Rate</th>
+                                        <td>@Model.noteTermsTab.SoldInterestRate</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Late Charges is</th>
+                                        <td>@Model.noteTermsTab.LateChargesIs</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Rate Type</th>
+                                        <td>@Model.noteTermsTab.RateType</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Registered w/MERS</th>
+                                        <td>@Model.noteTermsTab.Registered_wMERS</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">In Bankruptcy</th>
+                                        <td>@Model.noteTermsTab.InBankruptcy</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="DividerBot mt-3 mb-4"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            Seller Comments
+                            <br />
+                            @Model.noteTermsTab.SellerComments
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-notedates" role="tabpanel" aria-labelledby="pills-notedates-tab">
+                <div class="container">
+                    <div class="row TabTable">
+                        <div class="col-md-4">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Origination Date</th>
+                                        <td>@Model.noteDatesTab.OriginationDate</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">First Payment Date</th>
+                                        <td>@Model.noteDatesTab.FirstPaymentDate</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Last Payment Received Date</th>
+                                        <td>@Model.noteDatesTab.LastPaymentReceived</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Paid to Date</th>
+                                        <td>@Model.noteDatesTab.PaidToDate</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Maturity Date</th>
+                                        <td>@Model.noteDatesTab.MaturityDate</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Next Due Date</th>
+                                        <td>@Model.noteDatesTab.NextDueDate</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-foreclosure" role="tabpanel" aria-labelledby="pills-foreclosure-tab">
+                <div class="container">
+                    <div class="row TabTable">
+                        <div class="col-md-4">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Date Opened</th>
+                                        <td>@Model.foreClosureTab.DateOpened</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Schedule Sale Date</th>
+                                        <td>@Model.foreClosureTab.ScheduleSaleDate</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-propertyinfo" role="tabpanel" aria-labelledby="pills-propertyinfo-tab">
+                <div class="container">
+                    <div class="row TabTable">
+                        <div class="col-md-4">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Property Type</th>
+                                        <td>@Model.propertyTab.PropertyType</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">City</th>
+                                        <td>@Model.propertyTab.City</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Market Value</th>
+                                        <td>$ @Model.propertyTab.MarketValue</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-4">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">LTV Ratio</th>
+                                        <td>@Model.propertyTab.LTVRatio</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">County</th>
+                                        <td>@Model.propertyTab.Country</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Valuation Date</th>
+                                        <td>@Model.propertyTab.ValuationDate</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Contact Broker Modal-->
+<div class="modal fade" id="ContactBrokerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <h3 class="mb-5 mt-5" id="deal_title">Contact Broker</h3>
+                    <div class="text-center modalData">
+                        <div class="form-group text-left" id="messageBody">
+                            <label for="description" class="LightGrey">Message will be sent to broker <span class='redcolor'>*</span> </label>
+                            <textarea id="txt_Description" class="form-control" rows="3" placeholder="Type anything here…"></textarea>
+                            <input type="hidden" id="hdn_ListingId" />
+                            <span class="redcolor" id="lbl_errorforContactBroker"></span>
+                        </div>
+                        <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_send">SEND</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Contact Broker Modal-->
+<!--View Document Popup-->
+<div class="modal fade" id="ViewDocumentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal minwidth670">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <h3 class="text-center" id="ViewDocument_title">View Document</h3>
+
+                <div class="viewdocument mt-4" id="ViewDocumentBody">
+                    <div class="row">
+                        <div class="col-md-4 documentlinks">
+                            <ul id="documentlist"></ul>
+                        </div>
+                        <div class="col-md-8" id="docviewer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--  Schedule Consultation Modal -->
+<div class="modal fade" id="ScheduleConsultationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <h3 class="mb-5 mt-5" id="Consultation_title">Schedule a Document Review Consultation</h3>
+                    <div class="text-center modalData">
+
+                        @{
+                            var userName = "";
+                            var Email = "";
+                        }
+                        @if (Synoptek.SessionController.UserSession.UserId != null)
+                        {
+                            userName = Synoptek.SessionController.UserSession.UserName;
+                            Email = Synoptek.SessionController.UserSession.EmailAddress;
+                        }
+
+                        <div class="form-group has-warning text-left">
+                            <label for="Name" class="LightGrey">Name <span class='redcolor'>*</span></label>
+                            <input type="text" class="form-control" value="@userName" id="txt_Name" placeholder="Name">
+                            <span class="redcolor" id="lbl_errorforName"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="Email" class="LightGrey">Email <span class='redcolor'>*</span> </label>
+                            <input type="text" class="form-control" value="@Email" id="txt_EmailID" placeholder="Email Address">
+                            <span class="redcolor" id="lbl_errorforEmail"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="phone" class="LightGrey">Phone Number </label>
+                            <input type="text" class="form-control" id="txt_Phone" placeholder="Phone Number">
+                            <span class="redcolor" id="lbl_errorforPhone"></span>
+                        </div>
+                        <div class="form-group text-left" id="ScheduleConsultationBody">
+                            <label for="description" class="LightGrey">Description <span class='redcolor'>*</span> </label>
+                            <textarea id="txt_Consultation" class="form-control" rows="3" placeholder="Description"></textarea>
+                            <input type="hidden" id="hdn_ConsultationListingId" />
+                            <span class="redcolor" id="lbl_errorforConsultation"></span>
+                        </div>
+                        <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_sendConsultaion" data-broker-id="@(Model.BrokerId)">Send Consultation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#hdn_ListingId").val("@ListingID");
+
+        $("#btn_favorite").on("click", function () {
+            try {
+                var IsFavorite = $("#btn_favorite").attr("data-val");
+                var id = $("#hdn_ListingId").val();
+                $.ajax({
+                    url: "Favorite",
+                    data: { listingID: id, IsFavorite: IsFavorite },
+                    success: function (result) {
+                        if (result == 1) {
+                            $("#btn_favorite i").removeClass("fa fa-heart-o").addClass("fa fa-heart");
+                            $("#btn_favorite span").html("Favorited");
+                            $("#btn_favorite").attr("data-val", "True");
+                        }
+                        else {
+                            $("#btn_favorite i").removeClass("fa fa-heart").addClass("fa fa-heart-o");
+                            $("#btn_favorite span").html("Favorite");
+                            $("#btn_favorite").attr("data-val", "False");
+                        }
+                    },
+                    error: function (result) {
+                    }
+                });
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+        // View Photos
+        $("#btn_ViewPhotos").on('click', function () {
+            $('#ImagePreviewModal').modal({ backdrop: 'static', keyboard: false });
+        });
+
+        // Contact broker
+        $("#btn_ContactBroker").on("click", function () {
+            ClearContactBroker();
+            $('#ContactBrokerModal').modal({ backdrop: 'static', keyboard: false })
+            var BrokerName = '@(BrokerName)'
+            $("#deal_title").html("Contact Broker : " + BrokerName);
+            $("#hdn_ListingId").val('@ListingID');
+        });
+        function ClearContactBroker() {
+            $("#lbl_errorforContactBroker").html("");
+            $("#txt_Description").val("");
+            $("#hdn_ListingId").val("");
+        }
+
+        $("#btn_send").on("click", function () {
+            try {
+                var ListingId = $("#hdn_ListingId").val();
+                Message = $("#txt_Description").val().trim();
+                var BrokerId = $("#btn_ContactBroker").attr("data-broker-id");
+                if (Message != "") {
+                    $.ajax({
+                        url: "ContactBroker",
+                        data: { ListingId: ListingId, Message: Message, BrokerId: BrokerId },
+                        success: function (result) {
+                            if (result == 1) {
+                                $('#ContactBrokerModal').modal('hide');
+                                bootbox.alert("Message has been sent to broker. Broker may contact you soon.", function () {
+                                    $("#txt_Description").val("");
+                                    $("#lbl_errorforContactBroker").html("");
+                                    $("#hdn_ListingId").val("");
+                                });
+                            }
+                        },
+                        error: function (result) {
+                        }
+                    });
+                }
+                else {
+                    $("#lbl_errorforContactBroker").html("Message is required.");
+                    return false;
+                }
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        // end contact broker
+
+
+        // Schedule Consultation
+        $("#btn_ScheduleAConsultation").on('click', function () {
+            $('#ScheduleConsultationModal').modal({ backdrop: 'static', keyboard: false })
+            $("#btn_favorite").attr("data-val");
+        });
+
+        $("#btn_cancelConsultation").on("click", function () {
+            $("#lbl_errorforConsultation").html("");
+            $("#txt_Consultation").val("");
+            $("#hdn_ConsultationListingId").val("");
+        });
+
+        $("#btn_sendConsultaion").on("click", function () {
+            try {
+                var Email = $("#txt_EmailID").val().trim();
+                var Name = $("#txt_Name").val().trim();
+                var Phone = $("#txt_Phone").val().trim();
+                var ListingId = $("#hdn_ListingId").val();
+                Message = $("#txt_Consultation").val().trim();
+                var BrokerId = $("#btn_sendConsultaion").attr("data-broker-id");
+                $("#lbl_errorforConsultation").html('');
+                $("#lbl_errorforEmail").html('');
+                $("#lbl_errorforPhone").html('');
+                $("#lbl_errorforName").html('');
+
+                if (Name != "" & Message != "" & Email != "") {
+
+                    if (Phone != "") {
+                        if ((Phone.length < 1) || (Phone.length > 10)) {
+                            $("#lbl_errorforPhone").html('Please enter valid Phone Number.');
+                            return false;
+                        }
+                    }
+                    $.ajax({
+                        url: "ScheduleConsultation",
+                        data: { ListingId: ListingId, Email: Email, Name: Name, Phone: Phone, Message: Message, BrokerId: BrokerId },
+                        success: function (result) {
+                            if (result == 1) {
+                                $('#ScheduleConsultationModal').modal('hide');
+                                bootbox.alert("Your request for document review consultation has been sent.", function () {
+                                    $("#txt_Consultation").val("");
+                                    $("#lbl_errorforConsultation").html("");
+                                    $("#lbl_errorforConsultation").html("");
+                                    $("#hdn_ConsultationListingId").val("");
+                                    $("#lbl_errorforPhone").html('');
+                                    $("#lbl_errorforName").html('');
+                                });
+                            }
+                        },
+                        error: function (result) {
+                        }
+                    });
+                }
+                else {
+
+                    if (Name == "") {
+                        $("#lbl_errorforName").html("Name is required.");
+                    }
+                    if (Message == "") {
+                        $("#lbl_errorforConsultation").html("Description is required.");
+                    } if (Email == "") {
+                        $("#lbl_errorforEmail").html("Email address is required.");
+                    }
+                    return false;
+                }
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        // End Schedule Consultation
+
+        // View Documents
+        $("#btn_ViewDocuments").on("click", function () {
+            try {
+                $("#docviewer").html("");
+                $("#documentlist").html("");
+                var ListingId = $("#hdn_ListingId").val();
+                $.ajax({
+                    url: "ViewListingDocument",
+                    data: { ListingId: ListingId },
+                    success: function (result) {
+                        $("#documentlist").html("");
+                        if (result.length > 0) {
+                            for (i = 0; i < result.length; i++) {
+                                var id = result[i].id;
+                                var path = result[i].FileName;
+                                var fileNameIndex = path.lastIndexOf("/") + 1;
+                                var filename = path.substr(fileNameIndex);
+                                $("#documentlist").append("<li class='js_viewdocument'  style='cursor: pointer;word-wrap: break-word;'  id=' span_" + id + "' data-path = '" + path + "' > " + filename + "</li>").html();
+                            }
+                        }
+                        else {
+                            $("#docviewer").append("<br /> Documents are not available");
+                        }
+                        $("#ViewDocumentModal").modal('show');
+                        $('#ViewDocumentModal').modal({ backdrop: 'static', keyboard: false })
+                    },
+                    error: function (result) {
+                    }
+                });
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+        // End View Documents
+
+        $(document).on('click', '.js_viewdocument', function (e) {
+            var file = $(this).attr('data-path');
+            var testext = file.replace(/ /g, "_");
+            var extregex = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)(:([^\/]*))?((\/[\w/-]+)*\/)([\w\-\.]+[^#?\s]+)(\?([^#]*))?(#(.*))?$/i;
+            var ext = testext.match(extregex)[8].split(".").pop();
+            //doc,docx,odt,xls,xlsx,ods,pptx,ppt,pps   need to add
+            if (/^(tiff|TIFF|pdf|PDF|txt|TXT|jpg|JPG|jpeg|JPEG|png|PNG)$/.test(ext)) {
+                $(this).after(function () {
+                    $("#docviewer").html("<iframe src=' " + file + " ' id='iframe_documentviewer' style='min-height: 250px;height:600px; max-height:600px;background:white;font-color:black;padding:0px;' width='100%' height='100%'></iframe>");
+
+                    //google doc viewer code
+                    //  $("#docviewer").html("<iframe src='https://docs.google.com/gview?url=" + file + "&embedded=true' id='iframe_documentviewer' width='600' height='600'></iframe>");
+
+                    //   $("#docviewer").html("<iframe  src='https://view.officeapps.live.com/op/view.aspx?src='" + file + "'&embedded=true' id='iframe_documentviewer' width='600' height='600'></iframe>");
+
+                })
+            }
+            else {
+                $("#docviewer").html("This document is not supported by document viewer. This file has been downloaded to you system. Please check download folder");
+                $("#docviewer").append("<iframe src=' " + file + " ' id='iframe_documentviewer' style = 'display : none;' ></iframe>");
+            }
+        });
+    });
+
+</script>
+
+
+<script>
+    function initMap() {
+        var location = '@(Model.Location)'
+        var lat; var lang; var map; var myLatlng;
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': location }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                lang = results[0].geometry.location.lng();
+                lat = results[0].geometry.location.lat();
+            } else {
+                bootbox.alert("Location is not present on map");
+            }
+        });
+        setTimeout(function () {
+            myLatlng = { lat: lat, lng: lang };
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 8,
+                center: myLatlng
+            });
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: 'Click to zoom'
+            });
+
+            map.addListener('center_changed', function () {
+                // 3 seconds after the center of the map has changed, pan back to the
+                // marker.
+                window.setTimeout(function () {
+                    map.panTo(marker.getPosition());
+                }, 3000);
+            });
+            marker.addListener('click', function () {
+                map.setZoom(8);
+                map.setCenter(marker.getPosition());
+            });
+        }, 1000);
+    }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAQouhySh4D5eHdyfT7uVNwWfcNvnA8aU&callback=initMap"></script>

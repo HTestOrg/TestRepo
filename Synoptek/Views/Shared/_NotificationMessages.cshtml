@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BusinessObjects.MessageCenterModel>
+<style>
+    .wordwrap {
+        word-wrap: break-word;
+    }
+</style>
+@{
+    int counter = 0;
+    foreach (var item in Model)
+    {
+        if (counter < 3)
+        {
+            <li>
+                <div class="dropdown-messages-box" id="RowID_@(item.ID)">
+                    <a href="#" class="pull-left">
+                        <img alt="image" class="img-circle" src="@(item.ProfileImage)">
+                    </a>
+                    <div class="media-body">
+                        <small class="pull-right">@item.Duration</small>
+                       @item.Subject from <strong>@item.FromUser</strong>. <br>
+                        <small class="text-muted wordwrap">@item.MessageBody</small>
+                    </div>
+                </div>
+            </li>
+            <li class="dropdown-divider"></li>
+        }
+        counter++;
+    }
+}
+@if (Model.ToList().Count > 0)
+{
+    <li>
+        <div class="text-center link-block">
+            <a class="softBlue font13" href="/MessageCenter/Inbox" ><i class="fa fa-envelope"></i> <strong>Read All @(Model.ToList().Count) Messages </strong></a>
+        </div>
+    </li>
+}
+@if (Model.ToList().Count <= 0)
+{
+    <li>
+        <div class="text-center link-block">
+            You have 0 unread messages
+        </div>
+    </li>
+}

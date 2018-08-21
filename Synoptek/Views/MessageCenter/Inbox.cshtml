@@ -1,0 +1,142 @@
+﻿@model BusinessObjects.MessageCenterWrapper
+
+@{
+    ViewBag.Title = "Inbox";
+}
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">@Synoptek.SessionController.UserSession.UserName</h2>
+    </div>
+</div>
+
+<div class="ActionBar mb-5 p-0">
+    <ul class="nav justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="li_UnreadMessages" data-toggle="pill" href="#pills-drafts" role="tab" aria-controls="pills-drafts" aria-selected="false">UNREAD</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="li_AllMessages" data-toggle="pill" href="#pills-active" role="tab" aria-controls="pills-active" aria-selected="true">ALL</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="li_ReadMessages" data-toggle="pill" href="#pills-closed" role="tab" aria-controls="pills-closed" aria-selected="false">ARCHIVED</a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="tab-content mb-5 educationPage" id="pills-tabContent">
+    <div id="DivActiveMessages" class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-active-tab">
+        @Html.Partial("_MyInbox", Model.PagedMessageUnread)
+    </div>
+</div>
+
+<!--reply Modal-->
+<div class="modal fade" id="ReplyToMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" id="btn_cancel" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <h3 class="mb-5 mt-5" id="deal_title">Reply</h3>
+                    <div class="text-center modalData">
+                        <div class="form-group text-left" id="messageBody">
+                            <label for="description" class="LightGrey">Reply <span class='redcolor'>*</span> </label>
+                            <textarea id="txt_Description" class="form-control" rows="3" placeholder="Type anything here…"></textarea>
+                            <input type="hidden" id="hdn_ToUserId" />
+                            <input type="hidden" id="hdn_ListingDetailsID" />
+                            <input type="hidden" id="hdn_CommentID" />
+                            <span class="redcolor" id="lbl_error"></span>
+                        </div>
+                        <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_send">SEND</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End ReplyModal--> 
+
+<script>
+    $(document).ready(function () {
+        $("#li_Inbox").parent().addClass("active");
+        $("#li_AllMessages").on('click', function () {
+            $.ajax({
+                url: "Inbox",
+                data: { Read: "All" },
+                success: function (res) {
+                    $("#DivActiveMessages").html(res);
+                }
+            });
+        });
+        $("#li_UnreadMessages").on('click', function () {
+            $.ajax({
+                url: "Inbox",
+                data: { Read: "0" },
+                success: function (res) {
+                    $("#DivActiveMessages").html(res);
+                }
+            });
+        });
+        $("#li_ReadMessages").on('click', function () {
+            $.ajax({
+                url: "Inbox",
+                data: { Read: "1" },
+                success: function (res) {
+                    $("#DivActiveMessages").html(res);
+                }
+            });
+        });
+
+        //Send message to broker -------------------------
+        $("#btn_send").on("click", function () {
+            try {
+                var ListingDetailsID = $("#hdn_ListingDetailsID").val();
+                var ToUserId = $("#hdn_ToUserId").val();
+                var CommentID = $("#hdn_CommentID").val();
+                var Message = $("#txt_Description").val().trim();
+
+                if (Message != "") {
+                    $.ajax({
+                        url: '@Url.Action("ReplyToMessage","MessageCenter")',
+                        data: { ListingDetailsID: ListingDetailsID, ToUserId: ToUserId, Message: Message, CommentID: CommentID },
+                        success: function (result) {
+                            if (result) {
+                                $('#ReplyToMessageModal').modal('hide');
+                                bootbox.alert("Message has been sent", function () {
+                                    $("#txt_Description").val("");
+                                    $("#lbl_error").html("");
+                                    $("#hdn_ToUserId").val("");
+                                    $("#hdn_CommentID").val(""); 
+                                });
+                            }
+                        },
+                        error: function (result) {
+                        }
+                    });
+                }
+                else {
+                    $("#lbl_error").html("Message is required.");
+                    return false;
+                }
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        //Send message to broker -------------------------
+
+        //Close Modal -------------------------
+        $("#btn_cancel").on("click", function () {
+            $("#lbl_error").html("");
+            $("#txt_Description").val("");
+            $("#hdn_ToUserId").val("");
+            $("#hdn_ListingDetailsID").val("");
+        });
+        //Close Modal -------------------------
+    });
+
+
+</script>

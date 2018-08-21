@@ -1,0 +1,391 @@
+﻿@model BusinessObjects.LearnModel
+
+@{
+    ViewBag.Title = "Webinar Details";
+}
+
+<div class="signUpBlog">
+    <div class="container">
+        <h2 class="mb-0 text-left">@Model.LearnTypeName - @Model.TopicName</h2>
+    </div>
+</div>
+
+<!-- Added fo social shared functionality for facebook -->
+<meta property="og:title" content="@Model.Name" />
+<meta property="og:description" content="@Model.Description" />
+<meta property="og:url" content="@TempData["Link"]" />
+<!----->
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div class="educationPage">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-10">
+                    <h2 class="pt-4">@Model.ExperienceLevelName - @Model.Name</h2>
+                    <div class="BottonLine mt-3 mb-4"></div>
+                    <div class="ResponviseCenter">
+                        @if (Model.ResourcePath != "")
+                        {
+                        <div>
+                            <video class="white-two" width="960" height="540" controls>
+                                <source src="@(Model.ResourcePath)" type="video/WebM">
+                                <source src="@(Model.ResourcePath)" type="video/mp4">
+                                <source src="@(Model.ResourcePath)" type="video/ogg">
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </div>
+                        <div class="mt-4">
+                            @if (Model.Url != null && Model.Url != "")
+                            {
+                                <p>Video URL: <span class="cursorPointer coolBlue darkBlue" data-toggle="modal" data-target="#YoutubeVideoModal" onclick="rediretToURL('@Model.Url')">  @Model.Url</span></p>
+                            }
+                        </div>
+                        }
+                        else if (Model.ResourcePath == "" && Model.Url != null && Model.Url != "")
+                        {
+                            @Html.HiddenFor(m => m.Url, new {@id= "hdnUrl" })
+                            <embed id="videoOnSamePage" src="" wmode="transparent" type="application/x-shockwave-flash"
+                                   width="960" height="540" allowfullscreen="true" title="Adobe Flash Player">
+                        }
+                        else
+                        {
+                            <div><b><span> No Video Available</span></b></div>
+                        }
+                        <p class="mt-4">Interested in taking the next step?</p>
+                        <button type="button" class="btn btn-primary w-250px mr-4 mb-3" id="btn_ScheduleAConsultation" data-target="#ScheduleConsultationModal" data-id="@(Model.ID)">Schedule a Consultation</button>
+                        <button type="button" class="btn btn-primary w-250px mr-4 mb-3" id="btnShare" data-toggle="modal" data-target="#SocialShareModal">Share</button>
+
+                        <div style="margin-top: 10px;">
+                            @Html.Raw(Model.Description)
+                            <div class="clearfix"></div>
+                        </div>
+                        @Html.HiddenFor(model => model.ID)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="white-two">
+            <div class="container pb-5">
+                <h2 class="pt-4">Next Videos</h2>
+                <div class="BottonLine mt-3 mb-4"></div>
+                <div class="clearfix"></div>
+                <div class="row pt-2 ResponviseCenter">
+                    @if (Model.LatestSimillarArticleList != null)
+                    {
+                        if (Model.LatestSimillarArticleList.Count > 0 && Model.LatestSimillarArticleList != null)
+                        {
+                            foreach (var resource in Model.LatestSimillarArticleList)
+                            {
+                                string LearnID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(resource.ID), true);
+                                string TopicID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(resource.TopicID), true);
+
+                    @Html.HiddenFor(modelItem => resource.Name, new { id = "hdnName" + resource.ID })
+                    @Html.HiddenFor(modelItem => resource.Description, new { id = "hdnDescription" + resource.ID })
+
+                                if (Synoptek.SessionController.UserSession.UserId != null)
+                                {
+                    <div class="col-md-3">
+                        <a href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })'>
+                            <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News">
+                        </a>
+                        <h4 class="ResponviseCenter"><span id="lbl_Name@(resource.ID)">@Html.Raw(resource.Name)</span></h4>
+                        <p><div id="lbl_description@(resource.ID)">@Html.Raw(resource.Description)</div></p>
+                    </div>
+                                }
+                                else if (Synoptek.SessionController.UserSession.UserId == null && resource.ContentTypeID == 0)
+                                {
+                    <div class="col-md-3">
+                        <a href='@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = LearnID })'>
+                            <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News">
+                        </a>
+                        <h4 class="ResponviseCenter"><span id="lbl_Name@(resource.ID)">@Html.Raw(resource.Name)</span></h4>
+                        <p><div id="lbl_description@(resource.ID)">@Html.Raw(resource.Description)</div></p>
+                    </div>
+                                }
+                                else
+                                {
+                    <div class="col-md-3">
+                        <img src="~/images/opportunities-lockThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="Articles and News" onclick="GetRoleAccessPopup()"><br />
+                        <h4 class="ResponviseCenter"><div id="lbl_Name@(resource.ID)">@Html.Raw(resource.Name)</div></h4>
+                        <p><div id="lbl_description@(resource.ID)">@Html.Raw(resource.Description)</div></p>
+                    </div>
+                                }
+
+                    <script>
+                                    $(document).ready(function () {
+                                        var actualvalue = $('#hdnDescription@(resource.ID)').val();
+                                        var result = actualvalue.replace(/<[^>]+>/g, '');
+                                        if (result.length > 70) {
+                                            $("#lbl_description@(resource.ID)").html(result.substr(0, 70) + "...");
+                                        }
+                                        else {
+                                            $("#lbl_description@(resource.ID)").html(result.substr(0, 70));
+                                        }
+                                        var actualname = $('#hdnName@(resource.ID)').val();
+                                        var resultname = actualname.replace(/<[^>]+>/g, '');
+                                        if (resultname.length > 50) {
+                                            $("#lbl_Name@(resource.ID)").html(resultname.substr(0, 50) + "...");
+                                        }
+                                        else {
+                                            $("#lbl_Name@(resource.ID)").html(resultname.substr(0, 50));
+                                        }
+                                    });
+                    </script>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!--Social Share Modal-->
+<div class="modal fade" id="SocialShareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <h3 class="mb-2 mt-5">Share this on your favorite social <br /> media channels.</h3>
+                    <div class="mt-4 pt-2 SocialShare">
+                        <div class="text-left form-group">
+                            <label for="viaurl">Via URL</label>
+                            <input type="text" class="form-control" id="viaurl" value="@TempData["Link"]">
+                        </div>
+                        <div class="text-left form-group mt-5 mb-5">
+                            <label for="viasocial">Via Social Networks</label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="socialbox">
+                                        <a title="Share on Facebook" href="@TempData["FacebookURL"]" onclick="CenterWindow(600, 600, 50, this.href, 'Share on Facebook'); return false;">
+                                            <i class="fa fa-facebook"> </i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="socialbox">
+                                        <a title="Share on linkedin" href="@ViewBag.LinkedInURL" onclick="CenterWindow(600, 600, 50, this.href, 'Share on LinkedIn'); return false;">
+                                            <i class="fa fa-linkedin"> </i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="socialbox">
+                                        <a title="Share on twitter" href="@ViewBag.TwitterURL" onclick="CenterWindow(600,600,50,this.href, 'Share on Twitter'); return false;">
+                                            <i class="fa fa-twitter"> </i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="row mt-4">
+                                    <div class="col-md-4">
+                                        <div class="socialbox">
+                                            <a title="Share on Google+" href="@ViewBag.GooglePlusURL" onclick="CenterWindow(600, 600, 50, this.href, 'Share on Google Plus'); return false;">
+                                                <i class="fa fa-google-plus"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="socialbox">
+                                            <a title="Share on Medium" href="@ViewBag.MediumURL" onclick="CenterWindow(600, 600, 50, this.href, 'Share on Medium'); return false;">
+                                                <i class="fa fa-medium"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="socialbox">
+                                            <i class="fa fa-instagram"></i>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Social Share Modal-->
+<!--  Schedule Consultation Modal -->
+<div class="modal fade" id="ScheduleConsultationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                @{
+                        var userName = "";
+                        var Email = "";
+                }
+                @if (Synoptek.SessionController.UserSession.UserId != null)
+                {
+                    userName = Synoptek.SessionController.UserSession.UserName;
+                    Email = Synoptek.SessionController.UserSession.EmailAddress;
+                }
+
+                <form>
+                    <h3 class="mb-5 mt-5">Schedule a Consultation</h3>
+                    <div class="text-center mt-4 pt-2 modalData" id="ScheduleConsultationBody">
+                        <div class="form-group has-warning text-left">
+                            <label for="Name" class="LightGrey">Name <span class='redcolor'>*</span></label>
+                            <input type="text" class="form-control" value="@userName" id="txt_Name" placeholder="Name">
+                            <span class="redcolor" id="lbl_errorforName"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="Email" class="LightGrey">Email <span class='redcolor'>*</span> </label>
+                            <input type="text" class="form-control" value="@Email" id="txt_EmailID" placeholder="Email Address">
+                            <span class="redcolor" id="lbl_errorforEmail"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="phone" class="LightGrey">Phone Number </label>
+                            <input type="text" class="form-control" id="txt_Phone" placeholder="Phone Number">
+                            <span class="redcolor" id="lbl_errorforPhone"></span>
+                        </div>
+                        <div class="form-group has-warning text-left">
+                            <label for="description" class="LightGrey">Description <span class='redcolor'>*</span> </label>
+                            <textarea rows="3" id="txt_Consultation" class="form-control" placeholder="Description"></textarea>
+                            <input type="hidden" id="hdn_ConsultationListingId" />
+                            <span class="redcolor" id="lbl_errorforConsultation"></span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-4 mb-5" id="btn_sendConsultaion">Send Consultation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Schedule Consultation Modal -->
+
+<div class="modal fade" id="YoutubeVideoModal" tabindex="-1" role="dialog" aria-labelledby="YoutubeVideoModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <form>
+                    <div class="pt-4 font25">@Model.ExperienceLevelName - @Model.Name</div>
+                    <div class="pt-2">
+                        <div class="text-left form-group">
+                            <embed id="video" src="" wmode="transparent" type="application/x-shockwave-flash"
+                                   class="width100" height="380" allowfullscreen="true" title="Adobe Flash Player"></embed>  
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $(document).ready( function () {
+        var url = $("#hdnUrl").val();
+        url = url.split('v=')[1];
+        $("#videoOnSamePage")[0].src = "https://www.youtube.com/v/" + url;
+    });
+
+    function rediretToURL(url) {
+        url = url.split('v=')[1];
+        $("#video")[0].src = "https://www.youtube.com/v/" + url;
+    }
+
+    $('body').on('click', "#YoutubeVideoModal .close", function () {
+
+    });
+
+    function GetRoleAccessPopup() {
+        $.ajax({
+            url: "/UserRegistration/Register",
+            success: function (result) {
+                $("#SignUpModal").modal();
+                $("#Signupcontent").html(result);
+            }
+        });
+    }
+    function CenterWindow(windowWidth, windowHeight, windowOuterHeight, url, wname, features) {
+        var centerLeft = parseInt((window.screen.availWidth - windowWidth) / 2);
+        var centerTop = parseInt(((window.screen.availHeight - windowHeight) / 2) - windowOuterHeight);
+
+        var misc_features;
+        if (features) {
+            misc_features = ', ' + features;
+        }
+        else {
+            misc_features = ', status=no, location=no, scrollbars=yes, resizable=yes';
+        }
+        var windowFeatures = 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + centerLeft + ',top=' + centerTop + misc_features;
+        var win = window.open(url, wname, windowFeatures);
+        win.focus();
+        return win;
+    }
+
+    // Schedule Consultation
+    $("#btn_ScheduleAConsultation").on('click', function () {
+        $('#ScheduleConsultationModal').modal({ backdrop: 'static', keyboard: false })
+    });
+
+    $("#btn_sendConsultaion").on("click", function () {
+        var Email = $("#txt_EmailID").val().trim();
+        var Name = $("#txt_Name").val().trim();
+        var Phone = $("#txt_Phone").val().trim();
+
+        Message = $("#txt_Consultation").val().trim();
+        $("#lbl_errorforConsultation").html('');
+        $("#lbl_errorforEmail").html('');
+        $("#lbl_errorforPhone").html('');
+        $("#lbl_errorforName").html('');
+
+        if (Name != "" & Message != "" & Email != "") {
+
+            if (Phone != "") {
+                if ((Phone.length < 1) || (Phone.length > 10)) {
+                    $("#lbl_errorforPhone").html('Please enter valid Phone Number.');
+                    return false;
+                }
+            }
+            $.ajax({
+                url: '@Url.Action("ScheduleConsultationForPublicUser", "HomePage")',
+                data: { Email: Email, Name: Name, Phone: Phone, Message: Message },
+                success: function (result) {
+                    if (result == 1) {
+                        $('#ScheduleConsultationModal').modal('hide');
+                        bootbox.alert("Your request for consultation has been sent.", function () {
+                            $("#txt_EmailID").val("");
+                            $("#txt_Consultation").val("");
+                            $("#lbl_errorforEmail").html("");
+                            $("#lbl_errorforConsultation").html("");
+                            $("#hdn_ConsultationListingId").val("");
+                            $("#lbl_errorforPhone").html('');
+                            $("#lbl_errorforName").html('');
+                        });
+                    }
+                },
+                error: function (result) {
+                    bootbox.alert("An error has been occured..");
+                }
+            });
+        }
+        else {
+            if (Name == "") {
+                $("#lbl_errorforName").html("Name is required.");
+            }
+            if (Message == "") {
+                $("#lbl_errorforConsultation").html("Description is required.");
+            } if (Email == "") {
+                $("#lbl_errorforEmail").html("Email address is required.");
+            }
+            return false;
+        }
+    });
+</script>

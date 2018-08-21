@@ -1,0 +1,139 @@
+﻿@model  PagedList.IPagedList<BusinessObjects.InvestorDashboardModel>
+@using PagedList.Mvc;
+
+@{ int counter = 0; int divEnd = 1; int modelcounter = Model.Count; }
+@foreach (var item in Model)
+{
+    string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+    @Html.HiddenFor(modelitem => item.Status, new { @class = "Status" })
+    if (counter % 4 == 0)
+    {
+        @Html.Raw("<div class='row'>")
+    }
+    <div class="col-md-3 mb-4">
+        <a href='@Url.Action("GetSingleListingDetails", "InvestorListings", new { ListingId = ListingID})'>
+            <div class="item mb-2">
+                <img src="@(item.ImagePath)" class="img-fluid" alt="@(item.Name)">
+                @if (item.IsSponsored)
+                {
+                    <div class='item-star'><i class='fa fa-star'></i></div>
+                }
+                <div class="item-text">$ @item.AmountRequired <br> @item.Location</div>
+            </div>
+        </a>
+        <div class="font12 mb-1"><a href="#" class="mr-2">@item.ListingType.ToUpper()</a> <strong>ID #@item.ID</strong></div>
+        <h4 class="mb-1">@item.Name</h4>
+        @if (item.MessageCount <= 0)
+        {
+            <span class="coolGrey"><i class="fa fa-envelope"></i> @item.MessageCount New Message</span>
+        }
+        else
+        {
+            <span class="coolBlue cursorPointer" data-toggle="modal" data-target="#investorMessageModel" onclick="ViewMessages('@ListingID');"><i class="fa fa-envelope"></i> @item.MessageCount New Messages</span>
+        }
+    </div>
+    if (divEnd % 4 == 0 || divEnd == modelcounter)
+    {
+        @Html.Raw("</div>");
+    }
+    divEnd++;
+    counter++;
+}
+
+@if (Model.Count <= 0)
+{
+    <div>
+        <h4 class="text-center">No deals found</h4>
+    </div>
+}
+
+<nav aria-label="Page navigation pagination">
+    <ul class="pagination justify-content-center">
+        @Html.PagedListPager(Model, page => Url.Action("Investor", new { Page = page }))
+    </ul>
+</nav>
+
+<!--User Comments Popup-->
+<div class="modal fade" id="investorMessageModel" tabindex="-1" role="dialog" aria-labelledby="investorMessageModelCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content custom-modal">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body" id="messageBody">
+            </div>
+        </div>
+    </div>
+</div>
+<!--User Comments Popup-->
+
+<script>
+    $("document").ready(function () {
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+
+        //Pagination event handling ----------------------------
+        $('.pagination a').click(function () {
+            try {
+                var Status = $(".Status").val();
+                if (this.href != "" && this.href != undefined) {
+                    $.ajax({
+                        url: this.href,
+                        data: { listingStatus: Status },
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#DivActiveContent').html(result);
+                        }
+                    });
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        //Pagination event handling ----------------------------
+    });
+
+    function ViewMessages(listingID) {
+        try {
+            var Id = listingID
+            $.ajax({
+                url: '@Url.Action("GetDealMessages", "Dashboard")',
+                data: { listingID: Id },
+                success: function (result) {
+                    $("#messageBody").html(result);
+                },
+                error: function (result) {
+                }
+            });
+        }
+        catch (ex) {
+            ShowErrorMessage(ex.message);
+        }
+    }
+
+    function ReplyMessage(CommentID, toUserId, listingDetailsID, obj) {
+        message = $(obj).siblings('textarea').val().trim();
+        if (message != "") {
+            $.ajax({
+                url: '@Url.Action("ReplyToMessage","MessageCenter")',
+                data: { listingDetailsID: listingDetailsID, toUserId: toUserId, message: message, CommentID: CommentID },
+                success: function (result) {
+                    if (result) {
+                        bootbox.alert("Your message has been sent successfully!!!", function () {
+                            $("#investorMessageModel .close").trigger('click');
+                        });
+                    }
+                },
+                error: function (result) {
+                }
+            });
+        }
+        else {
+            $(obj).siblings('span') = 'Message is required.';
+            return false;
+        }
+    }
+</script>

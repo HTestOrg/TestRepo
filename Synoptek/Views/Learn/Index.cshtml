@@ -1,0 +1,193 @@
+﻿@model BusinessObjects.LearnHomeModel
+
+@{
+    ViewBag.Title = "Learn";
+
+}
+
+@Styles.Render("~/bundles/bootstrapCss", "~/Content/css")
+
+<div class="signUpBlog text-center">
+    <h2 class="mb-4">What are you wanting to learn today?</h2>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-8">
+                <div class="input-group">
+                    @Html.TextBoxFor(m => m.SearchText, new { @class = "form-control", @placeholder = "Search for..." })
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+<div class="ActionBar mb-5" id="LandingPage">
+    <ul class="nav justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pills-education-tab" data-toggle="pill" href="#pills-education" role="tab" aria-controls="pills-education" aria-selected="true">EDUCATION</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-resources-tab" data-toggle="pill" href="#pills-resources" role="tab" aria-controls="pills-resources" aria-selected="false">RESOURCES</a>
+        </li>
+    </ul>
+    <div class="tab-content mb-5" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-education" role="tabpanel" aria-labelledby="pills-education-tab">
+            <div class="container text-center">
+                <h2 class="mb-5">Choose your level of experience</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <img src="~/images/just-beginning.png" alt="Just Beginning" />
+                        <h3>Just Beginning</h3>
+                        <p class="learntopics">New to Non-Conventional Lending & Investing? Start Here.</p>
+                        <a class="btn btn-primary" href='@Url.Action("LearnListingDetails", "Learn", new BusinessObjects.LearnWrapper { SelectedLearnType = "1", SelectedExperienceLevel = "1" })' style="min-width: 120px;">Go</a>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <img src="~/images/been-doing.png" alt="Been Doing This a While" />
+                        <h3>Been Doing This a While</h3>
+                        <p class="learntopics">Understand Some Non-Conventional Lending & Investing? Start Here.</p>
+                        <a class="btn btn-primary" href='@Url.Action("LearnListingDetails", "Learn", new BusinessObjects.LearnWrapper { SelectedLearnType =  "1", SelectedExperienceLevel =  "2" })' style="min-width: 120px;">Go</a>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <img src="~/images/advanced.png" alt="Advanced" />
+                        <h3>Advanced</h3>
+                        <p class="learntopics">Even experts can always learn more about Non-Conventional Lending. Click Here.</p>
+                        <a class="btn btn-primary" href='@Url.Action("LearnListingDetails", "Learn", new BusinessObjects.LearnWrapper { SelectedLearnType =  "1", SelectedExperienceLevel = "3" })' style="min-width: 120px;">Go</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container text-center">
+                <h2 class="mb-5">Or choose a topic</h2>
+                @{ int counter = 0; int endCounter = 1;}
+                @foreach (var item in Model.TopicList)
+                {
+                    string topicID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+                    if (counter % 2 == 0)
+                    {
+                        @Html.Raw("<div class='row justify-content-md-center'>")
+                    }
+                    <div class="col-md-4 mb-4">
+                        <img src="~/images/topic-icon.jpg" alt="@item.Name" />
+                        <h3>@item.Name</h3>
+                        <p class="learntopics"  title="@item.Description">@item.Description</p>
+                        <a class="btn btn-primary" href='@Url.Action("LearnListingDetails", "Learn", new BusinessObjects.LearnWrapper { SelectedLearnType =  "1", SelectedTopic = @item.ID.ToString() })' style="min-width: 120px;">Browse</a>
+                    </div>
+                    if (endCounter % 2 == 0)
+                    {
+                        @Html.Raw("</div>")
+                    }
+                    endCounter++;
+                    counter++;
+                }
+            </div>
+
+        </div>
+        <div class="tab-pane fade" id="pills-resources" role="tabpanel" aria-labelledby="pills-resources-tab">
+            <div class="container text-center">
+                <h2 class="mb-5">Choose a topic</h2>
+
+                @{ int resourceCounter = 0; int resourceEndCounter = 1;}
+                @foreach (var item in Model.ResourceTopicList)
+                {
+                    string topicID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+                    if (resourceCounter % 2 == 0)
+                    {
+                        @Html.Raw("<div class='row justify-content-md-center'>")
+                    }
+                    <div class="col-md-4 mb-4">
+                        <img src="~/images/topic-icon.jpg" alt="@item.Name" />
+                        <h3>@item.Name</h3>
+                        <p class="learntopics" title="@item.Description">@item.Description</p>
+                        <a class="btn btn-primary" href='@Url.Action("LearnListingDetails", "Learn", new BusinessObjects.LearnWrapper { SelectedLearnType = "2", SelectedTopic = @item.ID.ToString() })' style="min-width: 120px;">Browse</a>
+                    </div>
+                    if (resourceEndCounter % 2 == 0)
+                    {
+                        @Html.Raw("</div>")
+                    }
+                    resourceEndCounter++;
+                    resourceCounter++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="divsearchResult" class="container" style="display:none;">
+    <div>
+        <div class="position-relative">
+            <h2 class="pt-5">Search result</h2>
+            <div class="sortBy mb-3">
+                <span>Sort by :</span>
+                <div class="input-group">
+                    @Html.DropDownList("SortingOrder", new List<SelectListItem>
+            {
+                new SelectListItem{ Text="Most Recent", Value = "RecentlyPosted" },
+                new SelectListItem{ Text="Alphabetical", Value = "Alphabetical" },
+                new SelectListItem{ Text="Type", Value = "Type" }
+             }, new { @class = "custom-select form-control-lg" }) 
+
+                </div>
+            </div>
+        </div>
+        <div class="BottonLine mt-3 mb-4"></div>
+        <div class="clearfix"></div>
+        <div id="searchResult" class="mt-3 educationPage">
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        RemoveTempDataForLearnListing();
+
+        if ($("#SearchText").val().length > 0) {
+            $("#SearchText").val("");
+        }  
+        $("#SearchText").keyup(function () {
+            SearchDeals();
+        });
+
+        $("#SortingOrder").change(function () {
+            SearchDeals();
+        });
+
+        function SearchDeals() {
+            if ($("#SearchText").val().length > 2) {
+                $("#LandingPage").hide();
+                var SortingBy = "";
+                if ($("#SortingOrder").val() != "") {
+                    SortingBy = $("#SortingOrder").val();
+                }
+                else {
+                    SortingBy = "RecentlyPosted";
+                }
+                var SearchCriteria = $("#SearchText").val();
+                var url = '@Url.Action("LearnListingDetailsPartial", "Learn")';
+                $.ajax({
+                    url: url,
+                    data: { SortingBy: SortingBy, SearchCriteria: SearchCriteria },
+                    type: 'POST',
+                    cache: false,
+                    success: function (result) {
+                        $('#searchResult').html("");
+                        $('#searchResult').html(result);
+                        $("#divsearchResult").show();
+                    }
+                });
+            }
+            else {
+                $("#LandingPage").show();
+                $("#divsearchResult").hide();
+            }
+        }
+
+        function RemoveTempDataForLearnListing() {
+            $.ajax({
+                url: '@Url.Action("RemoveTempDataForLearnListing","Learn")',
+                success: function (result) {
+                }
+            });
+        }
+
+    });
+</script>

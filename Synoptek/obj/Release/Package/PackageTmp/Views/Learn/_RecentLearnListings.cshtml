@@ -1,0 +1,128 @@
+﻿@model  PagedList.IPagedList<BusinessObjects.LearnModel>
+
+
+<div class="BottonLine mt-3 mb-4"></div>
+<div class="row pt-2">
+    @foreach (var item in Model)
+    {
+        string LearnID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+        string TopicID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.TopicID), true);
+        <div class="col-md-3" id="RowID_@(item.ID)">
+
+            @if (Synoptek.SessionController.UserSession.UserId != null)
+            {
+                if (@item.ResourcePath != null && item.ResourcePath != "")
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails","Learn", new { LearnID = LearnID , TopicID = TopicID })" class="marginRT5 ">
+                        <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath">
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails","Learn", new { LearnID = LearnID , TopicID = TopicID })" class="marginRT5 ">
+                        <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name">
+                    </a>
+                }
+
+            }
+
+            else if (Synoptek.SessionController.UserSession.UserId == null && item.ContentTypeID == 0)
+            {
+
+                if (@item.ResourcePath != null && item.ResourcePath != "")
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                        <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath">
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("GetSingleLearnDetails", "Learn", new { LearnID = LearnID, TopicID = TopicID })" class="marginRT5 ">
+                        <img src="~/images/opportunities-openThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name">
+                    </a>
+                }
+
+            }
+            else
+            {
+                if (@item.ResourcePath != null && item.ResourcePath != "")
+                {
+                    <img src="@item.ResourcePath" class="img-fluid mb-2 cursorPointer height145" alt="@item.ResourcePath" onclick="GetRoleAccessPopup()">
+                }
+
+                else
+                {
+                    <img src="~/images/opportunities-lockThumb.png" class="img-fluid mb-2 cursorPointer height145" alt="@item.Name" onclick="GetRoleAccessPopup()">
+                }
+            }
+            <h4><div id="lbl_RecentName@(item.ID)">@Html.DisplayFor(modelItem => item.Name)</div></h4>
+            <a href="#">@(item.LearnTypeName.ToUpper()) - @(item.TopicName.ToUpper()) </a>
+            <div id="lbl_Recentdescription@(item.ID)">@Html.Raw(item.Description)</div>
+
+            @Html.HiddenFor(modelItem => item.Name, new
+       {
+           id = "hdnRecentName" + item.ID
+       })
+            @Html.HiddenFor(modelItem => item.Description, new { id = "hdnRecentDescription" + item.ID })
+        </div>
+        <script>
+            $(document).ready(function () {
+                var actualvalue = $('#hdnRecentDescription@(item.ID)').val();
+                var result = actualvalue.replace(/<[^>]+>/g, '');
+                if (result.length > 70) {
+                    $("#lbl_Recentdescription@(item.ID)").html(result.substr(0, 50) + "...");
+                }
+                else {
+                    $("#lbl_Recentdescription@(item.ID)").html(result.substr(0, 50));
+                }
+
+                var actualname = $('#hdnRecentName@(item.ID)').val();
+                var resultname = actualname.replace(/<[^>]+>/g, '');
+                $("#lbl_RecentName@(item.ID)").html(resultname.substr(0, 50));
+                if (resultname.length > 50) {
+                    $("#lbl_RecentName@(item.ID)").html(resultname.substr(0, 50) + "...");
+                }
+                else {
+                    $("#lbl_RecentName@(item.ID)").html(resultname.substr(0, 50));
+                }
+            });
+
+            function DeleteDeal(learnID) {
+                var Id = learnID
+                bootbox.confirm({
+                    message: "Do you want to delete this resource?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "Delete",
+                                data: { learnID: Id },
+                                success: function (result) {
+                                    setSessionValues();
+                                    SearchDeals();
+                                },
+                                error: function (result) {
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        </script>
+    }
+    @if (Model.Count <= 0)
+    {
+        <div>
+            <h4 class="text-center">No resources found</h4>
+        </div>
+    }
+</div>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ListingService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://10.200.97.239:8000/ListingService/ListingService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://10.200.97.239:8000/ListingService/ListingService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://10.200.97.239:8000/ListingService/ListingService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/BusinessObjects" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IListingService_EditCurrentListing_InputMessage">
+    <wsdl:part name="parameters" element="tns:EditCurrentListing" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_EditCurrentListing_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EditCurrentListingResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetLoanDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanDocuments" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetLoanDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveLoanInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveLoanInformation" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveLoanInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveLoanInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SavePropertyInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePropertyInformation" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SavePropertyInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePropertyInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveCommentsInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveCommentsInformation" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveCommentsInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveCommentsInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveDocumentsInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDocumentsInformation" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveDocumentsInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDocumentsInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetListingLoanTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingLoanTypes" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetListingLoanTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingLoanTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetListingDefaultValuesForLoanInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingDefaultValuesForLoanInformation" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetListingDefaultValuesForLoanInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingDefaultValuesForLoanInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetListingDefaultValuesForPropertyInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingDefaultValuesForPropertyInformation" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetListingDefaultValuesForPropertyInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetListingDefaultValuesForPropertyInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_InsertUpdateListingImagePath_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertUpdateListingImagePath" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_InsertUpdateListingImagePath_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertUpdateListingImagePathResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveUploadedListingDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveUploadedListingDocuments" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_SaveUploadedListingDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveUploadedListingDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetLoanImages_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanImages" />
+  </wsdl:message>
+  <wsdl:message name="IListingService_GetLoanImages_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLoanImagesResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IListingService">
+    <wsdl:operation name="EditCurrentListing">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/EditCurrentListing" message="tns:IListingService_EditCurrentListing_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/EditCurrentListingResponse" message="tns:IListingService_EditCurrentListing_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanDocuments">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/GetLoanDocuments" message="tns:IListingService_GetLoanDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/GetLoanDocumentsResponse" message="tns:IListingService_GetLoanDocuments_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveLoanInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/SaveLoanInformation" message="tns:IListingService_SaveLoanInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/SaveLoanInformationResponse" message="tns:IListingService_SaveLoanInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePropertyInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/SavePropertyInformation" message="tns:IListingService_SavePropertyInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/SavePropertyInformationResponse" message="tns:IListingService_SavePropertyInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveCommentsInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/SaveCommentsInformation" message="tns:IListingService_SaveCommentsInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/SaveCommentsInformationResponse" message="tns:IListingService_SaveCommentsInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveDocumentsInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/SaveDocumentsInformation" message="tns:IListingService_SaveDocumentsInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/SaveDocumentsInformationResponse" message="tns:IListingService_SaveDocumentsInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListingLoanTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/GetListingLoanTypes" message="tns:IListingService_GetListingLoanTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/GetListingLoanTypesResponse" message="tns:IListingService_GetListingLoanTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListingDefaultValuesForLoanInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/GetListingDefaultValuesForLoanInformation" message="tns:IListingService_GetListingDefaultValuesForLoanInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/GetListingDefaultValuesForLoanInformationResponse" message="tns:IListingService_GetListingDefaultValuesForLoanInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListingDefaultValuesForPropertyInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/GetListingDefaultValuesForPropertyInformation" message="tns:IListingService_GetListingDefaultValuesForPropertyInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/GetListingDefaultValuesForPropertyInformationResponse" message="tns:IListingService_GetListingDefaultValuesForPropertyInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertUpdateListingImagePath">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/InsertUpdateListingImagePath" message="tns:IListingService_InsertUpdateListingImagePath_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/InsertUpdateListingImagePathResponse" message="tns:IListingService_InsertUpdateListingImagePath_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveUploadedListingDocuments">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/SaveUploadedListingDocuments" message="tns:IListingService_SaveUploadedListingDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/SaveUploadedListingDocumentsResponse" message="tns:IListingService_SaveUploadedListingDocuments_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanImages">
+      <wsdl:input wsaw:Action="http://tempuri.org/IListingService/GetLoanImages" message="tns:IListingService_GetLoanImages_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IListingService/GetLoanImagesResponse" message="tns:IListingService_GetLoanImages_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IListingService" type="tns:IListingService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="EditCurrentListing">
+      <soap:operation soapAction="http://tempuri.org/IListingService/EditCurrentListing" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanDocuments">
+      <soap:operation soapAction="http://tempuri.org/IListingService/GetLoanDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveLoanInformation">
+      <soap:operation soapAction="http://tempuri.org/IListingService/SaveLoanInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePropertyInformation">
+      <soap:operation soapAction="http://tempuri.org/IListingService/SavePropertyInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveCommentsInformation">
+      <soap:operation soapAction="http://tempuri.org/IListingService/SaveCommentsInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveDocumentsInformation">
+      <soap:operation soapAction="http://tempuri.org/IListingService/SaveDocumentsInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListingLoanTypes">
+      <soap:operation soapAction="http://tempuri.org/IListingService/GetListingLoanTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListingDefaultValuesForLoanInformation">
+      <soap:operation soapAction="http://tempuri.org/IListingService/GetListingDefaultValuesForLoanInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListingDefaultValuesForPropertyInformation">
+      <soap:operation soapAction="http://tempuri.org/IListingService/GetListingDefaultValuesForPropertyInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertUpdateListingImagePath">
+      <soap:operation soapAction="http://tempuri.org/IListingService/InsertUpdateListingImagePath" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveUploadedListingDocuments">
+      <soap:operation soapAction="http://tempuri.org/IListingService/SaveUploadedListingDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLoanImages">
+      <soap:operation soapAction="http://tempuri.org/IListingService/GetLoanImages" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ListingService">
+    <wsdl:port name="BasicHttpBinding_IListingService" binding="tns:BasicHttpBinding_IListingService">
+      <soap:address location="http://10.200.97.239:8000/ListingService/ListingService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

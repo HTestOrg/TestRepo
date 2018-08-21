@@ -1,0 +1,228 @@
+﻿@model  PagedList.IPagedList<BusinessObjects.MessageCenterModel>
+@using PagedList.Mvc;
+
+@{
+    var IsPagerAdded = false;
+}
+<style>
+    .wordwrap {
+        word-wrap: break-word;
+    }
+</style>
+<div class="container">
+    @foreach (var item in Model)
+    {
+        //string MessageID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), false);
+        //string Sender = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.Sender), false);
+        //string ListingDetailsID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ListingDetailsID), false);
+
+        <div class="row" id="RowID_@(item.ID)">
+            <div class="col-md-2 col-lg-1 text-center mb-2">
+                <img class="mr-3 rounded-circle" src="@item.ProfileImage" width="60" height="60">
+            </div>
+            <div class="col-md-8 col-lg-9">
+                <h4 class="mb-0 ResponviseCenter">@item.Subject</h4>
+                <div class="mb-3 font13 ResponviseCenter">Submitted on @item.Duration by @item.FromUser</div>
+                <div class="ResponviseJustify minheight68px">
+                    <p class="wordwrap">  @item.MessageBody</p>
+                </div>
+
+                <div class="DividerBot mt-4 mb-4"></div>
+            </div>
+            <div class="col-md-2 col-lg-2 mb-5">
+                <button type="button" class="btn btn-primary w-100 font14" id="btnReply" data-replyto="@item.Sender" onclick="ReplyToMessage('@item.ID','@item.FromUser','@item.Sender','@item.ListingDetailsID')">Reply</button>
+                @*<button type="button" class="btn btn-primary w-100 font14 mt-3" id="btnDelete" onclick="DeleteMessage('@item.ID','@item.MessageStatus')">Delete</button>*@
+                
+                @if (!item.IsArchived)
+                {
+                    <button type="button" class="btn btn-primary w-100 font14 mt-3" id="btnArchive" onclick="ArchiveMessage('@item.ID','@item.MessageStatus')">Archive</button>
+                }
+                @if (!item.IsRead)
+                {
+                    <button type="button" class="btn btn-primary w-100 font14 mt-3" id="btnMarkAsRead" onclick="MarkAsReadMessage('@item.ID','@item.MessageStatus')">Mark As Read</button>
+                }
+            </div>
+        </div>
+    }
+    @if (Model.Count <= 0)
+    {
+        if (Synoptek.SessionController.UserSession.RoleType == "Investor")
+        {
+            <div>
+                <h4 class="text-center">No messages found.<br /> Go browse investments to find some loans to discuss!</h4>
+            </div>
+        }
+        else if (Synoptek.SessionController.UserSession.RoleType == "Broker")
+        {
+            <div>
+                <h4 class="text-center">No messages found.<br /> Go post some Loans so that investor will contact you!</h4>
+            </div>
+        }
+        else
+        {
+            <div>
+                <h4 class="text-center">No messages found.</h4>
+            </div>
+        }
+
+    }
+
+    @foreach (var item in Model)
+    {
+        if (!IsPagerAdded)
+        {
+            IsPagerAdded = true;
+            <nav aria-label="Page navigation pagination" id='Paging_@item.MessageStatus'>
+                <ul class="pagination justify-content-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Inbox", new { Page = page, Read = item.MessageStatus }))
+                </ul>
+            </nav>
+        }
+    }
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+        $('.pagination a').click(function () {
+            if (this.href != "" && this.href != undefined) {
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#DivActiveMessages').html(result);
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
+    function ReplyToMessage(messageID, fromuser, sender, ID) {
+        var ReplyName = fromuser
+        $('#ReplyToMessageModal').modal({ backdrop: 'static', keyboard: false })
+        $("#deal_title").html("Reply To : " + ReplyName);
+        $("#hdn_ToUserId").val(sender);
+        $("#hdn_ListingDetailsID").val(ID);
+        $("#hdn_CommentID").val(messageID);
+    }
+
+    function ArchiveMessage(messageID, messageStatus) {
+        var Id = messageID
+        $.ajax({
+            url: "ArchiveMessage",
+            data: { messageID: Id },
+            success: function (result) {
+                var status = messageStatus;
+                
+                if (status == "1") {
+                    $("#li_ReadMessages").trigger('click');
+                }
+                else if (status == "0") {
+                    $("#li_UnreadMessages").trigger('click');
+                    ChangeNotificationCount();
+                }
+                else {
+                    $("#li_AllMessages").trigger('click');
+                    ChangeNotificationCount();
+                }
+            },
+            error: function (result) {
+            }
+        }); 
+    }
+
+    //function DeleteMessage(messageID, messageStatus) {
+    //    var Id = messageID
+    //    bootbox.confirm({
+    //        message: "Do you want to delete this Message?",
+    //        buttons: {
+    //            confirm: {
+    //                label: 'Yes',
+    //                className: 'btn-success'
+    //            },
+    //            cancel: {
+    //                label: 'No',
+    //                className: 'btn-danger'
+    //            }
+    //        },
+    //        callback: function (result) {
+    //            if (result) {
+    //                $.ajax({
+    //                    url: "DeleteMessage",
+    //                    data: { messageID: Id },
+    //                    success: function (result) {
+    //                        var status = messageStatus;
+    //                        if (status == "1") {
+    //                            $("#li_ReadMessages").trigger('click'); 
+    //                        }
+    //                        else if (status == "0") {
+    //                            $("#li_UnreadMessages").trigger('click');
+    //                            ChangeNotificationCount();
+    //                        }
+    //                        else {
+    //                            $("#li_AllMessages").trigger('click');
+    //                            ChangeNotificationCount();
+    //                        }
+    //                    },
+    //                    error: function (result) {
+    //                    }
+    //                });
+    //            }
+    //        }
+    //    });
+    //}
+
+    function MarkAsReadMessage(messageID, messageStatus) {
+        var Id = messageID;
+        $.ajax({
+            url: "MarkAsReadMessage",
+            data: { messageID: Id },
+            success: function (result) {
+                var status = messageStatus;
+                if (status == "All") {
+                    $("#li_AllMessages").trigger('click');
+                }
+                else if (status == "0") {
+                    $("#li_UnreadMessages").trigger('click');
+                    ChangeNotificationCount();
+                }
+                else {
+                    $("#li_ReadMessages").trigger('click');
+                    ChangeNotificationCount();
+                }
+            },
+            error: function (result) {
+            }
+        });
+    }
+
+    function ChangeNotificationCount() {
+        var count = $("#notificationCount").html();
+        $("#notificationCount").html(count - 1);
+    }
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.pagination a').click(function () {
+
+            if (this.href != "" && this.href != undefined) {
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#DivActiveMessages').html(result);
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>

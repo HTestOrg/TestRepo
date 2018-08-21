@@ -1,0 +1,232 @@
+﻿@model PagedList.IPagedList<BusinessObjects.UserProfileEditModel>
+@using PagedList.Mvc;
+
+<div class="container">
+    @foreach (var item in Model)
+    {
+        string UserID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+
+        <div class="row" id="user-@item.ID">
+            <div class="col-md-6 col-lg-3 minheight70px">
+                <div><strong>ID#@item.ID</strong></div>
+                <h4>@item.Name</h4>
+                <div>
+                    @{ if (item.IsPaid)
+                        {
+                            <span>Paid</span>
+                        }
+                        else
+                        {
+                            <span>Free</span>
+                        }
+                    } - @{
+                        if (item.RoleName == "RegisterUser")
+                        {
+                            <span>User</span>
+                        }
+                        else
+                        {
+                            @item.RoleName;
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                @*<div><strong>Licence Number:</strong> @item.LicenceNumber</div>*@
+                <div><strong>Created:</strong> @item.CreatedDate.ToString("dd-MM-yyyy")</div>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                
+                @if (@item.ModifiedDate == DateTime.MinValue)
+                {<div><strong>Last Updated: </strong> @item.CreatedDate.ToString("dd-MM-yyyy")</div> }
+                else
+                {<div><strong>Last Updated: </strong> @item.ModifiedDate.ToString("dd-MM-yyyy")</div> }
+
+                <div><strong> Contact: </strong> @item.PhoneNumber </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="mt-2 text-right ResponviseCenter AdminButton">
+                    <a href="@Url.Action("UpdateSelectedUser", "UserRegistration", new { selectedUserID = UserID })"><button type="button" class="GhostButton"><i class="fa fa-pencil"></i></button></a>
+                    <button type="button" class="GhostButton" onclick="DeleteRecord('@UserID', 'Users', @item.ID )"><i class="fa fa-trash"></i></button>
+                    @*<input type="checkbox" id="IsEnabled-@item.ID" checked="@(item.IsEnabled ? true : false)" class="GhostButton Respon-right w-30per" onclick="EnableDesableUser('@item.ID')"></input>*@
+                    @if (item.IsEnabled == true)
+                    {
+                        <button type="button" id="IsEnabled-@item.ID" class="GhostButton" onclick="EnableDesableUser('@UserID', @item.ID )">Disable</button>
+                    }
+                    else
+                    {
+                        <button type="button" id="IsEnabled-@item.ID" class="GhostButton" onclick="EnableDesableUser('@UserID',  @item.ID)">Enable</button>
+                    }
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="DividerBot mt-2 mb-3"></div>
+            </div>
+        </div>
+                        }
+
+    @if (Model.Count <= 0)
+    {
+        <div>
+            <h4 class="text-center">No users found</h4>
+        </div>
+    }
+
+    <nav aria-label="Page navigation pagination" id="UsersTabNav">
+        <ul class="pagination justify-content-center">
+            @Html.PagedListPager(Model, page => Url.Action("Admin", new { Page = page, Tab = "Users" }))
+        </ul>
+    </nav>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+
+
+        //Pagination event handling ----------------------------
+        $('#UsersTabNav .pagination a').click(function (e) {
+            try {
+                var searchTxt = $('#searchUserstxt').val();
+                var sortingOrder = $("#inputGroupSelectUsers").val();
+                var url = '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    if (this.href != "" && this.href != undefined) {
+                        $.ajax({
+                            url: this.href + url,
+                            type: 'GET',
+                            cache: false,
+                            success: function (result) {
+                                $('#pills-tab2-child').html("");
+                                $('#pills-tab2-child').html(result);
+                                $('#pills-tab2').addClass('tab-pane fade show active in');
+
+                                $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            }
+                        });
+                    }
+                    e.handled = true;
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+        //Pagination event handling ----------------------------
+
+        //search
+        $('#searchUserstxt').keyup(function (e) {
+            try {
+                var searchTxt = $('#searchUserstxt').val();
+                var page = $('#UsersTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectUsers").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Users" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    if (searchTxt.length >= 2 || searchTxt.length == 0) {
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            cache: false,
+                            success: function (result) {
+                                $('#pills-tab2-child').html("");
+                                $('#pills-tab2-child').html(result);
+                                $('#pills-tab2').addClass('tab-pane fade show active in');
+
+                                $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                                $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            }
+                        });
+                    }
+                    e.handled = true;
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+
+        //on sorting change
+
+        $('#inputGroupSelectUsers').change(function (e) {
+            try {
+                var searchTxt = $('#searchUserstxt').val();
+                var page = $('#UsersTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectUsers").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Users" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (e.handled !== true) // This will prevent event triggering more then once
+                {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#pills-tab2-child').html("");
+                            $('#pills-tab2-child').html(result);
+                            $('#pills-tab2').addClass('tab-pane fade show active in');
+
+                            $('#pills-tab1').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        }
+                    });
+                    e.handled = true;
+                }
+
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+
+    });
+
+    function EnableDesableUser(userId, attrId) {
+
+        bootbox.confirm({
+            message: "Do you want to " + $('#IsEnabled-' + attrId).html() + " this Record?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-primary'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-default'
+                }
+            },
+            callback: function (result) {
+
+                if (result) {
+                    var isEnabled = $('#IsEnabled-' + attrId).html() == "Enable" ? true : false;
+                    var buttonTxt = $('#IsEnabled-' + attrId).html() == "Enable" ? "Disable" : "Enable";
+                    var url = '@Url.Action("EnableDesableUser", "UserRegistration")';
+                    $.ajax({
+                        url: url,
+                        data: { selectedUserID: userId, isEnabled: isEnabled },
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#IsEnabled-' + attrId).html(buttonTxt);
+                        }
+                    });
+                }
+
+            }
+        });
+    }
+
+</script>

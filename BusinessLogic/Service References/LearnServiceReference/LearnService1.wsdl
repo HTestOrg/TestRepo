@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LearnService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpsBinding_ILearnService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ILearnService_GetExperienceLevel_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperienceLevel" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetExperienceLevel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperienceLevelResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetTopics_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTopics" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetTopics_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTopicsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetLearnTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLearnTypes" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetLearnTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLearnTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_SaveLearnData_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveLearnData" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_SaveLearnData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveLearnDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_SaveUploadedLearnDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveUploadedLearnDocuments" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_SaveUploadedLearnDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveUploadedLearnDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_InsertUpdateLearnImagePath_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertUpdateLearnImagePath" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_InsertUpdateLearnImagePath_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertUpdateLearnImagePathResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetLearnListingDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLearnListingDetails" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetLearnListingDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLearnListingDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetSingleLearnDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSingleLearnDetails" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetSingleLearnDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSingleLearnDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_DeleteCurrentResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrentResource" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_DeleteCurrentResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrentResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_EditCurrentResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:EditCurrentResource" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_EditCurrentResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EditCurrentResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetLearnDocuments_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLearnDocuments" />
+  </wsdl:message>
+  <wsdl:message name="ILearnService_GetLearnDocuments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLearnDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ILearnService">
+    <wsdl:operation name="GetExperienceLevel">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/GetExperienceLevel" message="tns:ILearnService_GetExperienceLevel_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/GetExperienceLevelResponse" message="tns:ILearnService_GetExperienceLevel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTopics">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/GetTopics" message="tns:ILearnService_GetTopics_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/GetTopicsResponse" message="tns:ILearnService_GetTopics_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/GetLearnTypes" message="tns:ILearnService_GetLearnTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/GetLearnTypesResponse" message="tns:ILearnService_GetLearnTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveLearnData">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/SaveLearnData" message="tns:ILearnService_SaveLearnData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/SaveLearnDataResponse" message="tns:ILearnService_SaveLearnData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveUploadedLearnDocuments">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/SaveUploadedLearnDocuments" message="tns:ILearnService_SaveUploadedLearnDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/SaveUploadedLearnDocumentsResponse" message="tns:ILearnService_SaveUploadedLearnDocuments_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertUpdateLearnImagePath">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/InsertUpdateLearnImagePath" message="tns:ILearnService_InsertUpdateLearnImagePath_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/InsertUpdateLearnImagePathResponse" message="tns:ILearnService_InsertUpdateLearnImagePath_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnListingDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/GetLearnListingDetails" message="tns:ILearnService_GetLearnListingDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/GetLearnListingDetailsResponse" message="tns:ILearnService_GetLearnListingDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSingleLearnDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/GetSingleLearnDetails" message="tns:ILearnService_GetSingleLearnDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/GetSingleLearnDetailsResponse" message="tns:ILearnService_GetSingleLearnDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCurrentResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/DeleteCurrentResource" message="tns:ILearnService_DeleteCurrentResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/DeleteCurrentResourceResponse" message="tns:ILearnService_DeleteCurrentResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EditCurrentResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/EditCurrentResource" message="tns:ILearnService_EditCurrentResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/EditCurrentResourceResponse" message="tns:ILearnService_EditCurrentResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnDocuments">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILearnService/GetLearnDocuments" message="tns:ILearnService_GetLearnDocuments_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILearnService/GetLearnDocumentsResponse" message="tns:ILearnService_GetLearnDocuments_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ILearnService" type="tns:ILearnService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetExperienceLevel">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetExperienceLevel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopics">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetTopics" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnTypes">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetLearnTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveLearnData">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/SaveLearnData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveUploadedLearnDocuments">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/SaveUploadedLearnDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertUpdateLearnImagePath">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/InsertUpdateLearnImagePath" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnListingDetails">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetLearnListingDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSingleLearnDetails">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetSingleLearnDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCurrentResource">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/DeleteCurrentResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditCurrentResource">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/EditCurrentResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnDocuments">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetLearnDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpsBinding_ILearnService" type="tns:ILearnService">
+    <wsp:PolicyReference URI="#BasicHttpsBinding_ILearnService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetExperienceLevel">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetExperienceLevel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopics">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetTopics" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnTypes">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetLearnTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveLearnData">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/SaveLearnData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveUploadedLearnDocuments">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/SaveUploadedLearnDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertUpdateLearnImagePath">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/InsertUpdateLearnImagePath" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnListingDetails">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetLearnListingDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSingleLearnDetails">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetSingleLearnDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCurrentResource">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/DeleteCurrentResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditCurrentResource">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/EditCurrentResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLearnDocuments">
+      <soap:operation soapAction="http://tempuri.org/ILearnService/GetLearnDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LearnService">
+    <wsdl:port name="BasicHttpBinding_ILearnService" binding="tns:BasicHttpBinding_ILearnService">
+      <soap:address location="http://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpsBinding_ILearnService" binding="tns:BasicHttpsBinding_ILearnService">
+      <soap:address location="https://geraciwcfservices.azurewebsites.net/LearnService/LearnService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,144 @@
+﻿@model PagedList.IPagedList<BusinessObjects.InvestorListingsModel>
+@using PagedList.Mvc;
+
+<div class="container">
+    @foreach (var item in Model)
+    {
+        string ListingID = Synoptek.SessionManagement.CipherTool.EncryptString(Convert.ToString(@item.ID), true);
+        <div class="row" id="listing-@item.ID">
+            <div class="col-md-6 col-lg-3">
+                <div><strong>ID#00 @item.ID</strong></div>
+                <h4>@item.Name</h4>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                <div><strong>User:</strong> @item.BrokerName</div>
+                <div class="mt-1">Created: @item.CreatedDate</div>
+            </div>
+            <div class="col-md-6 col-lg-3 font13">
+                <div>Last Updated: @item.ModifiedDate</div>
+                <div>Status: @item.Status</div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="mt-2 text-right ResponviseCenter AdminButton">
+                    <button type="button" class="GhostButton Respon-right w-30per mr-3" onclick="DeleteRecord('@ListingID', 'Listings', @item.ID )"><i class="fa fa-trash"></i></button>
+                    <a href="@Url.Action("Edit", "ListingDetails", new { ListingID = ListingID })" class="marginRT5 "><button type="button" class="GhostButton Respon-right"><i class="fa fa-pencil"></i></button></a>
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="DividerBot mt-2 mb-3"></div>
+            </div>
+        </div>
+
+    }
+
+    <nav aria-label="Page navigation pagination" id="ListingsTabNav">
+        <ul class="pagination justify-content-center">
+            @Html.PagedListPager(Model, page => Url.Action("Admin", new { Page = page, Tab = "Listings" }))
+        </ul>
+    </nav>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $(".pagination").find("li").addClass("page-item");
+        $(".pagination").find("li a").addClass("page-link");
+
+        //Pagination event handling ----------------------------
+        $('#ListingsTabNav .pagination a').click(function () {
+            try {
+                var searchTxt = $('#searchListingstxt').val();
+                var sortingOrder = $("#inputGroupSelectListings").val();
+                var url = '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+
+                if (this.href != "" && this.href != undefined) {
+                    $.ajax({
+                        url: this.href + url,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#pills-tab1-child').html("");
+                            $('#pills-tab1-child').html(result);
+                            $('#pills-tab1').removeClass('tab-pane fade').addClass('tab-pane fade show active in');
+
+                            $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        }
+                    });
+                }
+
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+            return false;
+        });
+        //Pagination event handling ----------------------------
+
+        //search
+        $('#searchListingstxt').change(function () {
+            try {
+                var searchTxt = $('#searchListingstxt').val();
+                var page = $('#ListingsTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectListings").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Listings" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+                if (searchTxt.length >= 3) {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $('#pills-tab1-child').html("");
+                            $('#pills-tab1-child').html(result);
+                            $('#pills-tab1').addClass('tab-pane fade show active in');
+
+                            $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                            $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        }
+                    });
+                }
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+
+
+        //on sorting change
+
+        $('#inputGroupSelectListings').change(function () {
+            try {
+                var searchTxt = $('#searchListingstxt').val();
+                var page = $('#ListingsTabNav .pagination .active a').html();
+                var sortingOrder = $("#inputGroupSelectListings").val();
+                var url = '@Url.Action("Admin", "Dashboard")?Page=' + page + '&Tab=' + "Listings" + '&sortingOrder=' + sortingOrder + '&searchText=' + searchTxt;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#pills-tab1-child').html("");
+                        $('#pills-tab1-child').html(result);
+                        $('#pills-tab1').addClass('tab-pane fade show active in');
+
+                        $('#pills-tab2').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        $('#pills-tab3').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                        $('#pills-tab4').removeClass('tab-pane fade show active in').addClass('tab-pane fade');
+                    }
+                });
+
+                return false;
+            }
+            catch (ex) {
+                ShowErrorMessage(ex.message);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio 14.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="14.0">
+ <Targets>
+  <Target Name="F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\DataAccess\bin\DataAccess.dll">
+   <Modules>
+    <Module Name="dataaccess.dll">
+     <Namespaces>
+      <Namespace Name="DataAccess">
+       <Types>
+        <Type Name="DBUtility" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'DBUtility' because it creates members of the following IDisposable types: 'SqlConnection'. If 'DBUtility' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#.ctor()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\DataAccess" File="DBUtility.cs" Line="22">'DBUtility.DBUtility()' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ExecuteCommand(System.Data.SqlClient.SqlCommand)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\DataAccess" File="DBUtility.cs" Line="80">'DBUtility.ExecuteCommand(SqlCommand)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ExecuteNonQuery(System.Data.SqlClient.SqlCommand)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\DataAccess" File="DBUtility.cs" Line="124">'DBUtility.ExecuteNonQuery(SqlCommand)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ExecuteScalar(System.Data.SqlClient.SqlCommand)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\DataAccess" File="DBUtility.cs" Line="103">'DBUtility.ExecuteScalar(SqlCommand)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#FillDataSet(System.Data.SqlClient.SqlCommand,System.Data.DataSet)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\DataAccess" File="DBUtility.cs" Line="57">'DBUtility.FillDataSet(SqlCommand, DataSet)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#FillDataTable(System.Data.SqlClient.SqlCommand,System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="F:\vishal\Projects\Synoptek\SynoptekGit\Geraciplatform\Github_code\Synoptek_Project\DataAccess" File="DBUtility.cs" Line="145">'DBUtility.FillDataTable(SqlCommand, DataTable)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="DataAccess.DataAccess">
+       <Types>
+        <Type Name="BrokerListingsDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'BrokerListingsDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'BrokerListingsDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="DashboardDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'DashboardDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'DashboardDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="EmailNotificationsDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'EmailNotificationsDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'EmailNotificationsDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="InvestorListingsDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'InvestorListingsDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'InvestorListingsDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="LearnDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'LearnDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'LearnDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ListingDetailsDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'ListingDetailsDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'ListingDetailsDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="LoginDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'LoginDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'LoginDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="SubscriptionDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'SubscriptionDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'SubscriptionDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="TestimonialDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'TestimonialDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'TestimonialDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="UserRegistrationDA" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2018-08-17 10:14:44Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'UserRegistrationDA' because it creates members of the following IDisposable types: 'SqlCommand'. If 'UserRegistrationDA' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200">
+   <Name>Rethrow to preserve stack details</Name>
+   <Description>Use the IL rethrow instruction to preserve original stack details when re-raising a caught exception.</Description>
+   <Resolution Name="Default">{0} rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182363.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="usagerules.dll" Version="14.0.0.0" />
+  </Rule>
+  <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
+   <Name>Types that own disposable fields should be disposable</Name>
+   <Description>Types that declare disposable members should also implement IDisposable. If the type does not own any unmanaged resources, do not implement a finalizer on it.</Description>
+   <Resolution Name="DependsOnFix">Implement IDisposable on {0} because it creates members of the following IDisposable types: {1}. If {0} has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182172.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="designrules.dll" Version="14.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+</FxCopReport>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/BusinessObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/BusinessObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfHomePageLatestResources">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="HomePageLatestResources" nillable="true" type="tns:HomePageLatestResources" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfHomePageLatestResources" nillable="true" type="tns:ArrayOfHomePageLatestResources" />
+  <xs:complexType name="HomePageLatestResources">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Category" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContentFor" type="xs:int" />
+      <xs:element minOccurs="0" name="ContentName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContentType" type="xs:int" />
+      <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="ImagePath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LearnCategory" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TopicID" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HomePageLatestResources" nillable="true" type="tns:HomePageLatestResources" />
+  <xs:complexType name="ArrayOfBrokerListingsModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerListingsModel" nillable="true" type="tns:BrokerListingsModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBrokerListingsModel" nillable="true" type="tns:ArrayOfBrokerListingsModel" />
+  <xs:complexType name="BrokerListingsModel">
+    <xs:sequence>
+      <xs:element name="_x003C_AmountRequired_x003E_k__BackingField" type="xs:double" />
+      <xs:element name="_x003C_Description_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ID_x003E_k__BackingField" type="xs:long" />
+      <xs:element name="_x003C_ImagePath_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_IsSponsored_x003E_k__BackingField" type="xs:boolean" />
+      <xs:element name="_x003C_ListingStatus_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ListingType_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_Location_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_MessageCount_x003E_k__BackingField" type="xs:int" />
+      <xs:element name="_x003C_Name_x003E_k__BackingField" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerListingsModel" nillable="true" type="tns:BrokerListingsModel" />
+</xs:schema>
